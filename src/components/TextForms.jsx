@@ -6,16 +6,19 @@ const TextForm = (props) => {
         // console.log("UpperCase was Clicked "+text);
         let newText = text.toUpperCase();
         setText(newText);
+        props.showAlert("Converted to UpperCase","Success");
     }
     const handelLoClick = () => {
         // console.log("UpperCase was Clicked "+text);
         let newText = text.toLowerCase();
         setText(newText);
+        props.showAlert("Converted to LowerCase","Success");
     }
     const handelCLearClick = () => {
         // console.log("UpperCase was Clicked "+text);
         let newText = '';
         setText(newText);
+        props.showAlert("Text has been Cleared","Success");
     }
     const handelOnChange = (event) => {
 
