@@ -36,7 +36,7 @@ function App() {
   }
   return (
     <>
-      <Navbar title="EVTOR" aboutText="About Evtor" mode={mode} toggleMode={toggleMode} />
+      <Navbar title="Lakshya" aboutText="About Lakshya" mode={mode} toggleMode={toggleMode} />
       <Alert alert={alert} />
       <div className="container my-3">
         <TextForm showAlert={showAlert} heading="Enter your text here " mode={mode} />
