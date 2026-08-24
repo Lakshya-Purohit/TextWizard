@@ -31,7 +31,7 @@ const About = () => {
   return (
     <div className="container" style={myStyle}>
       <h1 className="my-3">About Us</h1>
-      <div className="accordion" id="accordionExample">
+      {/* <div className="accordion" id="accordionExample">
         <div className="accordion-item">
           <h2 className="accordion-header">
             <button className="accordion-button" type="button" style={myStyle} data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -71,7 +71,7 @@ const About = () => {
       </div>
       <div className="container my-3">
         <button onClick={toggleStyle} className="btn btn-dark"  type='button'>{btnText}</button>
-      </div>
+      </div> */}
     </div>
   )
 }
