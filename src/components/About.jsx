@@ -28,23 +28,11 @@ const About = () => {
 
   return (
     <div className="container my-4" style={myStyle}>
-      <div className="row align-items-center py-5">
-
-        {/* Profile Image */}
-        <div className="col-md-4 text-center mb-4 mb-md-0">
-          <img
-            src="/profile.jpg"
-            alt="Lakshya Purohit"
-            className="img-fluid rounded-circle shadow"
-            style={{
-              maxWidth: '250px',
-              width: '100%'
-            }}
-          />
-        </div>
+      <div className="row py-5">
 
         {/* About Content */}
-        <div className="col-md-8">
+        <div className="col-md-12">
+
           <p className="mb-1">
             Hi there! I am
           </p>
@@ -125,7 +113,7 @@ const About = () => {
 
           </div>
 
-          {/* Dark/Light Mode Button */}
+          {/* Dark/Light Mode */}
           <button
             onClick={toggleStyle}
             className="btn btn-outline-secondary mt-3"
