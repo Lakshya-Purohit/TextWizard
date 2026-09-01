@@ -402,3 +402,54 @@
 .diff-stats-right strong {
   color: var(--text-primary);
 }
+
+/* ============================================
+   Text Diff Mobile Media Queries (< 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .diff-side-headers-row {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .diff-side-header {
+    width: 100%;
+    padding: 6px var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .diff-side-header.left-header {
+    border-right: none;
+  }
+
+  .diff-header-center-swap {
+    display: none;
+  }
+
+  .diff-edit-screens-row {
+    flex-direction: column;
+  }
+
+  .diff-edit-pane.left-edit-pane {
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .diff-screens-viewport {
+    flex-direction: column;
+  }
+
+  .diff-side-screen.left-screen {
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .diff-overview-minimap {
+    display: none;
+  }
+
+  .diff-status-bar {
+    gap: 6px;
+    font-size: 11px;
+  }
+}

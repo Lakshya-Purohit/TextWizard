@@ -171,3 +171,26 @@
   font-family: var(--font-mono);
   color: var(--accent-success);
 }
+
+/* ============================================
+   Regex Tester Mobile Media Queries (< 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .regex-pattern-input-group {
+    width: 100%;
+  }
+
+  .regex-input {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  .regex-flags {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .regex-output-container {
+    padding: var(--space-3);
+  }
+}

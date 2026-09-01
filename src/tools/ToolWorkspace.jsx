@@ -26,6 +26,7 @@ const ToolWorkspace = ({
   const { toggleFavorite, isFavorite, addHistory, showToast } = useApp();
   const [splitRatio, setSplitRatio] = useState(50);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [mobilePanelTab, setMobilePanelTab] = useState('input'); // 'input', 'output', 'both'
   const containerRef = useRef(null);
   const isDragging = useRef(false);
 
@@ -122,7 +123,7 @@ const ToolWorkspace = ({
           <div className="dw-workspace-toolbar-right">
             <div className="privacy-badge">
               <Shield size={10} />
-              Local
+              <span>Local</span>
             </div>
             {tool && (
               <button
@@ -133,7 +134,7 @@ const ToolWorkspace = ({
                 <Star size={14} fill={isFavorite(toolId) ? 'var(--accent-warning)' : 'none'} color={isFavorite(toolId) ? 'var(--accent-warning)' : 'currentColor'} />
               </button>
             )}
-            <button className="dw-btn dw-btn-ghost dw-btn-icon dw-btn-sm" onClick={toggleFullscreen}>
+            <button className="dw-btn dw-btn-ghost dw-btn-icon dw-btn-sm dw-hide-mobile" onClick={toggleFullscreen}>
               {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
             </button>
           </div>
@@ -172,7 +173,7 @@ const ToolWorkspace = ({
         <div className="dw-workspace-toolbar-right">
           <div className="privacy-badge">
             <Shield size={10} />
-            Local
+            <span>Local</span>
           </div>
           {tool && (
             <button
@@ -183,16 +184,43 @@ const ToolWorkspace = ({
               <Star size={14} fill={isFavorite(toolId) ? 'var(--accent-warning)' : 'none'} color={isFavorite(toolId) ? 'var(--accent-warning)' : 'currentColor'} />
             </button>
           )}
-          <button className="dw-btn dw-btn-ghost dw-btn-icon dw-btn-sm" onClick={toggleFullscreen}>
+          <button className="dw-btn dw-btn-ghost dw-btn-icon dw-btn-sm dw-hide-mobile" onClick={toggleFullscreen}>
             {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
           </button>
         </div>
       </div>
 
+      {/* Mobile Tab Switcher Strip when not singlePanel and output is active */}
+      {!hideOutput && (
+        <div className="dw-workspace-mobile-tabs dw-show-mobile">
+          <button
+            className={`dw-mobile-tab-btn ${mobilePanelTab === 'input' ? 'active' : ''}`}
+            onClick={() => setMobilePanelTab('input')}
+          >
+            {inputLabel || 'Input'}
+          </button>
+          <button
+            className={`dw-mobile-tab-btn ${mobilePanelTab === 'output' ? 'active' : ''}`}
+            onClick={() => setMobilePanelTab('output')}
+          >
+            {outputLabel || 'Output'}
+          </button>
+          <button
+            className={`dw-mobile-tab-btn ${mobilePanelTab === 'both' ? 'active' : ''}`}
+            onClick={() => setMobilePanelTab('both')}
+          >
+            Split (Both)
+          </button>
+        </div>
+      )}
+
       {/* Split Panels */}
-      <div className="dw-workspace-content">
+      <div className={`dw-workspace-content ${!hideOutput ? `mobile-tab-${mobilePanelTab}` : ''}`}>
         {/* Input Panel */}
-        <div className="dw-workspace-panel" style={{ width: hideOutput ? '100%' : `${splitRatio}%` }}>
+        <div
+          className={`dw-workspace-panel input-panel ${mobilePanelTab === 'output' && !hideOutput ? 'mobile-panel-hidden' : ''}`}
+          style={{ width: hideOutput ? '100%' : `${splitRatio}%` }}
+        >
           <div className="dw-panel-header">
             <div className="dw-panel-header-title">
               <ChevronRight size={12} />
@@ -205,6 +233,7 @@ const ToolWorkspace = ({
                 title="Clear"
               >
                 <Trash2 size={12} />
+                <span>Clear</span>
               </button>
             </div>
           </div>
@@ -219,14 +248,17 @@ const ToolWorkspace = ({
           </div>
         </div>
 
-        {/* Resizer */}
+        {/* Resizer on Desktop */}
         {!hideOutput && (
-          <div className="dw-resizer" onMouseDown={handleMouseDown} />
+          <div className="dw-resizer dw-hide-mobile" onMouseDown={handleMouseDown} />
         )}
 
         {/* Output Panel */}
         {!hideOutput && (
-          <div className="dw-workspace-panel" style={{ width: `${100 - splitRatio}%` }}>
+          <div
+            className={`dw-workspace-panel output-panel ${mobilePanelTab === 'input' ? 'mobile-panel-hidden' : ''}`}
+            style={{ width: `${100 - splitRatio}%` }}
+          >
             <div className="dw-panel-header">
               <div className="dw-panel-header-title">
                 <ChevronRight size={12} />

@@ -50,6 +50,9 @@ export function AppProvider({ children }) {
   // Toasts
   const [toasts, setToasts] = useState([]);
 
+  // Mobile sidebar state
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
   // Command palette open state
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
@@ -92,6 +95,10 @@ export function AppProvider({ children }) {
 
   const toggleSidebar = useCallback(() => setSidebarCollapsed(prev => !prev), []);
 
+  const toggleMobileSidebar = useCallback(() => setMobileSidebarOpen(prev => !prev), []);
+
+  const closeMobileSidebar = useCallback(() => setMobileSidebarOpen(false), []);
+
   const toggleFavorite = useCallback((toolId) => {
     setFavorites(prev =>
       prev.includes(toolId)
@@ -131,6 +138,10 @@ export function AppProvider({ children }) {
     sidebarCollapsed,
     setSidebarCollapsed,
     toggleSidebar,
+    mobileSidebarOpen,
+    setMobileSidebarOpen,
+    toggleMobileSidebar,
+    closeMobileSidebar,
     favorites,
     toggleFavorite,
     isFavorite,

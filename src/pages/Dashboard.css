@@ -341,3 +341,51 @@
   border-radius: var(--radius-full);
   border: 1px solid var(--border-subtle);
 }
+
+/* ============================================
+   Dashboard Mobile Media Queries
+   ============================================ */
+@media (max-width: 768px) {
+  .dw-dashboard-inner {
+    padding: var(--space-4) var(--space-4) var(--space-8);
+  }
+
+  .dw-dash-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+
+  .dw-dash-header-right {
+    width: 100%;
+  }
+
+  .dw-dash-search-trigger {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dw-dash-headline {
+    font-size: var(--text-xl);
+  }
+
+  .dw-dash-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .dw-dash-card {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .dw-dash-card-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .dw-dash-card-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+}

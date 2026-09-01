@@ -2,11 +2,11 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getToolById, CATEGORIES } from '../tools/toolRegistry';
-import { Sun, Moon, Monitor, Command, Zap } from 'lucide-react';
+import { Sun, Moon, Monitor, Command, Zap, Menu } from 'lucide-react';
 import './TopBar.css';
 
 const TopBar = () => {
-  const { theme, setTheme, setCommandPaletteOpen } = useApp();
+  const { theme, setTheme, setCommandPaletteOpen, toggleMobileSidebar } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +32,16 @@ const TopBar = () => {
   return (
     <header className="dw-topbar">
       <div className="dw-topbar-left">
+        {/* Mobile Hamburger Menu Toggle */}
+        <button
+          className="dw-topbar-mobile-menu-btn"
+          onClick={toggleMobileSidebar}
+          aria-label="Open navigation menu"
+          title="Open Menu"
+        >
+          <Menu size={20} />
+        </button>
+
         <button className="dw-topbar-brand" onClick={() => navigate('/')}>
           <Zap size={18} className="dw-topbar-logo" />
           <span className="dw-topbar-title">DevWizard</span>
@@ -43,12 +53,12 @@ const TopBar = () => {
             {currentCategory && (
               <>
                 <span
-                  className="dw-topbar-crumb"
+                  className="dw-topbar-crumb dw-topbar-crumb-cat"
                   style={{ color: currentCategory.color }}
                 >
                   {currentCategory.name}
                 </span>
-                <span className="dw-topbar-separator">/</span>
+                <span className="dw-topbar-separator dw-topbar-crumb-cat">/</span>
               </>
             )}
             <span className="dw-topbar-crumb active">{currentTool.name}</span>
@@ -60,9 +70,10 @@ const TopBar = () => {
         <button
           className="dw-topbar-search"
           onClick={() => setCommandPaletteOpen(true)}
+          aria-label="Search tools"
         >
           <Command size={14} />
-          <span>Search tools...</span>
+          <span className="dw-topbar-search-text">Search tools...</span>
           <div className="dw-topbar-search-kbd">
             <kbd>Ctrl</kbd>
             <kbd>K</kbd>
@@ -77,7 +88,7 @@ const TopBar = () => {
           title={`Theme: ${themeLabel}`}
         >
           <CurrentThemeIcon size={16} />
-          <span>{themeLabel}</span>
+          <span className="dw-topbar-theme-text">{themeLabel}</span>
         </button>
       </div>
     </header>

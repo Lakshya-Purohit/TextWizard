@@ -1,9 +1,11 @@
 import React, { useState, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ToolWorkspace from '../ToolWorkspace';
 import { transform } from '../../engine/transformEngine';
-import { Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload, CheckCircle, AlertCircle, FileImage } from 'lucide-react';
 
 const Base64Tool = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState('Hello DevWizard V4!');
   const [mode, setMode] = useState('text-base64'); // text-base64 | base64-text | text-hex | hex-text | text-binary | binary-text
   const fileInputRef = useRef(null);
@@ -64,6 +66,15 @@ const Base64Tool = () => {
       >
         <Upload size={12} />
         File to Base64
+      </button>
+
+      <button
+        className="dw-btn dw-btn-secondary dw-btn-sm"
+        onClick={() => navigate('/tool/base64-file')}
+        title="Open Base64 to PDF / Image / Video Converter"
+      >
+        <FileImage size={12} />
+        Base64 to PDF / Media
       </button>
     </div>
   );

@@ -3,7 +3,7 @@ import {
   Braces, TreePine, ArrowLeftRight,
   FileCode2,
   Type, CaseSensitive,
-  Binary, Link, Code2,
+  Binary, Link, Code2, FileImage,
   KeyRound, Hash, Regex, Clock,
   GitCompare,
 } from 'lucide-react';
@@ -112,6 +112,15 @@ const tools = [
   },
 
   // ---- Encoding ----
+  {
+    id: 'base64-file',
+    name: 'Base64 to File & Media',
+    category: 'encoding',
+    icon: FileImage,
+    description: 'Convert Base64 to PDF, Image, Video, Audio with live preview & download',
+    keywords: ['base64', 'pdf', 'image', 'video', 'audio', 'file', 'media', 'data uri', 'png', 'jpg', 'mp4', 'mp3', 'svg', 'convert', 'preview', 'download'],
+    component: lazy(() => import('./encoding/Base64FileConverter')),
+  },
   {
     id: 'base64',
     name: 'Base64 Encoder',

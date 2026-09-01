@@ -328,3 +328,24 @@
 .json-tree-stats strong {
   color: var(--text-primary);
 }
+
+/* ============================================
+   JSON Tree Viewer Mobile Media Queries (< 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .json-tree-toolbar {
+    gap: var(--space-1);
+  }
+
+  .json-tree-search-input {
+    width: 130px;
+  }
+
+  .json-tree-search-input:focus {
+    width: 160px;
+  }
+
+  .json-tree-container {
+    padding: var(--space-2);
+  }
+}
