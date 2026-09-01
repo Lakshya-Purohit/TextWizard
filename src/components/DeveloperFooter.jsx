@@ -91,7 +91,7 @@ const DeveloperFooter = () => {
           </a>
 
           <a
-            href="https://www.linkedin.com/in/lakshya-purohit"
+            href="https://www.linkedin.com/in/lakshya-purohit-a472a6200/"
             target="_blank"
             rel="noopener noreferrer"
             className="dev-footer-pill"
@@ -108,7 +108,7 @@ const DeveloperFooter = () => {
             className="dev-footer-pill"
           >
             <FileText size={15} />
-            <span>Resume</span>
+            <span>Portfolio</span>
             <ArrowUpRight size={13} className="dev-footer-pill-arrow" />
           </a>
         </div>
@@ -137,7 +137,7 @@ const DeveloperFooter = () => {
             GitHub
           </a>
           <a
-            href="https://www.linkedin.com/in/lakshya-purohit"
+            href="https://www.linkedin.com/in/lakshya-purohit-a472a6200/"
             target="_blank"
             rel="noopener noreferrer"
             className="dev-watermark-link"
