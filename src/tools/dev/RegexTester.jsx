@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
-import { Regex, CheckCircle, AlertCircle, Layers } from 'lucide-react';
+import { CheckCircle, AlertCircle, Layers } from 'lucide-react';
 import './RegexTester.css';
 
 const RegexTester = () => {

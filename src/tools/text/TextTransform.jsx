@@ -1,37 +1,35 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
-import { Type, Sparkles } from 'lucide-react';
+
+// Transformations
+const TRANSFORMS = {
+  upper: (str) => str.toUpperCase(),
+  lower: (str) => str.toLowerCase(),
+  title: (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()),
+  sentence: (str) => str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase()),
+  camel: (str) => str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+    if (+match === 0) return "";
+    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+  }).replace(/\s+/g, ''),
+  snake: (str) => str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)?.map(x => x.toLowerCase()).join('_') || str,
+  kebab: (str) => str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)?.map(x => x.toLowerCase()).join('-') || str,
+  reverse: (str) => str.split('').reverse().join(''),
+  reverseLines: (str) => str.split('\n').reverse().join('\n'),
+  sortLinesAsc: (str) => str.split('\n').sort((a, b) => a.localeCompare(b)).join('\n'),
+  sortLinesDesc: (str) => str.split('\n').sort((a, b) => b.localeCompare(a)).join('\n'),
+  uniqueLines: (str) => Array.from(new Set(str.split('\n'))).join('\n'),
+  trimLines: (str) => str.split('\n').map(l => l.trim()).join('\n'),
+  removeEmptyLines: (str) => str.split('\n').filter(l => l.trim().length > 0).join('\n')
+};
 
 const TextTransform = () => {
   const [input, setInput] = useState('Welcome to DevWizard V4!\nThe unified workspace for modern developers.');
-
-  // Transformations
-  const transforms = {
-    upper: (str) => str.toUpperCase(),
-    lower: (str) => str.toLowerCase(),
-    title: (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()),
-    sentence: (str) => str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase()),
-    camel: (str) => str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
-      if (+match === 0) return "";
-      return index === 0 ? match.toLowerCase() : match.toUpperCase();
-    }).replace(/\s+/g, ''),
-    snake: (str) => str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)?.map(x => x.toLowerCase()).join('_') || str,
-    kebab: (str) => str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)?.map(x => x.toLowerCase()).join('-') || str,
-    reverse: (str) => str.split('').reverse().join(''),
-    reverseLines: (str) => str.split('\n').reverse().join('\n'),
-    sortLinesAsc: (str) => str.split('\n').sort((a, b) => a.localeCompare(b)).join('\n'),
-    sortLinesDesc: (str) => str.split('\n').sort((a, b) => b.localeCompare(a)).join('\n'),
-    uniqueLines: (str) => Array.from(new Set(str.split('\n'))).join('\n'),
-    trimLines: (str) => str.split('\n').map(l => l.trim()).join('\n'),
-    removeEmptyLines: (str) => str.split('\n').filter(l => l.trim().length > 0).join('\n')
-  };
-
   const [activeTransform, setActiveTransform] = useState('upper');
 
   const output = useMemo(() => {
     if (!input) return '';
     try {
-      return transforms[activeTransform] ? transforms[activeTransform](input) : input;
+      return TRANSFORMS[activeTransform] ? TRANSFORMS[activeTransform](input) : input;
     } catch {
       return input;
     }

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { transform } from '../../engine/transformEngine';
-import { Binary, Upload, FileCode, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload, CheckCircle, AlertCircle } from 'lucide-react';
 
 const Base64Tool = () => {
   const [input, setInput] = useState('Hello DevWizard V4!');

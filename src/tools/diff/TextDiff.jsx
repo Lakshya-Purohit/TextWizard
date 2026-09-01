@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import * as Diff from 'diff';
-import { GitCompare, Columns, List, Plus, Minus } from 'lucide-react';
+import { Columns, List, Plus, Minus } from 'lucide-react';
 import './TextDiff.css';
 
 const TextDiff = () => {

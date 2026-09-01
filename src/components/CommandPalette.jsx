@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getAllTools, CATEGORIES } from '../tools/toolRegistry';
-import { Search, Star, Clock, ArrowRight } from 'lucide-react';
+import { Search, Star, ArrowRight } from 'lucide-react';
 import './CommandPalette.css';
 
 const CommandPalette = () => {

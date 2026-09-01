@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
-import { Clock, Calendar, Globe, Copy, RefreshCw } from 'lucide-react';
+import { Clock, Calendar, Copy } from 'lucide-react';
 import './TimestampConverter.css';
 
 const TimestampConverter = () => {

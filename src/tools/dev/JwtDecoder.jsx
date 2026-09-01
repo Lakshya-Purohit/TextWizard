@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
-import { KeyRound, ShieldAlert, ShieldCheck, Clock, User, Calendar } from 'lucide-react';
+import { KeyRound, ShieldAlert, ShieldCheck, User } from 'lucide-react';
 import './JwtDecoder.css';
 
 const JwtDecoder = () => {

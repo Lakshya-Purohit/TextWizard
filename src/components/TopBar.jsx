@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getToolById, CATEGORIES } from '../tools/toolRegistry';
-import { Sun, Moon, Monitor, Command, Settings, Zap } from 'lucide-react';
+import { Sun, Moon, Monitor, Command, Zap } from 'lucide-react';
 import './TopBar.css';
 
 const TopBar = () => {

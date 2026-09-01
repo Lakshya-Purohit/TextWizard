@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import {
-  Braces, FileJson, TreePine, ArrowLeftRight,
+  Braces, TreePine, ArrowLeftRight,
   FileCode2,
   Type, CaseSensitive,
   Binary, Link, Code2,

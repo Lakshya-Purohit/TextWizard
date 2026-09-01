@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
-import { Hash, Copy, Check } from 'lucide-react';
+import { Hash, Copy } from 'lucide-react';
 import './HashGenerator.css';
 
 // Simple MD5 implementation
@@ -76,7 +76,7 @@ function md5(string) {
     return WordToHexValue;
   }
 
-  var x = Array();
+  var x = [];
   var k, AA, BB, CC, DD, a, b, c, d;
   var S11 = 7, S12 = 12, S13 = 17, S14 = 22;
   var S21 = 5, S22 = 9, S23 = 14, S24 = 20;

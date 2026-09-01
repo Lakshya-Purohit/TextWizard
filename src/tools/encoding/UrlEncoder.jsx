@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { transform } from '../../engine/transformEngine';
-import { Link, CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 
 const UrlEncoder = () => {
   const [input, setInput] = useState('https://example.com/search?q=developer tools&category=web & tech');

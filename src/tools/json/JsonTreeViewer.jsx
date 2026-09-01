@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
-import { ChevronRight, ChevronDown, CheckCircle, AlertCircle, Plus, Minus } from 'lucide-react';
+import { ChevronRight, ChevronDown, CheckCircle, AlertCircle } from 'lucide-react';
 import './JsonTreeViewer.css';
 
 const TreeNode = ({ name, value, depth = 0, defaultOpen = true }) => {
@@ -8,14 +8,6 @@ const TreeNode = ({ name, value, depth = 0, defaultOpen = true }) => {
 
   const isObject = value !== null && typeof value === 'object';
   const isArray = Array.isArray(value);
-
-  const getType = (val) => {
-    if (val === null) return 'null';
-    if (Array.isArray(val)) return 'array';
-    return typeof val;
-  };
-
-  const type = getType(value);
 
   const renderValue = (val) => {
     if (val === null) return <span className="tree-val-null">null</span>;

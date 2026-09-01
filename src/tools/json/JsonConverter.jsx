@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { transform } from '../../engine/transformEngine';
-import { ArrowLeftRight, CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 
 const JsonConverter = () => {
   const [input, setInput] = useState('{\n  "id": 101,\n  "name": "DevWizard",\n  "active": true,\n  "tags": ["developer", "tools", "utility"]\n}');

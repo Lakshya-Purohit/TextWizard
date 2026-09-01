@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { Braces, Minimize2, CheckCircle, AlertCircle } from 'lucide-react';
 
