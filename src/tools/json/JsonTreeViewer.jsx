@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import {
   ChevronRight, ChevronDown, CheckCircle, AlertCircle,
   Search, Copy, ChevronsUpDown, ChevronsDownUp, Loader2,
-  FileCode2, Filter
+  FileCode2
 } from 'lucide-react';
 import './JsonTreeViewer.css';
 

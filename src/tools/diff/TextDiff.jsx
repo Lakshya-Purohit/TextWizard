@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import * as Diff from 'diff';
 import {
   MinusCircle, PlusCircle, Copy, ArrowLeftRight, Trash2,
-  FileText, CheckCircle, Code, Edit3, Eye, Sliders
+  FileText, CheckCircle, Code, Edit3, Eye
 } from 'lucide-react';
 import './TextDiff.css';
 
@@ -118,7 +118,7 @@ const TextDiff = () => {
       } else if (chunk.removed) {
         // Pure removal
         const lines = chunk.value.replace(/\n$/, '').split('\n');
-        lines.forEach(lineText => {
+        for (const lineText of lines) {
           totalRemovals++;
           rows.push({
             type: 'removed',
@@ -130,11 +130,11 @@ const TextDiff = () => {
             },
             right: null
           });
-        });
+        }
       } else if (chunk.added) {
         // Pure addition
         const lines = chunk.value.replace(/\n$/, '').split('\n');
-        lines.forEach(lineText => {
+        for (const lineText of lines) {
           totalAdditions++;
           rows.push({
             type: 'added',
@@ -146,11 +146,11 @@ const TextDiff = () => {
               type: 'added'
             }
           });
-        });
+        }
       } else {
         // Unchanged
         const lines = chunk.value.replace(/\n$/, '').split('\n');
-        lines.forEach(lineText => {
+        for (const lineText of lines) {
           rows.push({
             type: 'unchanged',
             left: {
@@ -166,7 +166,7 @@ const TextDiff = () => {
               type: 'unchanged'
             }
           });
-        });
+        }
       }
     }
 
