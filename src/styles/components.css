@@ -1,0 +1,389 @@
+/* ============================================
+   DevWizard V4 — Component Styles
+   ============================================ */
+
+/* ---- Buttons ---- */
+.dw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+.dw-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.dw-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.dw-btn-primary {
+  background: var(--accent-primary);
+  color: var(--accent-primary-text);
+  border-color: var(--accent-primary);
+}
+.dw-btn-primary:hover:not(:disabled) {
+  background: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.dw-btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border-color: var(--border-default);
+}
+.dw-btn-secondary:hover:not(:disabled) {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.dw-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+.dw-btn-ghost:hover:not(:disabled) {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+.dw-btn-danger {
+  background: var(--accent-danger);
+  color: var(--accent-danger-text);
+  border-color: var(--accent-danger);
+}
+.dw-btn-danger:hover:not(:disabled) {
+  background: #d32f2f;
+}
+
+.dw-btn-icon {
+  padding: var(--space-2);
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.dw-btn-sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+}
+.dw-btn-sm svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ---- Inputs ---- */
+.dw-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+.dw-input:hover {
+  border-color: var(--border-strong);
+}
+.dw-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-primary-subtle);
+}
+.dw-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.dw-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.dw-select {
+  appearance: none;
+  padding-right: var(--space-8);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239298a8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+}
+
+/* ---- Panels ---- */
+.dw-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.dw-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+  min-height: var(--toolbar-height);
+}
+
+.dw-panel-header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dw-panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.dw-panel-body {
+  position: relative;
+  overflow: auto;
+}
+
+/* ---- Cards ---- */
+.dw-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+.dw-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* ---- Badges ---- */
+.dw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+}
+.dw-badge-default {
+  background: var(--bg-badge);
+  color: var(--text-secondary);
+}
+.dw-badge-primary {
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
+}
+.dw-badge-success {
+  background: var(--accent-success-subtle);
+  color: var(--accent-success);
+}
+.dw-badge-warning {
+  background: var(--accent-warning-subtle);
+  color: var(--accent-warning);
+}
+.dw-badge-danger {
+  background: var(--accent-danger-subtle);
+  color: var(--accent-danger);
+}
+
+/* ---- Tabs ---- */
+.dw-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.dw-tab {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: -1px;
+}
+.dw-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+.dw-tab.active {
+  color: var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
+}
+
+/* ---- Divider ---- */
+.dw-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: var(--space-2) 0;
+  border: none;
+}
+
+/* ---- Tooltip ---- */
+.dw-tooltip {
+  position: relative;
+}
+.dw-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+  background: var(--bg-tooltip);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-md);
+}
+.dw-tooltip:hover::after {
+  opacity: 1;
+}
+
+/* ---- Toast ---- */
+.dw-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  min-width: 280px;
+  max-width: 420px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: slideInFromBottom var(--transition-slow) ease;
+  font-size: var(--text-sm);
+}
+.dw-toast-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.dw-toast-message {
+  flex: 1;
+  color: var(--text-primary);
+}
+.dw-toast-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+}
+.dw-toast-close:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+.dw-toast-success .dw-toast-icon { color: var(--accent-success); }
+.dw-toast-error .dw-toast-icon { color: var(--accent-danger); }
+.dw-toast-warning .dw-toast-icon { color: var(--accent-warning); }
+.dw-toast-info .dw-toast-icon { color: var(--accent-info); }
+
+/* ---- Resizer ---- */
+.dw-resizer {
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+  position: relative;
+}
+.dw-resizer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: var(--border-subtle);
+  transition: background var(--transition-fast);
+}
+.dw-resizer:hover::after,
+.dw-resizer.dragging::after {
+  background: var(--accent-primary);
+  width: 3px;
+}
+
+/* ---- Category Indicator ---- */
+.dw-cat-indicator {
+  width: 3px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* ---- Empty State ---- */
+.dw-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12);
+  text-align: center;
+  color: var(--text-tertiary);
+}
+.dw-empty svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-4);
+  opacity: 0.4;
+}
+.dw-empty-title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}
+.dw-empty-desc {
+  font-size: var(--text-sm);
+  max-width: 320px;
+}
+
+/* ---- Spinner ---- */
+.dw-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-default);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}

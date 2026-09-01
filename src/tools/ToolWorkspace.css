@@ -1,0 +1,122 @@
+/* ============================================
+   Tool Workspace Styles
+   ============================================ */
+
+.dw-workspace {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-app);
+  overflow: hidden;
+}
+
+/* Toolbar */
+.dw-workspace-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: var(--toolbar-height);
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.dw-workspace-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.dw-workspace-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.dw-workspace-tool-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.dw-workspace-tool-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.favorited {
+  color: var(--accent-warning) !important;
+}
+
+/* Content (split panels) */
+.dw-workspace-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.dw-workspace-content.single {
+  flex-direction: column;
+}
+
+/* Panel */
+.dw-workspace-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.dw-workspace-panel .dw-panel-header {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dw-workspace-editor {
+  flex: 1;
+  overflow: hidden;
+}
+
+.dw-workspace-textarea {
+  width: 100%;
+  height: 100%;
+  padding: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-editor);
+  border: none;
+  outline: none;
+  resize: none;
+  tab-size: 2;
+}
+.dw-workspace-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Status Bar */
+.dw-workspace-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  height: var(--statusbar-height);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.dw-workspace-status-left,
+.dw-workspace-status-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}

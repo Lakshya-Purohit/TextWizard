@@ -1,0 +1,70 @@
+.json-tree-container {
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-primary);
+  height: 100%;
+  overflow: auto;
+  background: var(--bg-editor);
+}
+
+.tree-node, .tree-leaf {
+  position: relative;
+}
+
+.tree-branch-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  user-select: none;
+}
+
+.tree-branch-header:hover {
+  background: var(--bg-surface-hover);
+}
+
+.tree-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+
+.tree-key {
+  color: var(--text-code);
+  font-weight: 500;
+}
+
+.tree-bracket {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.tree-collapsed-preview {
+  color: var(--text-tertiary);
+  font-style: italic;
+  padding: 0 4px;
+  font-size: var(--text-xs);
+}
+
+.tree-val-string {
+  color: var(--accent-success);
+}
+
+.tree-val-number {
+  color: var(--cat-diff);
+}
+
+.tree-val-boolean {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.tree-val-null {
+  color: var(--accent-danger);
+  font-style: italic;
+}
