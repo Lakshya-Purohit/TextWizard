@@ -1,30 +1,138 @@
+/* ============================================
+   Interactive JSON Tree Viewer Styles
+   ============================================ */
+
+.json-tree-view-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-editor);
+  display: flex;
+  flex-direction: column;
+}
+
 .json-tree-container {
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  line-height: 1.6;
+  font-size: var(--text-xs);
+  line-height: 1.7;
   color: var(--text-primary);
   height: 100%;
   overflow: auto;
-  background: var(--bg-editor);
 }
 
+/* Toolbar search & buttons */
+.json-tree-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.json-tree-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.json-tree-search-icon {
+  position: absolute;
+  left: 8px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.json-tree-search-input {
+  padding: 4px 24px 4px 26px;
+  font-size: var(--text-xs);
+  font-family: var(--font-ui);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  width: 170px;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.json-tree-search-input:focus {
+  width: 220px;
+  border-color: var(--border-focus);
+  background: var(--bg-input);
+}
+
+.json-tree-search-clear {
+  position: absolute;
+  right: 6px;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.json-tree-search-clear:hover {
+  color: var(--text-primary);
+}
+
+/* Loading Overlay */
+.json-tree-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 20, 26, 0.75);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  z-index: 10;
+}
+
+.json-tree-loader-spinner {
+  color: var(--accent-primary);
+}
+
+.json-tree-loader-text {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Tree Nodes */
 .tree-node, .tree-leaf {
   position: relative;
 }
 
-.tree-branch-header {
+.tree-branch-header, .tree-leaf {
   display: flex;
   align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  padding: 2px 4px;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 2px 6px;
   border-radius: var(--radius-sm);
   user-select: none;
+  min-height: 24px;
+  transition: background var(--transition-fast);
 }
 
-.tree-branch-header:hover {
+.tree-branch-header {
+  cursor: pointer;
+}
+
+.tree-branch-header:hover, .tree-leaf:hover {
   background: var(--bg-surface-hover);
+}
+
+.tree-leaf-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .tree-toggle-icon {
@@ -32,10 +140,15 @@
   align-items: center;
   justify-content: center;
   color: var(--text-tertiary);
+  transition: transform var(--transition-fast);
+}
+
+.tree-branch-header:hover .tree-toggle-icon {
+  color: var(--text-primary);
 }
 
 .tree-key {
-  color: var(--text-code);
+  color: var(--accent-primary);
   font-weight: 500;
 }
 
@@ -47,24 +160,171 @@
 .tree-collapsed-preview {
   color: var(--text-tertiary);
   font-style: italic;
-  padding: 0 4px;
-  font-size: var(--text-xs);
+  font-size: 11px;
+  background: var(--bg-surface);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
 }
 
+/* Values */
 .tree-val-string {
   color: var(--accent-success);
+  word-break: break-all;
 }
 
 .tree-val-number {
-  color: var(--cat-diff);
+  color: #ff9800;
 }
 
 .tree-val-boolean {
-  color: var(--accent-primary);
+  color: #ab47bc;
   font-weight: 600;
 }
 
 .tree-val-null {
   color: var(--accent-danger);
   font-style: italic;
+  opacity: 0.9;
+}
+
+.tree-val-other {
+  color: var(--text-primary);
+}
+
+/* Type Badges */
+.tree-type-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 0 4px;
+  height: 15px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.badge-obj {
+  background: rgba(79, 143, 247, 0.12);
+  color: var(--accent-primary);
+}
+
+.badge-arr {
+  background: rgba(179, 136, 255, 0.12);
+  color: var(--accent-purple);
+}
+
+.badge-str {
+  background: rgba(62, 207, 142, 0.12);
+  color: var(--accent-success);
+}
+
+.badge-num {
+  background: rgba(255, 152, 0, 0.12);
+  color: #ff9800;
+}
+
+.badge-bool {
+  background: rgba(171, 71, 188, 0.12);
+  color: #ab47bc;
+}
+
+.badge-null {
+  background: rgba(239, 83, 80, 0.12);
+  color: var(--accent-danger);
+}
+
+/* Node actions (Copy path / value) */
+.tree-node-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  margin-left: auto;
+  padding-left: 8px;
+}
+
+.tree-branch-header:hover .tree-node-actions,
+.tree-leaf:hover .tree-node-actions {
+  opacity: 1;
+}
+
+.tree-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: var(--font-ui);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tree-mini-btn:hover {
+  background: var(--bg-surface-active);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* Branch body guidelines */
+.tree-branch-body {
+  position: relative;
+  border-left: 1px dashed var(--border-subtle);
+  margin-left: 7px;
+}
+
+.tree-branch-closing {
+  display: flex;
+  align-items: center;
+}
+
+/* Status */
+.json-tree-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+}
+
+.status-loading {
+  color: var(--accent-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-error {
+  color: var(--accent-danger);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-success {
+  color: var(--accent-success);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-idle {
+  color: var(--text-tertiary);
+}
+
+.json-tree-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.json-tree-stats strong {
+  color: var(--text-primary);
 }

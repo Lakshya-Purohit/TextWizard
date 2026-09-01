@@ -255,13 +255,17 @@ const ToolWorkspace = ({
               </div>
             </div>
             <div className="dw-panel-body dw-workspace-editor">
-              <textarea
-                className="dw-workspace-textarea"
-                value={output || ''}
-                readOnly
-                placeholder="Output will appear here..."
-                spellCheck={false}
-              />
+              {children ? (
+                children
+              ) : (
+                <textarea
+                  className="dw-workspace-textarea"
+                  value={output || ''}
+                  readOnly
+                  placeholder="Output will appear here..."
+                  spellCheck={false}
+                />
+              )}
             </div>
           </div>
         )}

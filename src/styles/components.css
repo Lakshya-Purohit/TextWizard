@@ -357,25 +357,38 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-12);
+  padding: var(--space-8);
   text-align: center;
   color: var(--text-tertiary);
+  height: 100%;
 }
-.dw-empty svg {
-  width: 48px;
-  height: 48px;
-  margin-bottom: var(--space-4);
-  opacity: 0.4;
+.dw-empty-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-3);
+}
+.dw-empty-icon-box.danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--accent-danger);
 }
 .dw-empty-title {
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 .dw-empty-desc {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   max-width: 320px;
+  line-height: 1.4;
 }
 
 /* ---- Spinner ---- */
@@ -385,5 +398,15 @@
   border: 2px solid var(--border-default);
   border-top-color: var(--accent-primary);
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: dw-spin 0.6s linear infinite;
 }
+
+@keyframes dw-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dw-spin {
+  animation: dw-spin 0.75s linear infinite;
+}
+
