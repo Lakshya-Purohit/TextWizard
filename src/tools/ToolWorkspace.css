@@ -62,6 +62,9 @@
 }
 .dw-workspace-content.single {
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Panel */

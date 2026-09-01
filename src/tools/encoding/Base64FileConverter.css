@@ -3,15 +3,13 @@
    ============================================ */
 
 .b64f-container {
-  padding: var(--space-6);
-  max-width: 1200px;
+  padding: var(--space-5) var(--space-6);
+  max-width: 1280px;
   margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  gap: var(--space-5);
 }
 
 /* Mode Switcher Header */
@@ -58,8 +56,8 @@
 /* 2-Column Responsive Grid */
 .b64f-view-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
-  gap: var(--space-6);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
   align-items: stretch;
 }
 
@@ -92,6 +90,13 @@
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-primary);
+  min-width: 0;
+}
+
+.b64f-header-title span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .b64f-card-body {
@@ -104,10 +109,9 @@
 
 /* Controls Row */
 .b64f-controls-row {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
-  flex-wrap: wrap;
 }
 
 .b64f-select-group,
@@ -115,8 +119,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 1;
-  min-width: 140px;
+  min-width: 0;
 }
 
 .b64f-select-group label,
@@ -132,25 +135,27 @@
   padding: 6px 28px 6px 10px !important;
   font-size: var(--text-xs) !important;
   background-color: var(--bg-editor) !important;
+  min-width: 0;
 }
 
 .b64f-name-input {
   padding: 6px 10px !important;
   font-size: var(--text-xs) !important;
   background-color: var(--bg-editor) !important;
+  min-width: 0;
 }
 
 /* Big Textarea */
 .b64f-textarea-wrap {
   flex: 1;
-  min-height: 240px;
+  min-height: 200px;
   display: flex;
 }
 
 .b64f-textarea {
   width: 100%;
   height: 100%;
-  min-height: 240px;
+  min-height: 200px;
   padding: var(--space-3);
   font-size: var(--text-xs);
   line-height: 1.6;
@@ -160,6 +165,7 @@
   color: var(--text-primary);
   outline: none;
   resize: none;
+  word-break: break-all;
 }
 
 .b64f-textarea:focus {
@@ -261,8 +267,8 @@
   background: var(--bg-editor);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  min-height: 240px;
-  max-height: 380px;
+  min-height: 200px;
+  max-height: 360px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -280,7 +286,7 @@
 
 .b64f-preview-img {
   max-width: 100%;
-  max-height: 320px;
+  max-height: 300px;
   object-fit: contain;
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
@@ -288,7 +294,7 @@
 
 .b64f-pdf-viewport {
   width: 100%;
-  height: 360px;
+  height: 340px;
 }
 
 .b64f-preview-iframe {
@@ -307,7 +313,7 @@
 
 .b64f-preview-video {
   max-width: 100%;
-  max-height: 300px;
+  max-height: 280px;
   border-radius: var(--radius-md);
 }
 
@@ -479,6 +485,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .b64f-file-info-meta {
@@ -542,19 +549,25 @@
   color: var(--text-primary);
   outline: none;
   resize: vertical;
+  word-break: break-all;
 }
 
 /* ============================================
-   Responsive Media Queries (< 768px)
+   Tablet Responsiveness (< 900px)
+   ============================================ */
+@media (max-width: 900px) {
+  .b64f-view-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+/* ============================================
+   Mobile Responsiveness (< 768px)
    ============================================ */
 @media (max-width: 768px) {
   .b64f-container {
     padding: var(--space-3);
-    gap: var(--space-4);
-  }
-
-  .b64f-view-grid {
-    grid-template-columns: 1fr;
     gap: var(--space-4);
   }
 
@@ -563,14 +576,35 @@
     font-size: var(--text-xs);
   }
 
+  .b64f-mode-tab span {
+    display: none;
+  }
+
+  .b64f-controls-row {
+    grid-template-columns: 1fr;
+  }
+
   .b64f-textarea-wrap,
   .b64f-textarea {
-    min-height: 180px;
+    min-height: 160px;
   }
 
   .b64f-meta-bar {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
+  }
+
+  .b64f-card-header {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .b64f-card-body {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+
+  .b64f-header-title {
+    font-size: var(--text-xs);
   }
 }

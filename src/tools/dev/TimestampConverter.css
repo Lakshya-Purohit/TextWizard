@@ -3,15 +3,13 @@
    ============================================ */
 
 .ts-container {
-  padding: var(--space-6);
-  max-width: 1080px;
+  padding: var(--space-5) var(--space-6);
+  max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  gap: var(--space-5);
 }
 
 /* Hero Live Clock Ticker */
@@ -19,7 +17,7 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-4) var(--space-5);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -64,7 +62,7 @@
 .ts-ticker-right {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
@@ -109,8 +107,8 @@
 /* Grid */
 .ts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-  gap: var(--space-6);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
   align-items: start;
 }
 
@@ -131,6 +129,7 @@
   background: var(--bg-panel);
   border-bottom: 1px solid var(--border-subtle);
   gap: var(--space-2);
+  flex-wrap: wrap;
 }
 
 .ts-card-header-left {
@@ -140,6 +139,7 @@
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-primary);
+  min-width: 0;
 }
 
 .ts-card-icon {
@@ -156,13 +156,14 @@
   color: var(--accent-primary);
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .ts-card-body {
-  padding: var(--space-5);
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 /* Input Section */
@@ -177,6 +178,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
+  flex-wrap: wrap;
 }
 
 .ts-label {
@@ -222,6 +224,7 @@
   padding: var(--space-3) var(--space-4) !important;
   border-radius: var(--radius-lg) !important;
   background: var(--bg-editor) !important;
+  min-width: 0;
 }
 
 .ts-input-clear {
@@ -300,7 +303,7 @@
   background: var(--bg-editor);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  gap: var(--space-3);
+  gap: var(--space-2);
   transition: border-color var(--transition-fast);
 }
 
@@ -395,6 +398,16 @@
 }
 
 /* ============================================
+   Tablet Responsiveness (< 900px)
+   ============================================ */
+@media (max-width: 900px) {
+  .ts-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+/* ============================================
    Mobile Responsiveness Media Queries
    ============================================ */
 @media (max-width: 768px) {
@@ -425,12 +438,15 @@
 
   .ts-card-body {
     padding: var(--space-3);
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
 
-  .ts-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
+  .ts-card-header {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .ts-card-header-left {
+    font-size: var(--text-xs);
   }
 }
 
