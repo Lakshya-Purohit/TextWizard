@@ -6,6 +6,7 @@ import {
   Search, Star, Clock, Zap,
   ArrowRight, ShieldCheck, Cpu
 } from 'lucide-react';
+import DeveloperFooter from '../components/DeveloperFooter';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -237,6 +238,9 @@ const Dashboard = () => {
           </div>
         </section>
       </div>
+
+      {/* Developer Footer with Watermark */}
+      <DeveloperFooter />
     </div>
   );
 };

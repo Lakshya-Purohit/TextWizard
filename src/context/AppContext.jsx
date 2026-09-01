@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
+const generateId = () => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 9);
+};
 
 const AppContext = createContext(null);
 
@@ -105,7 +111,7 @@ export function AppProvider({ children }) {
   }, []);
 
   const showToast = useCallback((message, type = 'info', duration = 3000) => {
-    const id = uuidv4();
+    const id = generateId();
     setToasts(prev => [...prev, { id, message, type }]);
     if (duration > 0) {
       setTimeout(() => {
