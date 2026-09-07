@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getToolById, CATEGORIES } from '../tools/toolRegistry';
-import { Sun, Moon, Monitor, Command, Zap, Menu } from 'lucide-react';
+import { Sun, Moon, Monitor, Command, Zap, Menu, Clock } from 'lucide-react';
 import './TopBar.css';
 
 const TopBar = () => {
   const { theme, setTheme, setCommandPaletteOpen, toggleMobileSidebar } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
+  const [istClock, setIstClock] = useState('');
+
+  // Live IST Clock (UTC+05:30)
+  useEffect(() => {
+    const update = () => {
+      try {
+        const formatted = new Intl.DateTimeFormat('en-IN', {
+          timeZone: 'Asia/Kolkata',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        }).format(new Date());
+        setIstClock(formatted);
+      } catch {}
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const currentToolId = location.pathname.replace('/tool/', '');
   const currentTool = getToolById(currentToolId);
@@ -82,6 +102,17 @@ const TopBar = () => {
       </div>
 
       <div className="dw-topbar-right">
+        {/* Live IST Clock Chip */}
+        <button
+          className="dw-topbar-ist-chip"
+          onClick={() => navigate('/tool/timestamp-converter')}
+          title="Current Indian Standard Time (IST • UTC+05:30) — Click to open Timestamp Converter"
+        >
+          <Clock size={12} style={{ color: 'var(--accent-warning)' }} />
+          <span className="dw-topbar-ist-label">IST</span>
+          <span className="dw-topbar-ist-time">{istClock}</span>
+        </button>
+
         <button
           className="dw-topbar-theme-btn"
           onClick={nextTheme}

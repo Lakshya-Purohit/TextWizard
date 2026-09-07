@@ -183,6 +183,34 @@ const TimestampConverter = () => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const weekday = days[date.getDay()];
 
+    // Indian Standard Time (IST - Asia/Kolkata, UTC+05:30)
+    const istOptions = { timeZone: 'Asia/Kolkata' };
+    const istFull = `${date.toLocaleString('en-IN', {
+      ...istOptions,
+      weekday: 'long',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    })} IST (UTC+05:30)`;
+
+    const ist24h = `${date.toLocaleString('en-IN', {
+      ...istOptions,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    })} IST`;
+
+    const istTimeOnly = date.toLocaleTimeString('en-IN', { ...istOptions, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+    const istDateOnly = date.toLocaleDateString('en-IN', { ...istOptions, year: 'numeric', month: 'short', day: 'numeric' });
+
     return {
       date,
       detectedUnit,
@@ -191,6 +219,10 @@ const TimestampConverter = () => {
       localFull: `${weekday}, ${date.toLocaleString()}`,
       localDateOnly: date.toLocaleDateString(),
       localTimeOnly: date.toLocaleTimeString(),
+      istFull,
+      ist24h,
+      istTimeOnly,
+      istDateOnly,
       timezone: `${gmtOffset} (${tzName})`,
       relative: getRelativeTime(date),
       epochSeconds: Math.floor(date.getTime() / 1000),
@@ -202,10 +234,40 @@ const TimestampConverter = () => {
     };
   }, [inputTimestamp, unitMode]);
 
-  // Parse Date input to Epoch values
+  // Input timezone selection: 'IST' (default) | 'UTC' | 'local'
+  const [inputTimezone, setInputTimezone] = useState('IST');
+
+  // Helper to format Date as YYYY-MM-DDTHH:mm:ss in IST
+  const toIstInputString = (d = new Date()) => {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).formatToParts(d);
+
+    const val = (type) => parts.find(p => p.type === type)?.value || '00';
+    return `${val('year')}-${val('month')}-${val('day')}T${val('hour')}:${val('minute')}:${val('second')}`;
+  };
+
+  // Parse Date input to Epoch values according to selected timezone
   const dateToEpochResults = useMemo(() => {
     if (!inputDate) return null;
-    const d = new Date(inputDate);
+
+    let d;
+    if (inputTimezone === 'IST') {
+      // Parse as IST (+05:30)
+      d = new Date(`${inputDate}+05:30`);
+    } else if (inputTimezone === 'UTC') {
+      d = new Date(`${inputDate}Z`);
+    } else {
+      d = new Date(inputDate);
+    }
+
     if (isNaN(d.getTime())) return null;
 
     const epochSec = Math.floor(d.getTime() / 1000);
@@ -216,9 +278,21 @@ const TimestampConverter = () => {
       epochMs,
       utcString: d.toUTCString(),
       isoString: d.toISOString(),
+      istString: `${d.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST`,
       hex: `0x${epochSec.toString(16).toUpperCase()}`
     };
-  }, [inputDate]);
+  }, [inputDate, inputTimezone]);
+
+  // Current Live IST string
+  const currentIstTime = useMemo(() => {
+    return new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    }).format(new Date(currentEpochMs));
+  }, [currentEpochMs]);
 
   return (
     <ToolWorkspace
@@ -244,6 +318,10 @@ const TimestampConverter = () => {
             <div className="ts-ticker-epoch-box ts-ticker-ms-box">
               <span className="ts-ticker-val-ms">{currentEpochMs}</span>
               <span className="ts-ticker-unit">ms</span>
+            </div>
+            <div className="ts-ticker-epoch-box" style={{ background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.35)' }}>
+              <span className="ts-ticker-val" style={{ color: 'var(--accent-warning)', fontSize: '13px' }}>{currentIstTime}</span>
+              <span className="ts-ticker-unit" style={{ color: 'var(--accent-warning)', fontWeight: 700 }}>IST</span>
             </div>
 
             <div className="ts-ticker-actions">
@@ -348,10 +426,27 @@ const TimestampConverter = () => {
               {/* Formatted Results */}
               {parsedTimestamp && !parsedTimestamp.error && (
                 <div className="ts-results-table">
+                  {/* Indian Standard Time (IST - Asia/Kolkata) */}
+                  <div className="ts-row highlight" style={{ borderLeft: '3px solid var(--accent-warning)', background: 'rgba(245, 158, 11, 0.05)' }}>
+                    <div className="ts-row-info">
+                      <span className="ts-row-label" style={{ color: 'var(--accent-warning)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        🇮🇳 Indian Standard Time (IST • UTC+05:30)
+                      </span>
+                      <span className="ts-row-val text-mono" style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{parsedTimestamp.istFull}</span>
+                    </div>
+                    <button
+                      className="ts-copy-btn"
+                      onClick={() => copyVal('ist', 'Indian Standard Time (IST)', parsedTimestamp.istFull)}
+                      title="Copy IST Time"
+                    >
+                      {copiedKey === 'ist' ? <Check size={13} className="text-success" /> : <Copy size={13} />}
+                    </button>
+                  </div>
+
                   {/* Local Time */}
                   <div className="ts-row highlight">
                     <div className="ts-row-info">
-                      <span className="ts-row-label">Your Local Time</span>
+                      <span className="ts-row-label">Your Local Browser Time</span>
                       <span className="ts-row-val text-mono">{parsedTimestamp.localFull}</span>
                     </div>
                     <button
@@ -411,7 +506,7 @@ const TimestampConverter = () => {
                   {/* Timezone Info */}
                   <div className="ts-row">
                     <div className="ts-row-info">
-                      <span className="ts-row-label">Timezone</span>
+                      <span className="ts-row-label">System Timezone</span>
                       <span className="ts-row-val text-mono">{parsedTimestamp.timezone}</span>
                     </div>
                     <button
@@ -461,9 +556,24 @@ const TimestampConverter = () => {
             </div>
 
             <div className="ts-card-body">
-              {/* Date Input */}
+              {/* Date Input with Timezone Selector */}
               <div className="ts-input-section">
-                <label className="ts-label">Pick Local Date & Time</label>
+                <div className="ts-input-header-row">
+                  <label className="ts-label">Pick Date & Time</label>
+                  <div className="ts-unit-select-wrap">
+                    <span className="ts-unit-select-label">Timezone:</span>
+                    <select
+                      className="ts-unit-select"
+                      value={inputTimezone}
+                      onChange={(e) => setInputTimezone(e.target.value)}
+                    >
+                      <option value="IST">🇮🇳 IST (UTC+05:30)</option>
+                      <option value="UTC">UTC / GMT (UTC+00:00)</option>
+                      <option value="local">Local Browser Time</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="ts-input-wrap">
                   <input
                     type="datetime-local"
@@ -477,11 +587,11 @@ const TimestampConverter = () => {
                 {/* Date Presets */}
                 <div className="ts-presets-strip">
                   <span className="ts-presets-title">Quick:</span>
-                  <button className="ts-preset-chip" onClick={() => setDatePreset('now')}>Now</button>
+                  <button className="ts-preset-chip" onClick={() => setInputDate(toIstInputString(new Date()))}>Now (IST)</button>
+                  <button className="ts-preset-chip" onClick={() => setDatePreset('now')}>Now (Local)</button>
                   <button className="ts-preset-chip" onClick={() => setDatePreset('startOfDay')}>Start of Today</button>
                   <button className="ts-preset-chip" onClick={() => setDatePreset('endOfDay')}>End of Today</button>
                   <button className="ts-preset-chip" onClick={() => setDatePreset('tomorrow')}>Tomorrow</button>
-                  <button className="ts-preset-chip" onClick={() => setDatePreset('nextWeek')}>+1 Week</button>
                 </div>
               </div>
 
@@ -515,6 +625,21 @@ const TimestampConverter = () => {
                       title="Copy Epoch Milliseconds"
                     >
                       {copiedKey === 'dateMs' ? <Check size={13} className="text-success" /> : <Copy size={13} />}
+                    </button>
+                  </div>
+
+                  {/* IST Equivalent */}
+                  <div className="ts-row">
+                    <div className="ts-row-info">
+                      <span className="ts-row-label">IST Time (Asia/Kolkata)</span>
+                      <span className="ts-row-val text-mono">{dateToEpochResults.istString}</span>
+                    </div>
+                    <button
+                      className="ts-copy-btn"
+                      onClick={() => copyVal('dateIst', 'IST Date', dateToEpochResults.istString)}
+                      title="Copy IST Date"
+                    >
+                      {copiedKey === 'dateIst' ? <Check size={13} className="text-success" /> : <Copy size={13} />}
                     </button>
                   </div>
 

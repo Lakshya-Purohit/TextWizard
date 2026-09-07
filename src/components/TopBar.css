@@ -170,6 +170,40 @@
   border-color: var(--border-default);
 }
 
+/* Live IST Clock Chip */
+.dw-topbar-ist-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dw-topbar-ist-chip:hover {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: var(--accent-warning);
+}
+
+.dw-topbar-ist-label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--accent-warning);
+  letter-spacing: 0.04em;
+}
+
+.dw-topbar-ist-time {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 /* ============================================
    Responsive TopBar Media Queries
    ============================================ */

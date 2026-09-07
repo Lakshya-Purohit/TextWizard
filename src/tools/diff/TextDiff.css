@@ -215,8 +215,13 @@
   transition: background var(--transition-fast);
 }
 
+/* Line Hover */
 .diff-line-row:hover {
   background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="light"] .diff-line-row:hover {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .diff-line-gutter {
@@ -258,6 +263,23 @@
   padding: 0 2px;
 }
 
+/* Light Theme Removed Overrides - GitHub / VS Code Crisp Style */
+[data-theme="light"] .line-removed {
+  background: #ffebe9;
+}
+
+[data-theme="light"] .line-removed .diff-line-gutter {
+  background: #ffdce0;
+  color: #cf222e;
+}
+
+[data-theme="light"] .token-removed {
+  background: #ffc0cb;
+  color: #82071e;
+  border-color: rgba(207, 34, 46, 0.35);
+  font-weight: 500;
+}
+
 /* Added Line Styling */
 .line-added {
   background: rgba(16, 185, 129, 0.12);
@@ -277,6 +299,23 @@
   padding: 0 2px;
 }
 
+/* Light Theme Added Overrides - GitHub / VS Code Crisp Style */
+[data-theme="light"] .line-added {
+  background: #e6ffec;
+}
+
+[data-theme="light"] .line-added .diff-line-gutter {
+  background: #ccffd8;
+  color: #1a7f37;
+}
+
+[data-theme="light"] .token-added {
+  background: #abf2bc;
+  color: #116329;
+  border-color: rgba(26, 127, 55, 0.35);
+  font-weight: 500;
+}
+
 .line-spacer {
   background: repeating-linear-gradient(
     -45deg,
@@ -287,6 +326,16 @@
   );
 }
 
+[data-theme="light"] .line-spacer {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    rgba(0, 0, 0, 0.035) 4px,
+    rgba(0, 0, 0, 0.035) 8px
+  );
+}
+
 .line-spacer .diff-line-gutter {
   background: var(--bg-panel);
   opacity: 0.5;
@@ -294,6 +343,17 @@
 
 .diff-empty-fill {
   user-select: none;
+}
+
+/* Light mode badge and status overrides */
+[data-theme="light"] .removal-badge,
+[data-theme="light"] .diff-status-item.removal {
+  color: #cf222e;
+}
+
+[data-theme="light"] .addition-badge,
+[data-theme="light"] .diff-status-item.addition {
+  color: #1a7f37;
 }
 
 /* Minimap Overview Track */

@@ -5,7 +5,7 @@ import {
   Type, CaseSensitive,
   Binary, Link, Code2, FileImage,
   KeyRound, Hash, Regex, Clock,
-  GitCompare,
+  GitCompare, Wand2, Smartphone, ShieldCheck, Quote
 } from 'lucide-react';
 
 /* ============================================
@@ -84,9 +84,18 @@ const tools = [
     name: 'JSON Converter',
     category: 'json',
     icon: ArrowLeftRight,
-    description: 'Convert JSON to XML, YAML, or CSV',
-    keywords: ['convert', 'json', 'xml', 'yaml', 'csv', 'transform'],
+    description: 'Convert JSON to CSV (with nested objects), YAML, or XML',
+    keywords: ['convert', 'json', 'xml', 'yaml', 'csv', 'transform', 'flatten'],
     component: lazy(() => import('./json/JsonConverter')),
+  },
+  {
+    id: 'string-json',
+    name: 'String ⇄ JSON',
+    category: 'json',
+    icon: Quote,
+    description: 'Convert & escape between JSON objects and string literals (Java, JS, Python, C#)',
+    keywords: ['string', 'json', 'escape', 'unescape', 'literal', 'stringify', 'parse', 'quotes'],
+    component: lazy(() => import('./json/StringJsonConverter')),
   },
 
   // ---- XML ----
@@ -112,6 +121,15 @@ const tools = [
   },
 
   // ---- Encoding ----
+  {
+    id: 'gsm-encoder',
+    name: 'GSM 7-bit & SMS Encoder',
+    category: 'encoding',
+    icon: Smartphone,
+    description: 'GSM 03.38 7-bit SMS encoding, hex octet packing, non-GSM validator, and segment calculator',
+    keywords: ['gsm', 'sms', '7-bit', 'telecom', 'pdu', '03.38', 'encode', 'decode', 'segments', 'twilio'],
+    component: lazy(() => import('./encoding/GsmEncoder')),
+  },
   {
     id: 'base64-file',
     name: 'Base64 to File & Media',
@@ -151,10 +169,28 @@ const tools = [
 
   // ---- Dev Tools ----
   {
+    id: 'cipher-crypto',
+    name: 'Cipher & Encryption (AES/AEM)',
+    category: 'dev',
+    icon: KeyRound,
+    description: 'AES-GCM, Adobe AEM CryptoSupport, RC4, XOR, Caesar, and classical ciphers',
+    keywords: ['aes', 'gcm', 'aem', 'crypto', 'encrypt', 'decrypt', 'cipher', 'secret', 'adobe', 'rc4', 'cbc'],
+    component: lazy(() => import('./dev/CipherCryptoTool')),
+  },
+  {
+    id: 'regex-creator',
+    name: 'Regex Creator',
+    category: 'dev',
+    icon: Wand2,
+    description: 'Visual regular expression builder with modular rule blocks, presets, and live tester',
+    keywords: ['regex', 'creator', 'builder', 'visual', 'regular expression', 'pattern', 'generator'],
+    component: lazy(() => import('./dev/RegexCreator')),
+  },
+  {
     id: 'jwt-decoder',
     name: 'JWT Decoder',
     category: 'dev',
-    icon: KeyRound,
+    icon: ShieldCheck,
     description: 'Decode JWT tokens, inspect header, payload, and signature',
     keywords: ['jwt', 'token', 'decode', 'claims', 'bearer', 'auth'],
     component: lazy(() => import('./dev/JwtDecoder')),
@@ -182,8 +218,8 @@ const tools = [
     name: 'Timestamp Converter',
     category: 'dev',
     icon: Clock,
-    description: 'Convert between Unix timestamps and human-readable dates',
-    keywords: ['timestamp', 'unix', 'epoch', 'date', 'time', 'convert'],
+    description: 'Convert between Unix timestamps and human-readable dates with live IST clock',
+    keywords: ['timestamp', 'unix', 'epoch', 'date', 'time', 'convert', 'ist', 'india'],
     component: lazy(() => import('./dev/TimestampConverter')),
   },
 
