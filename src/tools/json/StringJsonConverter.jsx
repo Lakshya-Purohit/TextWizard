@@ -229,10 +229,10 @@ const StringJsonConverter = () => {
                 <span className="sjc-card-badge">Unescape & Prettify</span>
               </div>
               <p className="sjc-card-desc">
-                Paste escaped log payloads, stringified JSON literals (with \"), or plain text lines to parse into pretty, validated JSON.
+                Paste escaped log payloads, stringified JSON literals (with escaped quotes), or plain text lines to parse into pretty, validated JSON.
               </p>
               <div className="sjc-card-preview">
-                "{\"user\":\"Alice\"}" ➔ {'{'} "user": "Alice" {'}'}
+                {'"{\\"user\\":\\"Alice\\"}"'} ➔ {'{ "user": "Alice" }'}
               </div>
             </div>
 
@@ -252,7 +252,7 @@ const StringJsonConverter = () => {
                 Paste raw JSON objects to escape quotes and newlines for embedding into Java, JavaScript, Python, C#, or SQL.
               </p>
               <div className="sjc-card-preview">
-                {'{'} "user": "Alice" {'}'} ➔ "{\"user\":\"Alice\"}"
+                {'{ "user": "Alice" }'} ➔ {'"{\\"user\\":\\"Alice\\"}"'}
               </div>
             </div>
           </div>
