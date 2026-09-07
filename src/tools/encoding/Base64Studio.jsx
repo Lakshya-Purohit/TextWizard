@@ -3,10 +3,9 @@ import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
 import { transform } from '../../engine/transformEngine';
 import {
-  FileText, Image as ImageIcon, Music, Video as VideoIcon,
-  File, Upload, Download, Copy, Check, Eye, ExternalLink,
+  File, Upload, Download, Copy, Check, Eye,
   Trash2, Sparkles, FileCode, AlertCircle, ArrowLeftRight,
-  Binary, Type, RefreshCw
+  Type
 } from 'lucide-react';
 import './Base64FileConverter.css';
 import './Base64Studio.css';

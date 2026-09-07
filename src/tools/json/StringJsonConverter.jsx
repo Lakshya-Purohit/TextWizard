@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
 import {
-  CheckCircle, AlertCircle, Sparkles, ArrowRight, ArrowLeftRight,
-  Copy, Check, Trash2, FileText, Code2, Braces, Quote
+  CheckCircle, AlertCircle, ArrowRight, ArrowLeftRight,
+  Copy, Check, Trash2, Braces, Quote
 } from 'lucide-react';
 import './StringJsonConverter.css';
 

@@ -3,7 +3,7 @@ import {
   Braces, TreePine, ArrowLeftRight,
   FileCode2,
   Type, CaseSensitive,
-  Binary, Link, Code2, FileImage,
+  Binary, Link, Code2,
   KeyRound, Hash, Regex, Clock,
   GitCompare, Wand2, Smartphone, ShieldCheck, Quote
 } from 'lucide-react';
