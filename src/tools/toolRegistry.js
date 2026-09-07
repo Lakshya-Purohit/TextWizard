@@ -131,22 +131,13 @@ const tools = [
     component: lazy(() => import('./encoding/GsmEncoder')),
   },
   {
-    id: 'base64-file',
-    name: 'Base64 to File & Media',
-    category: 'encoding',
-    icon: FileImage,
-    description: 'Convert Base64 to PDF, Image, Video, Audio with live preview & download',
-    keywords: ['base64', 'pdf', 'image', 'video', 'audio', 'file', 'media', 'data uri', 'png', 'jpg', 'mp4', 'mp3', 'svg', 'convert', 'preview', 'download'],
-    component: lazy(() => import('./encoding/Base64FileConverter')),
-  },
-  {
     id: 'base64',
-    name: 'Base64 Encoder',
+    name: 'Base64 Studio',
     category: 'encoding',
     icon: Binary,
-    description: 'Encode and decode Base64 text and files',
-    keywords: ['base64', 'encode', 'decode', 'binary', 'file'],
-    component: lazy(() => import('./encoding/Base64Tool')),
+    description: 'All-in-one Base64 converter: Text, PDF, Images, Audio, Video & Files with live preview',
+    keywords: ['base64', 'pdf', 'image', 'video', 'audio', 'file', 'media', 'data uri', 'png', 'jpg', 'mp4', 'mp3', 'svg', 'convert', 'preview', 'download', 'encode', 'decode', 'binary', 'hex'],
+    component: lazy(() => import('./encoding/Base64Studio')),
   },
   {
     id: 'url-encoder',
@@ -243,6 +234,7 @@ export function getAllTools() {
 }
 
 export function getToolById(id) {
+  if (id === 'base64-file') return tools.find(t => t.id === 'base64');
   return tools.find(t => t.id === id);
 }
 

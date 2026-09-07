@@ -6,7 +6,7 @@ import {
 } from '../../engine/transformEngine';
 import {
   AlertTriangle, CheckCircle, Smartphone, ArrowLeftRight,
-  HelpCircle, Copy, Check
+  Copy, Check
 } from 'lucide-react';
 import './GsmEncoder.css';
 

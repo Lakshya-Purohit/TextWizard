@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
 import {
-  Wand2, Copy, Check, Plus, Trash2, Code2,
+  Copy, Check, Plus, Trash2, Code2,
   CheckCircle, AlertCircle, Sparkles, BookOpen, Layers
 } from 'lucide-react';
 import './RegexCreator.css';
