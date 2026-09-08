@@ -10,7 +10,6 @@ function getSnippets(toolId, options = {}) {
   switch (toolId) {
     case 'cipher-crypto': {
       const algo = options.algorithm || 'aes-256-cbc';
-      const isAes = algo.startsWith('aes-');
       const isGcm = algo.includes('-gcm');
       const is128 = algo.includes('128');
       const bits = is128 ? 128 : 256;
@@ -744,7 +743,10 @@ const CodeSnippetsPanel = ({ toolId, options = {} }) => {
   const [copied, setCopied] = useState(false);
 
   const snippetData = useMemo(() => getSnippets(toolId, options), [toolId, options]);
-  const languages = snippetData.languages || [{ id: 'node', label: 'JavaScript (Node)' }];
+  const languages = useMemo(
+    () => snippetData.languages || [{ id: 'node', label: 'JavaScript (Node)' }],
+    [snippetData]
+  );
 
   // Ensure active tab exists in current language list
   useEffect(() => {
