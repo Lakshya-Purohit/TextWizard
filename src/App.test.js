@@ -3,7 +3,7 @@ import App from './App';
 
 test('renders DevWizard workspace', () => {
   render(<App />);
-  const element = screen.getByText(/DevWizard/i);
-  expect(element).toBeInTheDocument();
+  const elements = screen.getAllByText(/DevWizard/i);
+  expect(elements.length).toBeGreaterThan(0);
 });
 

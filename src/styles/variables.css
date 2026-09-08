@@ -2,12 +2,12 @@
    DevWizard V4 — Royal Obsidian & Emerald / Gold Design System
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap');
 
 :root {
   /* Typography Scale */
-  --font-heading: 'Fraunces', 'Plus Jakarta Sans', Georgia, serif;
-  --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   --text-2xs: 0.6875rem; /* 11px */
@@ -62,166 +62,193 @@
 }
 
 /* ============================================================
-   Dark Mode — Royal Obsidian Base with Emerald & Gold Accents
+   Dark Mode & Root — True Neutral Charcoal & Gold Palette
+   Exact Hex Specifications:
+   --bg-base: #121212
+   --bg-surface: #1A1A1A
+   --bg-elevated: #222222
+   --border: #2C2C2C
+   --text-primary: #F2F1ED (warm off-white, never pure #FFFFFF)
+   --text-muted: #9A9A96
+   --accent-primary: #C9A227  (single gold accent)
+   --accent-success: #1F8A5F  (emerald — semantic success only)
+   --error: #C0392B
+   --warning: #B8862F
    ============================================================ */
-[data-theme="dark"] {
-  /* Surfaces */
-  --bg-app: #0c0e14;
-  --bg-sidebar: #0f1118;
-  --bg-topbar: #0f1118;
-  --bg-surface: #131622;
-  --bg-surface-hover: #181c2b;
-  --bg-surface-active: #20263a;
-  --bg-editor: #0c0e15;
-  --bg-input: #11141e;
-  --bg-panel: #10131d;
-  --bg-card: #121520;
-  --bg-card-hover: #171b29;
-  --bg-overlay: rgba(6, 8, 12, 0.78);
-  --bg-tooltip: #1b1f2e;
-  --bg-badge: #171b28;
+:root, [data-theme="dark"] {
+  --bg-base: #121212;
+  --bg-surface: #1A1A1A;
+  --bg-elevated: #222222;
+  --border: #2C2C2C;
+  --text-primary: #F2F1ED;
+  --text-muted: #9A9A96;
+  --accent-primary: #C9A227;
+  --accent-gold: #C9A227;
+  --accent-success: #1F8A5F;
+  --error: #C0392B;
+  --warning: #B8862F;
 
-  /* Crisp Subtle Borders */
-  --border-subtle: #191c28;
-  --border-default: #232738;
-  --border-strong: #32384e;
-  --border-focus: #10b981;
+  /* Surfaces mapped to neutral charcoal */
+  --bg-app: #121212;
+  --bg-sidebar: #1A1A1A;
+  --bg-topbar: #1A1A1A;
+  --bg-surface-hover: #222222;
+  --bg-surface-active: #2A2A2A;
+  --bg-editor: #121212;
+  --bg-input: #171717;
+  --bg-panel: #1A1A1A;
+  --bg-card: #1A1A1A;
+  --bg-card-hover: #222222;
+  --bg-overlay: rgba(18, 18, 18, 0.85);
+  --bg-tooltip: #222222;
+  --bg-badge: #222222;
+
+  /* Borders */
+  --border-subtle: #222222;
+  --border-default: #2C2C2C;
+  --border-strong: #383838;
+  --border-focus: #C9A227;
 
   /* Typography Colors */
-  --text-primary: #f3f5fa;
-  --text-secondary: #9aa2b7;
-  --text-tertiary: #60687f;
-  --text-disabled: #3e4456;
-  --text-inverse: #0c0e14;
-  --text-link: #34d399;
-  --text-code: #fbbf24;
+  --text-secondary: #9A9A96;
+  --text-tertiary: #6E6E6A;
+  --text-disabled: #4A4A46;
+  --text-inverse: #121212;
+  --text-link: #C9A227;
+  --text-code: #C9A227;
 
-  /* Accents — Royal Emerald */
-  --accent-primary: #10b981;
-  --accent-primary-hover: #34d399;
-  --accent-primary-subtle: rgba(16, 185, 129, 0.12);
-  --accent-primary-border: rgba(16, 185, 129, 0.28);
-  --accent-primary-text: #ffffff;
+  /* Single Brand Accent — Gold */
+  --accent-primary-hover: #D8AF30;
+  --accent-primary-subtle: rgba(201, 162, 39, 0.12);
+  --accent-primary-border: rgba(201, 162, 39, 0.35);
+  --accent-primary-text: #121212;
 
-  /* Accents — Warm Antique Gold / Champagne */
-  --accent-gold: #f59e0b;
-  --accent-gold-hover: #fbbf24;
-  --accent-gold-subtle: rgba(245, 158, 11, 0.12);
-  --accent-gold-border: rgba(245, 158, 11, 0.3);
+  --accent-gold-hover: #D8AF30;
+  --accent-gold-subtle: rgba(201, 162, 39, 0.12);
+  --accent-gold-border: rgba(201, 162, 39, 0.35);
 
   /* Functional Status Accents */
-  --accent-success: #10b981;
-  --accent-success-subtle: rgba(16, 185, 129, 0.12);
-  --accent-success-text: #ffffff;
+  --accent-success-subtle: rgba(31, 138, 95, 0.15);
+  --accent-success-text: #F2F1ED;
 
-  --accent-warning: #f59e0b;
-  --accent-warning-subtle: rgba(245, 158, 11, 0.12);
-  --accent-warning-text: #0c0e14;
+  --accent-warning: #B8862F;
+  --accent-warning-subtle: rgba(184, 134, 47, 0.15);
+  --accent-warning-text: #F2F1ED;
 
-  --accent-danger: #f43f5e;
-  --accent-danger-subtle: rgba(244, 63, 94, 0.12);
-  --accent-danger-text: #ffffff;
+  --accent-danger: #C0392B;
+  --accent-danger-subtle: rgba(192, 57, 43, 0.15);
+  --accent-danger-text: #F2F1ED;
 
-  --accent-info: #06b6d4;
-  --accent-info-subtle: rgba(6, 182, 212, 0.12);
-  --accent-info-text: #ffffff;
+  --accent-info: #C9A227;
+  --accent-info-subtle: rgba(201, 162, 39, 0.12);
+  --accent-info-text: #F2F1ED;
 
-  /* Distinct Categories */
-  --cat-json: #f59e0b;
-  --cat-xml: #f43f5e;
-  --cat-text: #10b981;
-  --cat-encoding: #06b6d4;
-  --cat-dev: #8b5cf6;
-  --cat-diff: #fb923c;
+  /* Categories — unified gold accent */
+  --cat-json: #C9A227;
+  --cat-xml: #C9A227;
+  --cat-text: #C9A227;
+  --cat-encoding: #C9A227;
+  --cat-dev: #C9A227;
+  --cat-diff: #C9A227;
 
   /* Scrollbars */
   --scrollbar-track: transparent;
-  --scrollbar-thumb: #232738;
-  --scrollbar-thumb-hover: #32384e;
+  --scrollbar-thumb: #2C2C2C;
+  --scrollbar-thumb-hover: #383838;
+
+  /* Focus Rings */
+  --ring-focus: 0 0 0 2px rgba(201, 162, 39, 0.45);
 
   /* Restrained Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 12px 20px -4px rgba(0, 0, 0, 0.55);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 20px -4px rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================================
-   Light Mode — Crisp Architectural Slate with Emerald & Gold
+   Light Mode — Clean Charcoal & Off-White
    ============================================================ */
 [data-theme="light"] {
+  --bg-base: #F5F5F3;
+  --bg-surface: #ECECE9;
+  --bg-elevated: #E2E2DE;
+  --border: #D1D1CB;
+  --text-primary: #1C1C1A;
+  --text-muted: #72726E;
+  --accent-primary: #A88318;
+  --accent-gold: #A88318;
+  --accent-success: #1F8A5F;
+  --error: #C0392B;
+  --warning: #B8862F;
+
   /* Surfaces */
-  --bg-app: #f8fafc;
-  --bg-sidebar: #ffffff;
-  --bg-topbar: #ffffff;
-  --bg-surface: #ffffff;
-  --bg-surface-hover: #f1f5f9;
-  --bg-surface-active: #e2e8f0;
-  --bg-editor: #ffffff;
-  --bg-input: #ffffff;
-  --bg-panel: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
-  --bg-overlay: rgba(15, 23, 42, 0.45);
-  --bg-tooltip: #0f172a;
-  --bg-badge: #e2e8f0;
+  --bg-app: #F5F5F3;
+  --bg-sidebar: #ECECE9;
+  --bg-topbar: #ECECE9;
+  --bg-surface-hover: #E2E2DE;
+  --bg-surface-active: #D9D9D4;
+  --bg-editor: #F5F5F3;
+  --bg-input: #ECECE9;
+  --bg-panel: #ECECE9;
+  --bg-card: #ECECE9;
+  --bg-card-hover: #E2E2DE;
+  --bg-overlay: rgba(28, 28, 26, 0.45);
+  --bg-tooltip: #1C1C1A;
+  --bg-badge: #E2E2DE;
 
   /* Borders */
-  --border-subtle: #f1f5f9;
-  --border-default: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --border-focus: #059669;
+  --border-subtle: #E2E2DE;
+  --border-default: #D1D1CB;
+  --border-strong: #BCBCB5;
+  --border-focus: #A88318;
 
   /* Typography Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --text-disabled: #cbd5e1;
-  --text-inverse: #ffffff;
-  --text-link: #059669;
-  --text-code: #b45309;
+  --text-secondary: #72726E;
+  --text-tertiary: #8E8E89;
+  --text-disabled: #BCBCB5;
+  --text-inverse: #F5F5F3;
+  --text-link: #A88318;
+  --text-code: #A88318;
 
   /* Accents */
-  --accent-primary: #059669;
-  --accent-primary-hover: #047857;
-  --accent-primary-subtle: rgba(5, 150, 105, 0.08);
-  --accent-primary-border: rgba(5, 150, 105, 0.25);
-  --accent-primary-text: #ffffff;
+  --accent-primary-hover: #917013;
+  --accent-primary-subtle: rgba(168, 131, 24, 0.1);
+  --accent-primary-border: rgba(168, 131, 24, 0.3);
+  --accent-primary-text: #F5F5F3;
 
-  --accent-gold: #d97706;
-  --accent-gold-hover: #b45309;
-  --accent-gold-subtle: rgba(217, 119, 6, 0.08);
-  --accent-gold-border: rgba(217, 119, 6, 0.25);
+  --accent-gold-hover: #917013;
+  --accent-gold-subtle: rgba(168, 131, 24, 0.1);
+  --accent-gold-border: rgba(168, 131, 24, 0.3);
 
-  --accent-success: #059669;
-  --accent-success-subtle: rgba(5, 150, 105, 0.08);
-  --accent-success-text: #ffffff;
+  --accent-success-subtle: rgba(31, 138, 95, 0.1);
+  --accent-success-text: #1C1C1A;
 
-  --accent-warning: #d97706;
-  --accent-warning-subtle: rgba(217, 119, 6, 0.08);
-  --accent-warning-text: #ffffff;
+  --accent-warning: #B8862F;
+  --accent-warning-subtle: rgba(184, 134, 47, 0.1);
+  --accent-warning-text: #1C1C1A;
 
-  --accent-danger: #e11d48;
-  --accent-danger-subtle: rgba(225, 29, 72, 0.08);
-  --accent-danger-text: #ffffff;
+  --accent-danger: #C0392B;
+  --accent-danger-subtle: rgba(192, 57, 43, 0.1);
+  --accent-danger-text: #1C1C1A;
 
-  --accent-info: #0891b2;
-  --accent-info-subtle: rgba(8, 145, 178, 0.08);
-  --accent-info-text: #ffffff;
+  --accent-info: #A88318;
+  --accent-info-subtle: rgba(168, 131, 24, 0.1);
+  --accent-info-text: #1C1C1A;
 
-  --cat-json: #d97706;
-  --cat-xml: #e11d48;
-  --cat-text: #059669;
-  --cat-encoding: #0891b2;
-  --cat-dev: #7c3aed;
-  --cat-diff: #ea580c;
+  --cat-json: #A88318;
+  --cat-xml: #A88318;
+  --cat-text: #A88318;
+  --cat-encoding: #A88318;
+  --cat-dev: #A88318;
+  --cat-diff: #A88318;
 
   --scrollbar-track: transparent;
-  --scrollbar-thumb: #cbd5e1;
-  --scrollbar-thumb-hover: #94a3b8;
+  --scrollbar-thumb: #D1D1CB;
+  --scrollbar-thumb-hover: #BCBCB5;
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  --shadow-xs: 0 1px 2px rgba(28, 28, 26, 0.05);
+  --shadow-sm: 0 1px 3px rgba(28, 28, 26, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(28, 28, 26, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(28, 28, 26, 0.12);
 }

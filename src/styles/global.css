@@ -53,7 +53,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Buttons Reset */
+/* Buttons Reset & Focus */
 button {
   font-family: inherit;
   font-size: inherit;
@@ -61,6 +61,12 @@ button {
   border: none;
   background: none;
   color: inherit;
+}
+
+/* Custom Gold Focus Rings (No default browser blue) */
+:focus-visible {
+  outline: 2px solid var(--accent-gold) !important;
+  outline-offset: 2px !important;
 }
 
 /* Inputs & Textareas */

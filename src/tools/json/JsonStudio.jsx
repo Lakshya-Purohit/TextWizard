@@ -4,12 +4,11 @@ import { useApp } from '../../context/AppContext';
 import {
   Braces, TreePine, ArrowLeftRight, Quote,
   CheckCircle2, AlertCircle,
-  Search, ChevronRight, ChevronDown, Wand2
-} from 'lucide-react';
+  Search, ChevronDown, Wand2, ChevronRight
+} from 'lucide-react';  
 import Papa from 'papaparse';
 import * as yaml from 'js-yaml';
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
-import CodeSnippetsPanel from '../../components/CodeSnippetsPanel';
 import './JsonStudio.css';
 
 /* ============================================================
@@ -417,13 +416,89 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
           </button>
         </div>
       )}
+
+      {activeTab === 'escape' && (
+        <div className="json-context-actions">
+          <div className="dw-btn-group">
+            <button
+              type="button"
+              className={`dw-btn dw-btn-xs ${escapeDirection === 'escape' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
+              onClick={() => setEscapeDirection('escape')}
+            >
+              JSON → String
+            </button>
+            <button
+              type="button"
+              className={`dw-btn dw-btn-xs ${escapeDirection === 'unescape' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
+              onClick={() => setEscapeDirection('unescape')}
+            >
+              Unescape Logs
+            </button>
+          </div>
+          {escapeDirection === 'escape' && (
+            <select
+              className="json-select"
+              value={escapeLang}
+              onChange={e => setEscapeLang(e.target.value)}
+            >
+              <option value="javascript">JS/TS</option>
+              <option value="python">Python</option>
+              <option value="csharp">C# (@"")</option>
+              <option value="java">Java</option>
+              <option value="sql">SQL</option>
+            </select>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'convert' && (
+        <div className="json-context-actions">
+          <div className="dw-btn-group">
+            <button
+              type="button"
+              className={`dw-btn dw-btn-xs ${convertDirection === 'json-to-target' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
+              onClick={() => setConvertDirection('json-to-target')}
+            >
+              JSON → {convertTarget.toUpperCase()}
+            </button>
+            <button
+              type="button"
+              className={`dw-btn dw-btn-xs ${convertDirection === 'target-to-json' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
+              onClick={() => setConvertDirection('target-to-json')}
+            >
+              {convertTarget.toUpperCase()} → JSON
+            </button>
+          </div>
+          <div className="dw-btn-group">
+            {['yaml', 'csv', 'xml'].map(fmt => (
+              <button
+                key={fmt}
+                type="button"
+                className={`dw-btn dw-btn-xs ${convertTarget === fmt ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
+                onClick={() => setConvertTarget(fmt)}
+              >
+                {fmt.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
+
+  const snippetOptions = {
+    tab: activeTab,
+    convertTarget,
+    convertDirection,
+    input,
+    outputData: output,
+  };
 
   return (
     <ToolWorkspace
       toolId="json-studio"
       toolbar={toolbar}
+      snippetOptions={snippetOptions}
       statusLeft={
         validation.valid ? (
           <span className="json-status-valid">
@@ -457,12 +532,12 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
               : 'Formatted JSON Output'
       }
       input={input}
-      output={output}
+      output={activeTab === 'tree' ? null : output}
       onInputChange={setInput}
       errorMessage={validation.valid ? null : validation.message}
     >
-      {/* Special Content Rendering for Tree Inspector */}
-      {activeTab === 'tree' && (
+      {/* Special Content Rendering ONLY for Tree Inspector */}
+      {activeTab === 'tree' ? (
         <div className="json-tree-workspace">
           <div className="json-tree-search-bar">
             <Search size={13} className="text-secondary" />
@@ -499,104 +574,7 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
             )}
           </div>
         </div>
-      )}
-
-      {/* Special Controls Bar for Stringify & Escape */}
-      {activeTab === 'escape' && (
-        <div className="json-sub-bar">
-          <div className="json-sub-group">
-            <span className="json-sub-label">Mode:</span>
-            <div className="dw-btn-group">
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${escapeDirection === 'escape' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setEscapeDirection('escape')}
-              >
-                JSON → Escaped String
-              </button>
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${escapeDirection === 'unescape' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setEscapeDirection('unescape')}
-              >
-                Unescape Logs → JSON
-              </button>
-            </div>
-          </div>
-
-          {escapeDirection === 'escape' && (
-            <div className="json-sub-group">
-              <span className="json-sub-label">Target Syntax:</span>
-              <select
-                className="json-select"
-                value={escapeLang}
-                onChange={e => setEscapeLang(e.target.value)}
-              >
-                <option value="javascript">JavaScript / TypeScript String</option>
-                <option value="python">Python String literal</option>
-                <option value="csharp">C# Verbatim String (@"")</option>
-                <option value="java">Java Escaped String</option>
-                <option value="sql">SQL Escaped String ('')</option>
-              </select>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Special Controls Bar for Converter Tab */}
-      {activeTab === 'convert' && (
-        <div className="json-sub-bar">
-          <div className="json-sub-group">
-            <span className="json-sub-label">Direction:</span>
-            <div className="dw-btn-group">
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${convertDirection === 'json-to-target' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setConvertDirection('json-to-target')}
-              >
-                JSON → {convertTarget.toUpperCase()}
-              </button>
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${convertDirection === 'target-to-json' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setConvertDirection('target-to-json')}
-              >
-                {convertTarget.toUpperCase()} → JSON
-              </button>
-            </div>
-          </div>
-
-          <div className="json-sub-group">
-            <span className="json-sub-label">Format:</span>
-            <div className="dw-btn-group">
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${convertTarget === 'yaml' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setConvertTarget('yaml')}
-              >
-                YAML
-              </button>
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${convertTarget === 'csv' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setConvertTarget('csv')}
-              >
-                CSV
-              </button>
-              <button
-                type="button"
-                className={`dw-btn dw-btn-xs ${convertTarget === 'xml' ? 'dw-btn-primary' : 'dw-btn-secondary'}`}
-                onClick={() => setConvertTarget('xml')}
-              >
-                XML
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Code Snippets Integration */}
-      <CodeSnippetsPanel toolId="json-studio" options={{ tab: activeTab }} />
+      ) : null}
     </ToolWorkspace>
   );
 };

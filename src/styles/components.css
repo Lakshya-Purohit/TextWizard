@@ -49,24 +49,25 @@
   padding: 4px;
 }
 
-/* Primary Button (Royal Emerald) */
+/* Primary Button (Gold Fill with Dark Text) */
 .dw-btn-primary {
-  background: var(--accent-primary);
+  background: var(--accent-gold);
   color: var(--accent-primary-text);
-  border-color: var(--accent-primary);
+  border-color: var(--accent-gold);
+  font-weight: 600;
   box-shadow: var(--shadow-xs);
 }
 
 .dw-btn-primary:hover {
-  background: var(--accent-primary-hover);
-  border-color: var(--accent-primary-hover);
-  color: #0c0e14;
+  background: var(--accent-gold-hover);
+  border-color: var(--accent-gold-hover);
+  color: var(--accent-primary-text);
 }
 
 /* Gold Button */
 .dw-btn-gold {
   background: var(--accent-gold);
-  color: #0c0e14;
+  color: var(--accent-primary-text);
   border-color: var(--accent-gold);
   font-weight: 600;
 }
@@ -76,17 +77,30 @@
   border-color: var(--accent-gold-hover);
 }
 
-/* Secondary Button */
+/* Secondary Button (Outlined Gold) */
 .dw-btn-secondary {
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  border-color: var(--border-default);
+  background: transparent;
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
 }
 
 .dw-btn-secondary:hover {
-  background: var(--bg-surface-hover);
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--accent-gold-hover);
+  border-color: var(--accent-gold-hover);
+}
+
+/* Destructive Button (--error) */
+.dw-btn-danger {
+  background: var(--error);
   color: var(--text-primary);
-  border-color: var(--border-strong);
+  border-color: var(--error);
+}
+
+.dw-btn-danger:hover {
+  background: #A93226;
+  border-color: #A93226;
+  color: var(--text-primary);
 }
 
 /* Ghost Button */
@@ -118,12 +132,14 @@
 }
 
 .dw-btn-group .dw-btn.dw-btn-primary {
-  background: var(--accent-primary);
+  background: var(--accent-gold);
   color: var(--accent-primary-text);
+  font-weight: 600;
 }
 
 .dw-btn-group .dw-btn.dw-btn-primary:hover {
-  color: #0c0e14;
+  background: var(--accent-gold-hover);
+  color: var(--accent-primary-text);
 }
 
 .dw-btn-group .dw-btn.dw-btn-secondary {

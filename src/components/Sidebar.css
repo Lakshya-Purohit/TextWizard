@@ -208,6 +208,22 @@
   background: var(--bg-surface-hover);
 }
 
+.dw-sidebar-cat-icon {
+  color: var(--accent-gold);
+  flex-shrink: 0;
+}
+
+.dw-sidebar-tool-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.dw-sidebar-item:hover .dw-sidebar-tool-icon,
+.dw-sidebar-item.active .dw-sidebar-tool-icon {
+  color: var(--accent-gold);
+}
+
 .dw-sidebar-category-left {
   display: flex;
   align-items: center;
@@ -237,6 +253,13 @@
   padding-left: 14px;
   margin: 2px 0 6px 0;
   border-left: 1px solid var(--border-subtle);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--transition-base);
+}
+
+.dw-sidebar-tools.expanded {
+  max-height: 600px; /* Large enough for any category */
 }
 
 /* Sidebar Footer */

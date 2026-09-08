@@ -16,42 +16,42 @@ export const CATEGORIES = {
     id: 'json',
     name: 'JSON',
     icon: Braces,
-    color: 'var(--cat-json)',
+    color: 'var(--accent-gold)',
     description: 'Format, validate, inspect, and convert JSON structures',
   },
   xml: {
     id: 'xml',
     name: 'XML',
     icon: FileCode2,
-    color: 'var(--cat-xml)',
+    color: 'var(--accent-gold)',
     description: 'XML syntax validation, formatting, and minification',
   },
   text: {
     id: 'text',
     name: 'Text',
     icon: Type,
-    color: 'var(--cat-text)',
+    color: 'var(--accent-gold)',
     description: 'Case transformations, sorting, and line deduplication',
   },
   encoding: {
     id: 'encoding',
     name: 'Encoding',
     icon: Binary,
-    color: 'var(--cat-encoding)',
+    color: 'var(--accent-gold)',
     description: 'Base64 studio, GSM 03.38 SMS, URL, and HTML entities',
   },
   dev: {
     id: 'dev',
     name: 'Security & Dev',
     icon: KeyRound,
-    color: 'var(--cat-dev)',
+    color: 'var(--accent-gold)',
     description: 'Cryptography, JWT decoder, RegEx builder, timestamps, and hashes',
   },
   diff: {
     id: 'diff',
     name: 'Diff & Compare',
     icon: GitCompare,
-    color: 'var(--cat-diff)',
+    color: 'var(--accent-gold)',
     description: 'Side-by-side visual difference and line/word comparisons',
   },
 };
@@ -66,14 +66,14 @@ const tools = [
     name: 'JSON Studio',
     category: 'json',
     icon: Layers,
-    description: 'All-in-one JSON workspace: format & validate, interactive tree inspector, escape/unescape log strings (CloudWatch, Java, Python, C#), and convert to YAML, CSV, and XML.',
-    keywords: ['json', 'format', 'validate', 'beautify', 'prettify', 'minify', 'tree', 'viewer', 'explorer', 'hierarchy', 'jsonpath', 'convert', 'yaml', 'csv', 'xml', 'escape', 'unescape', 'log', 'cloudwatch', 'string', 'java', 'python', 'csharp', 'repair', 'sort keys'],
+    description: 'All-in-one JSON workspace: format & validate, interactive tree inspector, escape/unescape log strings (CloudWatch, Java, Python, C#), and convert to YAML, CSV, XML, and String.',
+    keywords: ['json', 'format', 'validate', 'beautify', 'prettify', 'minify', 'tree', 'viewer', 'explorer', 'hierarchy', 'jsonpath', 'convert', 'yaml', 'csv', 'xml', 'string', 'escape', 'unescape', 'log', 'cloudwatch', 'java', 'python', 'csharp', 'repair', 'sort keys'],
     relatedTools: ['xml-formatter', 'cipher-crypto', 'text-diff'],
     component: lazy(() => import('./json/JsonStudio')),
     faqs: [
       {
         question: 'What does JSON Studio include?',
-        answer: 'JSON Studio consolidates four separate JSON tools into one: (1) Format & Validate with auto-repair of common errors, (2) Interactive Tree Inspector with collapsible nodes and JSONPath copying, (3) Stringify & Log Unescaper for Java/Python/C#/CloudWatch log strings, and (4) Bidirectional converter to/from YAML, CSV, and XML.'
+        answer: 'JSON Studio consolidates four separate JSON tools into one: (1) Format & Validate with auto-repair of common errors, (2) Interactive Tree Inspector with collapsible nodes and JSONPath copying, (3) Stringify & Log Unescaper for Java/Python/C#/CloudWatch log strings, and (4) Bidirectional converter to/from YAML, CSV, XML, and escaped Strings.'
       },
       {
         question: 'How do I unescape JSON from CloudWatch or Datadog logs?',
@@ -85,12 +85,13 @@ const tools = [
       }
     ]
   },
-  // Backward-compat aliases so existing deep links to old tool IDs still work
+  // Backward-compat aliases so existing deep links to old tool IDs still work (hidden from sidebar nav)
   {
     id: 'json-formatter',
     name: 'JSON Formatter',
     category: 'json',
     icon: Braces,
+    hidden: true,
     description: 'Format, validate, and minify JSON — now part of JSON Studio.',
     keywords: ['json', 'format', 'validate', 'minify'],
     relatedTools: ['json-studio'],
@@ -102,6 +103,7 @@ const tools = [
     name: 'JSON Tree Viewer',
     category: 'json',
     icon: TreePine,
+    hidden: true,
     description: 'Interactive JSON tree inspector — now part of JSON Studio.',
     keywords: ['json', 'tree', 'viewer', 'explorer'],
     relatedTools: ['json-studio'],
@@ -113,6 +115,7 @@ const tools = [
     name: 'JSON Converter',
     category: 'json',
     icon: ArrowLeftRight,
+    hidden: true,
     description: 'Convert JSON to YAML, CSV, XML — now part of JSON Studio.',
     keywords: ['json', 'convert', 'yaml', 'csv', 'xml'],
     relatedTools: ['json-studio'],
@@ -124,6 +127,7 @@ const tools = [
     name: 'String ⇄ JSON',
     category: 'json',
     icon: Quote,
+    hidden: true,
     description: 'Escape and unescape JSON log strings — now part of JSON Studio.',
     keywords: ['json', 'escape', 'unescape', 'log', 'string'],
     relatedTools: ['json-studio'],

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES, getToolById } from './toolRegistry';
 import SeoMeta from '../components/SeoMeta';
+import CodeSnippetsPanel from '../components/CodeSnippetsPanel';
 import {
   Copy, Download, Trash2, Maximize2, Minimize2,
   Star, Shield, ChevronRight, HelpCircle, ChevronDown,
@@ -27,6 +28,9 @@ const ToolWorkspace = ({
   hideOutput = false,
   customEmptyState = null,
   errorMessage = null,
+  codeSnippetsPanel = null,
+  snippetOptions = {},
+  showCodeSnippets = true,
 }) => {
   const { toggleFavorite, isFavorite, addHistory, showToast } = useApp();
   const navigate = useNavigate();
@@ -250,7 +254,7 @@ const ToolWorkspace = ({
             <div className="dw-resizer dw-hide-mobile" onMouseDown={handleMouseDown} />
           )}
 
-          {/* Output Panel */}
+            {/* Output Panel */}
           {!hideOutput && (
             <div
               className={`dw-workspace-panel output-panel ${mobilePanelTab === 'input' ? 'mobile-panel-hidden' : ''}`}
@@ -263,28 +267,38 @@ const ToolWorkspace = ({
                 </div>
                 <div className="dw-panel-header-actions">
                   {output && (
-                    <>
-                      <button
-                        className="dw-btn dw-btn-ghost dw-btn-sm"
-                        onClick={() => handleCopy(output)}
-                        title="Copy output to clipboard"
-                      >
-                        {copiedOutput ? <Check size={12} className="text-success" /> : <Copy size={12} />}
-                        <span>{copiedOutput ? 'Copied' : 'Copy'}</span>
-                      </button>
-                      <button
-                        className="dw-btn dw-btn-ghost dw-btn-sm"
-                        onClick={() => handleDownload(output, `${toolId || 'output'}.txt`)}
-                        title="Download output file"
-                      >
-                        <Download size={12} />
-                      </button>
-                    </>
+                    <button
+                      type="button"
+                      className="dw-btn dw-btn-ghost dw-btn-sm"
+                      onClick={() => handleCopy(output)}
+                      title="Copy output to clipboard"
+                    >
+                      {copiedOutput ? <Check size={12} className="text-success" /> : <Copy size={12} />}
+                      <span>{copiedOutput ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  )}
+                  {showCodeSnippets !== false && (
+                    codeSnippetsPanel || (
+                      <CodeSnippetsPanel
+                        toolId={toolId}
+                        options={{ ...snippetOptions, input, output }}
+                      />
+                    )
+                  )}
+                  {output && (
+                    <button
+                      type="button"
+                      className="dw-btn dw-btn-ghost dw-btn-sm"
+                      onClick={() => handleDownload(output, `${toolId || 'output'}.txt`)}
+                      title="Download output file"
+                    >
+                      <Download size={12} />
+                    </button>
                   )}
                 </div>
               </div>
               <div className="dw-panel-body dw-workspace-editor">
-                {children ? (
+                {React.Children.toArray(children).length > 0 ? (
                   children
                 ) : errorMessage ? (
                   <div className="dw-empty">
@@ -294,7 +308,7 @@ const ToolWorkspace = ({
                     <div className="dw-empty-title">Validation Error</div>
                     <div className="dw-empty-desc">{errorMessage}</div>
                   </div>
-                ) : output ? (
+                ) : (output !== null && output !== undefined && output !== '') ? (
                   <textarea
                     className="dw-workspace-textarea"
                     value={output}

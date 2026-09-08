@@ -29,17 +29,17 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { history, favorites, isFavorite, toggleFavorite, setCommandPaletteOpen } = useApp();
 
-  const allTools = useMemo(() => getAllTools(), []);
+  const allTools = useMemo(() => getAllTools().filter(t => !t.hidden), []);
 
   const recentTools = useMemo(() => {
     return history
       .slice(0, 6)
       .map(h => getToolById(h.toolId))
-      .filter(Boolean);
+      .filter(t => t && !t.hidden);
   }, [history]);
 
   const favoriteTools = useMemo(() => {
-    return favorites.map(id => getToolById(id)).filter(Boolean);
+    return favorites.map(id => getToolById(id)).filter(t => t && !t.hidden);
   }, [favorites]);
 
   const categories = Object.values(CATEGORIES);

@@ -40,7 +40,7 @@ const Sidebar = () => {
 
   const favoriteTools = useMemo(() => {
     const allTools = Object.values(CATEGORIES).flatMap(cat => getToolsByCategory(cat.id));
-    return allTools.filter(t => favorites.includes(t.id));
+    return allTools.filter(t => !t.hidden && favorites.includes(t.id));
   }, [favorites]);
 
   const filteredCategories = useMemo(() => {
@@ -49,8 +49,10 @@ const Sidebar = () => {
     const filtered = {};
     Object.entries(CATEGORIES).forEach(([key, cat]) => {
       const tools = getToolsByCategory(cat.id).filter(t =>
-        t.name.toLowerCase().includes(q) ||
-        t.keywords.some(k => k.includes(q))
+        !t.hidden && (
+          t.name.toLowerCase().includes(q) ||
+          t.keywords.some(k => k.includes(q))
+        )
       );
       if (tools.length > 0) filtered[key] = cat;
     });
@@ -58,7 +60,7 @@ const Sidebar = () => {
   }, [searchQuery]);
 
   const getFilteredTools = (catId) => {
-    const tools = getToolsByCategory(catId);
+    const tools = getToolsByCategory(catId).filter(t => !t.hidden);
     if (!searchQuery.trim()) return tools;
     const q = searchQuery.toLowerCase();
     return tools.filter(t =>
@@ -140,11 +142,11 @@ const Sidebar = () => {
                   key={cat.id}
                   className="dw-sidebar-icon-btn"
                   onClick={() => {
-                    const tools = getToolsByCategory(cat.id);
+                    const tools = getToolsByCategory(cat.id).filter(t => !t.hidden);
                     if (tools.length > 0) handleNavigate(`/tool/${tools[0].id}`);
                   }}
                   title={cat.name}
-                  style={{ color: cat.color }}
+                  style={{ color: 'var(--accent-gold)' }}
                 >
                   <Icon size={18} />
                 </button>
@@ -177,7 +179,7 @@ const Sidebar = () => {
                       className={`dw-sidebar-item ${currentToolId === tool.id ? 'active' : ''}`}
                       onClick={() => handleNavigate(`/tool/${tool.id}`)}
                     >
-                      <Icon size={14} style={{ color: CATEGORIES[tool.category]?.color }} />
+                      <Icon size={14} className="dw-sidebar-tool-icon" />
                       <span>{tool.name}</span>
                     </button>
                   );
@@ -199,33 +201,33 @@ const Sidebar = () => {
                     onClick={() => toggleCategory(cat.id)}
                   >
                     <div className="dw-sidebar-category-left">
-                      <div className="dw-cat-indicator" style={{ background: cat.color }} />
-                      <CatIcon size={14} style={{ color: cat.color }} />
+                      <CatIcon size={14} className="dw-sidebar-cat-icon" />
                       <span>{cat.name}</span>
                     </div>
                     <div className="dw-sidebar-category-right">
                       <span className="dw-sidebar-count">{tools.length}</span>
-                      {isExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+                      <ChevronDown
+                        size={13}
+                        className={`dw-sidebar-cat-chevron ${isExpanded ? 'open' : ''}`}
+                      />
                     </div>
                   </button>
-                  {isExpanded && (
-                    <div className="dw-sidebar-tools">
-                      {tools.map(tool => {
-                        const Icon = tool.icon;
-                        return (
-                          <button
-                            key={tool.id}
-                            className={`dw-sidebar-item ${currentToolId === tool.id ? 'active' : ''}`}
-                            onClick={() => handleNavigate(`/tool/${tool.id}`)}
-                          >
-                            <Icon size={14} style={{ color: CATEGORIES[tool.category]?.color }} />
-                            <span>{tool.name}</span>
-                            {isFavorite(tool.id) && <Star size={10} className="dw-sidebar-fav-star" />}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
+                  <div className={`dw-sidebar-tools ${isExpanded ? 'expanded' : ''}`}>
+                    {tools.map(tool => {
+                      const Icon = tool.icon;
+                      return (
+                        <button
+                          key={tool.id}
+                          className={`dw-sidebar-item ${currentToolId === tool.id ? 'active' : ''}`}
+                          onClick={() => handleNavigate(`/tool/${tool.id}`)}
+                        >
+                          <Icon size={14} className="dw-sidebar-tool-icon" />
+                          <span>{tool.name}</span>
+                          {isFavorite(tool.id) && <Star size={10} className="dw-sidebar-fav-star" />}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}
