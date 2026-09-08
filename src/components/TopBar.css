@@ -14,6 +14,7 @@
   top: 0;
   z-index: var(--z-topbar);
   gap: var(--space-4);
+  min-width: 0;
 }
 
 .dw-topbar-left {
@@ -91,6 +92,7 @@
 /* Center Search Trigger */
 .dw-topbar-center {
   flex: 1;
+  min-width: 0;
   max-width: 440px;
 }
 
@@ -143,6 +145,7 @@
   align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .dw-topbar-ist-chip {
@@ -212,6 +215,33 @@
   background: var(--bg-surface-hover);
   color: var(--text-primary);
   border-color: var(--border-strong);
+}
+
+/* Keep the application chrome usable when browser zoom reduces the CSS
+   viewport before the phone breakpoint is reached. */
+@media (max-width: 1100px) {
+  .dw-topbar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--topbar-height);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    row-gap: 6px;
+  }
+
+  .dw-topbar-left {
+    flex: 1 1 auto;
+  }
+
+  .dw-topbar-center {
+    order: 3;
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .dw-topbar-right {
+    margin-left: auto;
+  }
 }
 
 @media (max-width: 768px) {

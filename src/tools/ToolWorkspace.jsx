@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES, getToolById } from './toolRegistry';
 import SeoMeta from '../components/SeoMeta';
 import CodeSnippetsPanel from '../components/CodeSnippetsPanel';
 import {
   Copy, Download, Trash2, Maximize2, Minimize2,
-  Star, Shield, ChevronRight, HelpCircle, ChevronDown,
-  ArrowRight, Sparkles, Check
+  Star, Shield, ChevronRight, HelpCircle,
+  Sparkles, Check
 } from 'lucide-react';
 import './ToolWorkspace.css';
 
@@ -33,11 +32,9 @@ const ToolWorkspace = ({
   showCodeSnippets = true,
 }) => {
   const { toggleFavorite, isFavorite, addHistory, showToast } = useApp();
-  const navigate = useNavigate();
   const [splitRatio, setSplitRatio] = useState(50);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [mobilePanelTab, setMobilePanelTab] = useState('input'); // 'input', 'output', 'both'
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [copiedOutput, setCopiedOutput] = useState(false);
   const containerRef = useRef(null);
   const isDragging = useRef(false);
@@ -117,11 +114,6 @@ const ToolWorkspace = ({
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   }, [splitRatio]);
-
-  // Related Tools
-  const relatedTools = (tool?.relatedTools || [])
-    .map(id => getToolById(id))
-    .filter(Boolean);
 
   return (
     <div className="dw-workspace" ref={containerRef}>
@@ -339,71 +331,6 @@ const ToolWorkspace = ({
         <div className="dw-workspace-status-right">{statusRight}</div>
       </div>
 
-      {/* Bottom Documentation, FAQ & Interlinking Section */}
-      {tool && (
-        <section className="dw-workspace-footer-section">
-          {/* Related Tools Discovery */}
-          {relatedTools.length > 0 && (
-            <div className="dw-related-tools-box">
-              <h3 className="dw-footer-subheading">Related Developer Tools</h3>
-              <div className="dw-related-tools-grid">
-                {relatedTools.map(rel => {
-                  const RelIcon = rel.icon;
-                  const relCat = CATEGORIES[rel.category];
-                  return (
-                    <div
-                      key={rel.id}
-                      className="dw-related-tool-card"
-                      onClick={() => navigate(`/tool/${rel.id}`)}
-                    >
-                      <div className="dw-related-icon" style={{ color: relCat?.color, background: `${relCat?.color}14` }}>
-                        <RelIcon size={16} />
-                      </div>
-                      <div className="dw-related-info">
-                        <span className="dw-related-name">{rel.name}</span>
-                        <span className="dw-related-desc">{rel.description}</span>
-                      </div>
-                      <ArrowRight size={13} className="dw-related-arrow" />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* How It Works & FAQs for AEO */}
-          {tool.faqs && tool.faqs.length > 0 && (
-            <div className="dw-tool-faq-box">
-              <h3 className="dw-footer-subheading">Frequently Asked Questions & Technical Overview</h3>
-              <div className="dw-faq-accordion">
-                {tool.faqs.map((faq, idx) => {
-                  const isOpen = openFaqIndex === idx;
-                  return (
-                    <article key={idx} className="dw-faq-item">
-                      <button
-                        className="dw-faq-question-btn"
-                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        aria-expanded={isOpen}
-                      >
-                        <h4 className="dw-faq-question-text">{faq.question}</h4>
-                        <ChevronDown
-                          size={15}
-                          className={`dw-faq-chevron ${isOpen ? 'open' : ''}`}
-                        />
-                      </button>
-                      {isOpen && (
-                        <div className="dw-faq-answer">
-                          <p>{faq.answer}</p>
-                        </div>
-                      )}
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </section>
-      )}
     </div>
   );
 };

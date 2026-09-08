@@ -11,25 +11,18 @@ import * as yaml from 'js-yaml';
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import './JsonStudio.css';
 
-/* ============================================================
-   Helper Utilities for JSON Processing
-   ============================================================ */
-
+/* Helper utilities */
 function tryAutoRepairJson(raw) {
   let text = raw.trim();
-  // Replace trailing commas before } or ]
   text = text.replace(/,\s*([}\]])/g, '$1');
-  // Replace single quotes around keys/values with double quotes
   text = text.replace(/'([^'\\]*(?:\\.[^'\\]*)*)'/g, '"$1"');
-  // Quote unquoted object keys: { foo: "bar" } -> { "foo": "bar" }
   text = text.replace(/([{,]\s*)([a-zA-Z0-9_$-]+)\s*:/g, '$1"$2":');
   return text;
 }
 
 function sortJsonKeys(value) {
-  if (Array.isArray(value)) {
-    return value.map(sortJsonKeys);
-  } else if (value !== null && typeof value === 'object') {
+  if (Array.isArray(value)) return value.map(sortJsonKeys);
+  if (value !== null && typeof value === 'object') {
     const sorted = {};
     Object.keys(value).sort().forEach(key => {
       sorted[key] = sortJsonKeys(value[key]);
@@ -55,17 +48,12 @@ function flattenObject(ob, prefix = '', result = {}) {
   return result;
 }
 
-/* ============================================================
-   Tree Node Component for Interactive Tree Tab
-   ============================================================ */
 const TreeNode = ({ keyName, value, path, searchQuery, onCopyPath }) => {
   const [collapsed, setCollapsed] = useState(false);
   const isObject = value !== null && typeof value === 'object';
   const isArray = Array.isArray(value);
-
   const displayPath = path || keyName || '$';
 
-  // Highlight matches
   const isMatch = useMemo(() => {
     if (!searchQuery) return false;
     const q = searchQuery.toLowerCase();
@@ -86,6 +74,7 @@ const TreeNode = ({ keyName, value, path, searchQuery, onCopyPath }) => {
         {keyName !== undefined && <span className="tree-key">{keyName}: </span>}
         <span className={`tree-val ${valTypeClass}`}>{valFormatted}</span>
         <button
+          type="button"
           className="tree-path-btn"
           title={`Copy path: ${displayPath}`}
           onClick={() => onCopyPath(displayPath)}
@@ -103,6 +92,7 @@ const TreeNode = ({ keyName, value, path, searchQuery, onCopyPath }) => {
     <div className="tree-branch">
       <div className={`tree-branch-header ${isMatch ? 'highlight-match' : ''}`}>
         <button
+          type="button"
           className="tree-collapse-btn"
           onClick={() => setCollapsed(!collapsed)}
           aria-expanded={!collapsed}
@@ -114,6 +104,7 @@ const TreeNode = ({ keyName, value, path, searchQuery, onCopyPath }) => {
         <span className="tree-count">{count} {count === 1 ? 'item' : 'items'}</span>
         <span className="tree-bracket">{isArray ? ']' : '}'}</span>
         <button
+          type="button"
           className="tree-path-btn"
           title={`Copy path: ${displayPath}`}
           onClick={() => onCopyPath(displayPath)}
@@ -143,13 +134,9 @@ const TreeNode = ({ keyName, value, path, searchQuery, onCopyPath }) => {
   );
 };
 
-/* ============================================================
-   Main Unified JsonStudio Component
-   ============================================================ */
 const JsonStudio = ({ defaultTab = 'format' }) => {
   const { showToast } = useApp();
 
-  // Active Tab: 'format' | 'tree' | 'escape' | 'convert'
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [input, setInput] = useState(
     '{\n  "status": "success",\n  "code": 200,\n  "data": {\n    "service": "DevWizard Unified JSON Studio",\n    "version": "4.0.0",\n    "features": [\n      "Format & Minify",\n      "Interactive Tree Explorer",\n      "Code Escaper & Log Unescaper",\n      "CSV / YAML / XML Converter"\n    ],\n    "secure": true\n  }\n}'
@@ -159,19 +146,13 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
   const [validation, setValidation] = useState({ valid: true, message: 'Valid JSON' });
   const [parsedData, setParsedData] = useState(null);
 
-  // Tab Specific States
-  // Format Tab
   const [isSorted, setIsSorted] = useState(false);
-  // Tree Tab
   const [treeSearch, setTreeSearch] = useState('');
-  // Escape Tab
-  const [escapeLang, setEscapeLang] = useState('javascript'); // 'javascript' | 'python' | 'csharp' | 'java' | 'sql'
-  const [escapeDirection, setEscapeDirection] = useState('escape'); // 'escape' | 'unescape'
-  // Convert Tab
-  const [convertTarget, setConvertTarget] = useState('yaml'); // 'yaml' | 'csv' | 'xml'
+  const [escapeLang, setEscapeLang] = useState('javascript');
+  const [escapeDirection, setEscapeDirection] = useState('escape');
+  const [convertTarget, setConvertTarget] = useState('yaml');
   const [convertDirection, setConvertDirection] = useState('json-to-target');
 
-  // Debounced Parsing & Operation Execution
   const executeOperation = useCallback(() => {
     if (!input.trim()) {
       setOutput('');
@@ -180,15 +161,12 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
       return;
     }
 
-    // 1. In unescape mode or target-to-json mode, we parse differently
     if (activeTab === 'escape' && escapeDirection === 'unescape') {
       try {
         let unescaped = input.trim();
-        // Remove enclosing quotes if present
         if ((unescaped.startsWith('"') && unescaped.endsWith('"')) || (unescaped.startsWith("'") && unescaped.endsWith("'"))) {
           unescaped = unescaped.slice(1, -1);
         }
-        // Unescape standard escaped characters
         unescaped = unescaped
           .replace(/\\"/g, '"')
           .replace(/\\\\/g, '\\')
@@ -229,35 +207,19 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
       return;
     }
 
-    // Standard JSON input parsing
     try {
       let parsed = JSON.parse(input);
       setParsedData(parsed);
       setValidation({ valid: true, message: 'Valid JSON' });
 
-      // TAB 1: Format & Validate
       if (activeTab === 'format') {
-        if (isSorted) {
-          parsed = sortJsonKeys(parsed);
-        }
-        if (indent === 0) {
-          setOutput(JSON.stringify(parsed));
-        } else {
-          setOutput(JSON.stringify(parsed, null, indent));
-        }
-      }
-
-      // TAB 2: Tree Inspector
-      else if (activeTab === 'tree') {
-        // Output can mirror formatted JSON or stats
+        if (isSorted) parsed = sortJsonKeys(parsed);
+        setOutput(indent === 0 ? JSON.stringify(parsed) : JSON.stringify(parsed, null, indent));
+      } else if (activeTab === 'tree') {
         setOutput(JSON.stringify(parsed, null, 2));
-      }
-
-      // TAB 3: Escape / Stringify for programming languages
-      else if (activeTab === 'escape') {
+      } else if (activeTab === 'escape') {
         const minified = JSON.stringify(parsed);
         let escaped = '';
-
         switch (escapeLang) {
           case 'javascript':
             escaped = JSON.stringify(minified);
@@ -278,10 +240,7 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
             escaped = JSON.stringify(minified);
         }
         setOutput(escaped);
-      }
-
-      // TAB 4: Converter (JSON to CSV, YAML, XML)
-      else if (activeTab === 'convert') {
+      } else if (activeTab === 'convert') {
         if (convertTarget === 'yaml') {
           setOutput(yaml.dump(parsed, { indent: 2 }));
         } else if (convertTarget === 'xml') {
@@ -300,12 +259,8 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
       }
     } catch (err) {
       setParsedData(null);
-      // Syntax error detail extraction
-      const msg = err.message;
-      setValidation({ valid: false, message: `Syntax Error: ${msg}` });
-      if (activeTab === 'format') {
-        setOutput('');
-      }
+      setValidation({ valid: false, message: `Syntax Error: ${err.message}` });
+      if (activeTab === 'format') setOutput('');
     }
   }, [input, activeTab, indent, isSorted, escapeLang, escapeDirection, convertTarget, convertDirection]);
 
@@ -313,7 +268,6 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
     executeOperation();
   }, [executeOperation]);
 
-  // Quick Action: Auto-repair common JSON errors
   const handleAutoRepair = () => {
     try {
       const repaired = tryAutoRepairJson(input);
@@ -325,7 +279,6 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
     }
   };
 
-  // Quick Action: Minify
   const handleMinify = () => {
     try {
       const parsed = JSON.parse(input);
@@ -337,7 +290,6 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
     }
   };
 
-  // Quick Action: Prettify 2
   const handlePrettify = () => {
     try {
       const parsed = JSON.parse(input);
@@ -349,16 +301,14 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
     }
   };
 
-  // Tree Path Copy
   const handleCopyPath = (path) => {
     navigator.clipboard.writeText(path);
     showToast(`Copied path: ${path}`, 'success');
   };
 
-  // Custom Toolbar
+  /* The toolbar containing navigation pills + context actions side by side */
   const toolbar = (
     <div className="json-studio-toolbar">
-      {/* Tab Switcher Pills */}
       <div className="json-nav-pills">
         <button
           type="button"
@@ -394,7 +344,6 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
         </button>
       </div>
 
-      {/* Tab Contextual Actions */}
       {activeTab === 'format' && (
         <div className="json-context-actions">
           <button type="button" className="dw-btn dw-btn-ghost dw-btn-sm" onClick={handlePrettify}>
@@ -536,7 +485,7 @@ const JsonStudio = ({ defaultTab = 'format' }) => {
       onInputChange={setInput}
       errorMessage={validation.valid ? null : validation.message}
     >
-      {/* Special Content Rendering ONLY for Tree Inspector */}
+      {/* ONLY tree inspector replaces output pane */}
       {activeTab === 'tree' ? (
         <div className="json-tree-workspace">
           <div className="json-tree-search-bar">

@@ -26,11 +26,22 @@
   pointer-events: none;
 }
 
+.dw-btn svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
 .dw-btn-sm {
   padding: 4px 10px;
   font-size: var(--text-xs);
   gap: 5px;
   border-radius: var(--radius-sm);
+}
+
+.dw-btn-sm svg {
+  width: 13px;
+  height: 13px;
 }
 
 .dw-btn-lg {
@@ -47,6 +58,11 @@
 
 .dw-btn-icon.dw-btn-sm {
   padding: 4px;
+}
+
+.dw-btn-icon svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Primary Button (Gold Fill with Dark Text) */

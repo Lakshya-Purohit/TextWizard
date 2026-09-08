@@ -154,6 +154,27 @@
   text-align: left;
 }
 
+.dw-sidebar-item svg,
+.dw-sidebar-category svg,
+.dw-sidebar-section-header svg {
+  flex: 0 0 auto;
+}
+
+.dw-sidebar-item > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dw-sidebar-category-left > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dw-sidebar-category-right > svg {
+  width: 14px;
+  height: 14px;
+}
+
 .dw-sidebar-item:hover {
   background: var(--bg-surface-hover);
   color: var(--text-primary);
