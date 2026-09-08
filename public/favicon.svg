@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Royal deep navy background -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f1118;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#131622;stop-opacity:1" />
+    </linearGradient>
+    <!-- Emerald to gold accent gradient for star/glow -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <!-- Subtle glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Sharp glow for star points -->
+    <filter id="starGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="96" fill="url(#bgGrad)"/>
+
+  <!-- Subtle border ring -->
+  <rect width="512" height="512" rx="96" fill="none" stroke="#232738" stroke-width="4"/>
+
+  <!-- === Wizard Hat (top-right accent motif) === -->
+  <!-- Hat brim (ellipse) -->
+  <ellipse cx="372" cy="152" rx="52" ry="14" fill="#10b981" opacity="0.85"/>
+  <!-- Hat cone -->
+  <polygon points="372,52 320,152 424,152" fill="url(#accentGrad)" opacity="0.9"/>
+  <!-- Hat band -->
+  <rect x="322" y="143" width="100" height="10" rx="3" fill="#0f1118" opacity="0.6"/>
+  <!-- Star on hat tip -->
+  <g filter="url(#starGlow)">
+    <polygon
+      points="372,38 376,50 388,50 379,57 382,69 372,62 362,69 365,57 356,50 368,50"
+      fill="#f59e0b"
+      opacity="1"
+    />
+  </g>
+
+  <!-- === LP Monogram (center) === -->
+  <!-- "L" letterform -->
+  <text
+    x="104"
+    y="350"
+    font-family="'Fraunces', Georgia, serif"
+    font-size="248"
+    font-weight="700"
+    fill="url(#accentGrad)"
+    filter="url(#glow)"
+    dominant-baseline="auto"
+    letter-spacing="-8"
+  >L</text>
+
+  <!-- "P" letterform -->
+  <text
+    x="250"
+    y="350"
+    font-family="'Fraunces', Georgia, serif"
+    font-size="248"
+    font-weight="700"
+    fill="#f3f5fa"
+    opacity="0.95"
+    dominant-baseline="auto"
+  >P</text>
+
+  <!-- Emerald accent underline -->
+  <rect x="80" y="368" width="352" height="6" rx="3" fill="url(#accentGrad)" opacity="0.85"/>
+
+  <!-- Small decorative stars scattered -->
+  <circle cx="120" cy="90" r="5" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="145" cy="70" r="3" fill="#10b981" opacity="0.6"/>
+  <circle cx="165" cy="95" r="2" fill="#f59e0b" opacity="0.5"/>
+  <circle cx="430" cy="310" r="4" fill="#10b981" opacity="0.5"/>
+  <circle cx="450" cy="340" r="2" fill="#f59e0b" opacity="0.4"/>
+</svg>

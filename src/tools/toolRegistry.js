@@ -5,7 +5,7 @@ import {
   Type, CaseSensitive,
   Binary, Link, Code2,
   KeyRound, Hash, Regex, Clock,
-  GitCompare, Wand2, Smartphone, ShieldCheck
+  GitCompare, Wand2, Smartphone, ShieldCheck, Layers
 } from 'lucide-react';
 
 /* ============================================
@@ -60,74 +60,75 @@ export const CATEGORIES = {
    Tool Definitions with FAQs & AEO Context
    ============================================ */
 const tools = [
-  // ---- JSON Category ----
+  // ---- JSON Category — Unified JSON Studio ----
+  {
+    id: 'json-studio',
+    name: 'JSON Studio',
+    category: 'json',
+    icon: Layers,
+    description: 'All-in-one JSON workspace: format & validate, interactive tree inspector, escape/unescape log strings (CloudWatch, Java, Python, C#), and convert to YAML, CSV, and XML.',
+    keywords: ['json', 'format', 'validate', 'beautify', 'prettify', 'minify', 'tree', 'viewer', 'explorer', 'hierarchy', 'jsonpath', 'convert', 'yaml', 'csv', 'xml', 'escape', 'unescape', 'log', 'cloudwatch', 'string', 'java', 'python', 'csharp', 'repair', 'sort keys'],
+    relatedTools: ['xml-formatter', 'cipher-crypto', 'text-diff'],
+    component: lazy(() => import('./json/JsonStudio')),
+    faqs: [
+      {
+        question: 'What does JSON Studio include?',
+        answer: 'JSON Studio consolidates four separate JSON tools into one: (1) Format & Validate with auto-repair of common errors, (2) Interactive Tree Inspector with collapsible nodes and JSONPath copying, (3) Stringify & Log Unescaper for Java/Python/C#/CloudWatch log strings, and (4) Bidirectional converter to/from YAML, CSV, and XML.'
+      },
+      {
+        question: 'How do I unescape JSON from CloudWatch or Datadog logs?',
+        answer: 'Switch to the "Stringify & Logs" tab, select "Unescape Logs → JSON" mode, and paste your log snippet. DevWizard strips escaped quotes and extracts embedded JSON, formatting it cleanly.'
+      },
+      {
+        question: 'Is my JSON data sent to any server?',
+        answer: 'No. All parsing, formatting, conversion, and tree rendering executes 100% locally in your browser JavaScript engine. No data leaves your device.'
+      }
+    ]
+  },
+  // Backward-compat aliases so existing deep links to old tool IDs still work
   {
     id: 'json-formatter',
     name: 'JSON Formatter',
     category: 'json',
     icon: Braces,
-    description: 'Prettify, format, minify, and validate JSON data with instant inline syntax diagnostics.',
-    keywords: ['format', 'beautify', 'prettify', 'json', 'minify', 'validate', 'syntax error', 'indent'],
-    relatedTools: ['json-tree', 'string-json', 'json-converter'],
-    component: lazy(() => import('./json/JsonFormatter')),
-    faqs: [
-      {
-        question: 'How do I format and validate JSON locally?',
-        answer: 'Paste your raw JSON into DevWizard JSON Formatter. The tool parses it client-side in real time, formats it with your chosen indentation (2 or 4 spaces), and provides instant syntax error line numbers if invalid.'
-      },
-      {
-        question: 'Is my JSON data uploaded to any external server?',
-        answer: 'No. DevWizard processes 100% of your data client-side in your browser via JavaScript. No data or telemetry leaves your device.'
-      }
-    ]
+    description: 'Format, validate, and minify JSON — now part of JSON Studio.',
+    keywords: ['json', 'format', 'validate', 'minify'],
+    relatedTools: ['json-studio'],
+    component: lazy(() => import('./json/JsonStudio')),
+    faqs: []
   },
   {
     id: 'json-tree',
     name: 'JSON Tree Viewer',
     category: 'json',
     icon: TreePine,
-    description: 'Explore, filter, and inspect complex nested JSON objects with collapsible tree nodes and path copying.',
-    keywords: ['tree', 'viewer', 'explorer', 'json', 'node', 'hierarchy', 'jsonpath', 'filter'],
-    relatedTools: ['json-formatter', 'string-json', 'json-converter'],
-    component: lazy(() => import('./json/JsonTreeViewer')),
-    faqs: [
-      {
-        question: 'What is the JSON Tree Viewer used for?',
-        answer: 'It helps developers visualize deep, complex JSON hierarchies as interactive collapsible trees, filter keys/values dynamically, and copy exact dot/bracket paths directly to clipboard.'
-      }
-    ]
+    description: 'Interactive JSON tree inspector — now part of JSON Studio.',
+    keywords: ['json', 'tree', 'viewer', 'explorer'],
+    relatedTools: ['json-studio'],
+    component: lazy(() => import('./json/JsonStudio')),
+    faqs: []
   },
   {
     id: 'json-converter',
     name: 'JSON Converter',
     category: 'json',
     icon: ArrowLeftRight,
-    description: 'Convert JSON to CSV (with deep object flattening), YAML, XML, or escaped code string literals.',
-    keywords: ['convert', 'json', 'xml', 'yaml', 'csv', 'transform', 'flatten', 'unparse', 'export'],
-    relatedTools: ['string-json', 'json-formatter', 'xml-formatter'],
-    component: lazy(() => import('./json/JsonConverter')),
-    faqs: [
-      {
-        question: 'How does JSON to CSV conversion handle nested objects?',
-        answer: 'DevWizard automatically flattens nested JSON objects into dot-separated (or underscore/slash) columns, allowing hierarchical data to be seamlessly imported into spreadsheets like Excel and Google Sheets.'
-      }
-    ]
+    description: 'Convert JSON to YAML, CSV, XML — now part of JSON Studio.',
+    keywords: ['json', 'convert', 'yaml', 'csv', 'xml'],
+    relatedTools: ['json-studio'],
+    component: lazy(() => import('./json/JsonStudio')),
+    faqs: []
   },
   {
     id: 'string-json',
-    name: 'String ⇄ JSON Converter',
+    name: 'String ⇄ JSON',
     category: 'json',
     icon: Quote,
-    description: 'Parse escaped log strings into clean formatted JSON, or escape JSON objects for Java, JS, Python, C#, and SQL.',
-    keywords: ['string', 'json', 'unescape', 'escape', 'log', 'cloudwatch', 'java', 'python', 'csharp', 'sql', 'literal'],
-    relatedTools: ['json-formatter', 'json-converter'],
-    component: lazy(() => import('./json/StringJsonConverter')),
-    faqs: [
-      {
-        question: 'How do I unescape JSON from server logs like CloudWatch or Datadog?',
-        answer: 'Select String → JSON mode and paste the log snippet. DevWizard detects escaped quotes (\\") and extracts the embedded JSON payload, automatically formatting it into valid JSON.'
-      }
-    ]
+    description: 'Escape and unescape JSON log strings — now part of JSON Studio.',
+    keywords: ['json', 'escape', 'unescape', 'log', 'string'],
+    relatedTools: ['json-studio'],
+    component: lazy(() => import('./json/JsonStudio')),
+    faqs: []
   },
 
   // ---- XML Category ----

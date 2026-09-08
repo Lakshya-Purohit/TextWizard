@@ -1,0 +1,137 @@
+/* ============================================================
+   Code Snippets Panel Styling — Royal DevWizard Theme
+   ============================================================ */
+
+.dw-snippet-panel {
+  margin-top: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-base);
+}
+
+.dw-snippet-panel:hover {
+  border-color: var(--border-strong);
+}
+
+.dw-snippet-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-panel);
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  transition: background var(--transition-fast);
+  text-align: left;
+}
+
+.dw-snippet-toggle:hover {
+  background: var(--bg-surface-hover);
+}
+
+.dw-snippet-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dw-snippet-icon {
+  color: var(--accent-gold);
+}
+
+.dw-snippet-title {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.dw-snippet-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary-border);
+}
+
+.dw-snippet-toggle-right {
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+}
+
+.dw-snippet-body {
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-editor);
+}
+
+.dw-snippet-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dw-snippet-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dw-snippet-tab {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dw-snippet-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+
+.dw-snippet-tab.active {
+  color: var(--accent-gold);
+  background: var(--accent-gold-subtle);
+  border-color: var(--accent-gold-border);
+}
+
+.dw-snippet-copy-btn {
+  font-size: 11px;
+  padding: 3px 8px;
+}
+
+.dw-snippet-code {
+  margin: 0;
+  padding: 14px 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-editor);
+  overflow-x: auto;
+  max-height: 320px;
+  scrollbar-width: thin;
+}
+
+.dw-snippet-code code {
+  font-family: var(--font-mono);
+}
