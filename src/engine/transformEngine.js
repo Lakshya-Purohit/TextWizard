@@ -3,14 +3,14 @@ import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import Papa from 'papaparse';
 
 /**
- * Universal Data Transformation Engine
+ * DevWizard V4 — Universal Data Transformation Engine
  */
 
 export const CONVERTERS = {
   // JSON -> YAML
   'json-yaml': (input) => {
     const obj = typeof input === 'string' ? JSON.parse(input) : input;
-    return yaml.dump(obj, { indent: 2, lineWidth: -1 });
+    return yaml.dump(obj, { indent: 2, lineWidth: -1, noRefs: true });
   },
 
   // YAML -> JSON
@@ -22,15 +22,13 @@ export const CONVERTERS = {
   // JSON -> XML
   'json-xml': (input) => {
     const obj = typeof input === 'string' ? JSON.parse(input) : input;
-    // fast-xml-parser builder
     const builder = new XMLBuilder({
       ignoreAttributes: false,
       format: true,
       indentBy: '  ',
       suppressEmptyNode: false
     });
-    // Ensure root object
-    const wrapped = typeof obj === 'object' && !Array.isArray(obj) && Object.keys(obj).length === 1
+    const wrapped = typeof obj === 'object' && obj !== null && !Array.isArray(obj) && Object.keys(obj).length === 1
       ? obj
       : { root: obj };
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + builder.build(wrapped);
@@ -41,13 +39,14 @@ export const CONVERTERS = {
     const parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: '@_',
-      parseTagValue: true
+      parseTagValue: true,
+      trimValues: true
     });
     const parsed = parser.parse(input);
     return JSON.stringify(parsed, null, indent);
   },
 
-  // JSON -> CSV
+  // JSON -> CSV (with recursive flattening)
   'json-csv': (input, options = {}) => {
     let data = typeof input === 'string' ? JSON.parse(input) : input;
     if (!Array.isArray(data)) {
@@ -73,7 +72,7 @@ export const CONVERTERS = {
     return JSON.stringify(result.data, null, indent);
   },
 
-  // XML -> CSV (via XML -> JSON -> CSV)
+  // XML -> CSV
   'xml-csv': (input) => {
     const parser = new XMLParser({ ignoreAttributes: false });
     let parsed = parser.parse(input);
@@ -88,7 +87,7 @@ export const CONVERTERS = {
     return Papa.unparse(flattened);
   },
 
-  // CSV -> XML (via CSV -> JSON -> XML)
+  // CSV -> XML
   'csv-xml': (input) => {
     const result = Papa.parse(input, { header: true, dynamicTyping: true, skipEmptyLines: true });
     const builder = new XMLBuilder({ ignoreAttributes: false, format: true, indentBy: '  ' });
@@ -174,12 +173,23 @@ export const CONVERTERS = {
 
   // Text -> Base64
   'text-base64': (input) => {
-    return btoa(unescape(encodeURIComponent(input)));
+    const bytes = new TextEncoder().encode(input);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) {
+      bin += String.fromCharCode(bytes[i]);
+    }
+    return btoa(bin);
   },
 
   // Base64 -> Text
   'base64-text': (input) => {
-    return decodeURIComponent(escape(atob(input.trim())));
+    const clean = input.trim().replace(/[\s\r\n]+/g, '');
+    const bin = atob(clean);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) {
+      bytes[i] = bin.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
   },
 
   // Text -> Hex
@@ -225,14 +235,16 @@ export const CONVERTERS = {
 
   // HTML Entity Encode / Decode
   'html-encode': (input) => {
-    const textarea = document.createElement('textarea');
-    textarea.innerText = input;
-    return textarea.innerHTML;
+    return input
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   },
   'html-decode': (input) => {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = input;
-    return textarea.value;
+    const doc = new DOMParser().parseFromString(input, 'text/html');
+    return doc.documentElement.textContent || '';
   }
 };
 
@@ -376,53 +388,6 @@ export function gsm7BitHexToText(hex) {
     }
   }
   return text;
-}
-
-/**
- * Magic detection of input type
- */
-export function detectFormat(input) {
-  if (!input || typeof input !== 'string') return 'unknown';
-  const trimmed = input.trim();
-
-  // JWT
-  if (/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/.test(trimmed) && trimmed.split('.').length === 3) {
-    return 'jwt';
-  }
-
-  // JSON
-  if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
-    try {
-      JSON.parse(trimmed);
-      return 'json';
-    } catch {
-      // not valid JSON
-    }
-  }
-
-  // XML / HTML
-  if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
-    return 'xml';
-  }
-
-  // Base64
-  if (/^[A-Za-z0-9+/=]{8,}$/.test(trimmed) && trimmed.length % 4 === 0) {
-    try {
-      if (atob(trimmed)) return 'base64';
-    } catch {}
-  }
-
-  // URL
-  if (/^https?:\/\/[^\s]+$/.test(trimmed)) {
-    return 'url';
-  }
-
-  // Timestamp
-  if (/^\d{10}(\d{3})?$/.test(trimmed)) {
-    return 'timestamp';
-  }
-
-  return 'text';
 }
 
 export default transform;

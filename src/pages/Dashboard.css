@@ -1,33 +1,44 @@
-/* ============================================
-   Developer Dashboard Styles (Engineered UI)
-   ============================================ */
+/* ============================================================
+   DevWizard V4 — Dashboard Styles
+   ============================================================ */
 
 .dw-dashboard {
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   background: var(--bg-app);
+  overflow-y: auto;
 }
 
 .dw-dashboard-inner {
-  max-width: 1140px;
+  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: var(--space-8) var(--space-6) var(--space-12);
+  padding: var(--space-8) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 
-/* Header */
+/* Command Center Header */
 .dw-dash-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-6);
-  padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--border-subtle);
-  flex-wrap: wrap;
+  padding: var(--space-6) var(--space-6);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
 }
 
 .dw-dash-header-left {
-  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 680px;
 }
 
 .dw-dash-badge {
@@ -35,27 +46,28 @@
   align-items: center;
   gap: 6px;
   padding: 3px 10px;
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-primary);
+  background: var(--accent-primary-subtle);
+  border: 1px solid var(--accent-primary-border);
   border-radius: var(--radius-full);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  font-size: var(--text-xs);
-  color: var(--accent-success);
-  font-weight: 500;
-  margin-bottom: var(--space-3);
-  letter-spacing: 0.02em;
+  width: fit-content;
 }
 
 .dw-dash-badge-icon {
-  color: var(--accent-success);
+  color: var(--accent-primary);
 }
 
 .dw-dash-headline {
-  font-size: var(--text-2xl);
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  margin-bottom: var(--space-2);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .dw-dash-subtitle {
@@ -64,32 +76,36 @@
   line-height: 1.5;
 }
 
-/* Search Trigger in Header */
+.dw-dash-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .dw-dash-search-trigger {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: 8px 14px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  font-family: var(--font-ui);
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--text-tertiary);
   font-size: var(--text-sm);
   cursor: pointer;
-  min-width: 260px;
   transition: all var(--transition-fast);
-  box-shadow: var(--shadow-xs);
+  min-width: 240px;
 }
 
 .dw-dash-search-trigger:hover {
   background: var(--bg-surface-hover);
-  border-color: var(--border-strong);
+  border-color: var(--accent-primary);
   color: var(--text-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
 }
 
 .dw-dash-search-icon {
-  color: var(--text-tertiary);
+  color: var(--accent-primary);
 }
 
 .dw-dash-search-text {
@@ -105,70 +121,61 @@
 
 .dw-dash-search-keys kbd {
   display: inline-block;
-  padding: 2px 5px;
+  padding: 2px 6px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  line-height: 1;
-  background: var(--bg-panel);
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xs);
-  color: var(--text-tertiary);
 }
 
-/* Quick Strip */
+/* Quick Access Stats Strip */
 .dw-dash-quick-strip {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
-  border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: var(--space-8);
   flex-wrap: wrap;
 }
 
 .dw-dash-stat-pill {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
   font-size: var(--text-xs);
   color: var(--text-secondary);
-  background: var(--bg-surface);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
 }
 
-.dw-dash-stat-pill strong {
-  color: var(--text-primary);
-}
-
-.dw-dash-stat-pill svg {
-  color: var(--accent-primary);
-}
-
-/* Section Common */
+/* Sections */
 .dw-dash-section {
-  margin-bottom: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .dw-dash-section-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .dw-dash-section-label {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  color: var(--text-primary);
+  gap: 8px;
 }
 
 .dw-dash-section-label h2 {
-  font-size: var(--text-md);
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  color: var(--text-primary);
 }
 
 .dw-dash-section-meta {
@@ -177,41 +184,41 @@
   font-family: var(--font-mono);
 }
 
-/* Grid & Cards */
+/* Tool Grid */
 .dw-dash-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
 }
 
+/* Card */
 .dw-dash-card {
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  padding: 14px 16px;
   background: var(--bg-card);
   border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-fast);
-  user-select: none;
   position: relative;
 }
 
 .dw-dash-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-strong);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
 
 .dw-dash-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
 
@@ -225,7 +232,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 
 .dw-dash-card-name {
@@ -239,7 +246,7 @@
 
 .dw-dash-card-cat {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   flex-shrink: 0;
@@ -259,47 +266,42 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  align-self: center;
+  flex-shrink: 0;
 }
 
 .dw-dash-card-fav {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-xs);
-  color: var(--text-tertiary);
-  cursor: pointer;
   transition: all var(--transition-fast);
-  opacity: 0.6;
 }
 
 .dw-dash-card-fav:hover {
-  background: var(--bg-surface-hover);
-  opacity: 1;
   color: var(--accent-warning);
+  background: var(--bg-surface-hover);
 }
 
 .dw-dash-card-arrow {
   color: var(--text-tertiary);
-  opacity: 0;
-  transform: translateX(-3px);
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast);
 }
 
 .dw-dash-card:hover .dw-dash-card-arrow {
-  opacity: 1;
-  transform: translateX(0);
+  color: var(--accent-primary);
+  transform: translateX(3px);
 }
 
-/* Category Groups */
+/* Categorized Container */
 .dw-dash-categories-container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
 }
 
 .dw-dash-cat-group {
@@ -318,74 +320,122 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 8px;
-  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
   border: 1px solid transparent;
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .dw-dash-cat-desc {
   font-size: var(--text-xs);
   color: var(--text-tertiary);
-  flex: 1;
 }
 
 .dw-dash-cat-count {
+  margin-left: auto;
   font-size: 11px;
   font-family: var(--font-mono);
   color: var(--text-tertiary);
-  background: var(--bg-surface);
-  padding: 1px 6px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border-subtle);
 }
 
-/* ============================================
-   Dashboard Mobile Media Queries
-   ============================================ */
-@media (max-width: 768px) {
-  .dw-dashboard-inner {
-    padding: var(--space-4) var(--space-4) var(--space-8);
-  }
+/* Info & FAQ Section (AEO) */
+.dw-dash-info-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
 
+.dw-dash-info-card,
+.dw-dash-faq-card {
+  padding: var(--space-6);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dw-dash-info-heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dw-dash-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dw-dash-feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dw-dash-feature-icon {
+  color: var(--accent-primary);
+  margin-bottom: 2px;
+}
+
+.dw-dash-feature-item h4 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dw-dash-feature-item p {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.dw-dash-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dw-dash-faq-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dw-dash-faq-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dw-dash-faq-q {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dw-dash-faq-a {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
   .dw-dash-header {
     flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-4);
   }
-
   .dw-dash-header-right {
     width: 100%;
   }
-
   .dw-dash-search-trigger {
     width: 100%;
-    min-width: 0;
   }
-
-  .dw-dash-headline {
-    font-size: var(--text-xl);
-  }
-
-  .dw-dash-grid {
+  .dw-dash-info-section {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .dw-dash-card {
-    padding: var(--space-2) var(--space-3);
-  }
-
-  .dw-dash-card-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .dw-dash-card-icon svg {
-    width: 15px;
-    height: 15px;
   }
 }

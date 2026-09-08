@@ -1,30 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
 import {
   Lock, Unlock, Key, RefreshCw, Copy, Check,
-  ShieldCheck, AlertCircle, ArrowLeftRight
+  ShieldCheck, AlertCircle, ArrowRightLeft, ArrowRight
 } from 'lucide-react';
 import './CipherCryptoTool.css';
 
-// WebCrypto helper: Derive AES key from password + salt via PBKDF2
+/* ============================================
+   Legacy PBKDF2 Key Derivation (existing aes-gcm mode)
+   ============================================ */
 async function deriveAesKey(password, salt, keyLength = 256) {
   const enc = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey(
-    'raw',
-    enc.encode(password),
-    'PBKDF2',
-    false,
-    ['deriveKey']
-  );
-
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
-    {
-      name: 'PBKDF2',
-      salt: salt,
-      iterations: 100000,
-      hash: 'SHA-256'
-    },
+    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
     keyMaterial,
     { name: 'AES-GCM', length: keyLength },
     false,
@@ -32,276 +22,382 @@ async function deriveAesKey(password, salt, keyLength = 256) {
   );
 }
 
-// Convert ArrayBuffer to Hex string
-function bufToHex(buffer) {
-  return Array.from(new Uint8Array(buffer))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+/* ============================================
+   SHA-256 Key Derivation (.NET compatible)
+   ============================================ */
+async function deriveSha256Key(passphrase, keyByteLength, algoName) {
+  const enc = new TextEncoder();
+  const hashBuf = await crypto.subtle.digest('SHA-256', enc.encode(passphrase));
+  const keyBytes = new Uint8Array(hashBuf).slice(0, keyByteLength);
+  return crypto.subtle.importKey(
+    'raw',
+    keyBytes,
+    { name: algoName },
+    false,
+    ['encrypt', 'decrypt']
+  );
 }
 
-// Convert Hex string to Uint8Array
+/* ============================================
+   AES-CBC Encrypt / Decrypt (Web Crypto API)
+   ============================================ */
+async function encryptAesCbc(plaintext, passphrase, keyByteLength) {
+  const enc = new TextEncoder();
+  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const key = await deriveSha256Key(passphrase, keyByteLength, 'AES-CBC');
+  const ciphertextBuf = await crypto.subtle.encrypt(
+    { name: 'AES-CBC', iv },
+    key,
+    enc.encode(plaintext)
+  );
+  // Pack: iv(16) + ciphertext
+  const combined = new Uint8Array(16 + ciphertextBuf.byteLength);
+  combined.set(iv, 0);
+  combined.set(new Uint8Array(ciphertextBuf), 16);
+  return combined;
+}
+
+async function decryptAesCbc(packed, passphrase, keyByteLength) {
+  if (packed.length < 17) throw new Error('Ciphertext too short (needs 16-byte IV + data).');
+  const iv = packed.slice(0, 16);
+  const ciphertext = packed.slice(16);
+  const key = await deriveSha256Key(passphrase, keyByteLength, 'AES-CBC');
+  const decryptedBuf = await crypto.subtle.decrypt(
+    { name: 'AES-CBC', iv },
+    key,
+    ciphertext
+  );
+  return new TextDecoder().decode(decryptedBuf);
+}
+
+/* ============================================
+   AES-GCM Encrypt / Decrypt (Web Crypto API)
+   12-byte nonce, 128-bit auth tag (appended by WebCrypto)
+   ============================================ */
+async function encryptAesGcmNew(plaintext, passphrase, keyByteLength) {
+  const enc = new TextEncoder();
+  const nonce = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveSha256Key(passphrase, keyByteLength, 'AES-GCM');
+  const ciphertextBuf = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv: nonce, tagLength: 128 },
+    key,
+    enc.encode(plaintext)
+  );
+  // Pack: nonce(12) + ciphertext+tag
+  const combined = new Uint8Array(12 + ciphertextBuf.byteLength);
+  combined.set(nonce, 0);
+  combined.set(new Uint8Array(ciphertextBuf), 12);
+  return combined;
+}
+
+async function decryptAesGcmNew(packed, passphrase, keyByteLength) {
+  if (packed.length < 13) throw new Error('Ciphertext too short (needs 12-byte nonce + data + 16-byte tag).');
+  const nonce = packed.slice(0, 12);
+  const ciphertextWithTag = packed.slice(12);
+  const key = await deriveSha256Key(passphrase, keyByteLength, 'AES-GCM');
+  const decryptedBuf = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv: nonce, tagLength: 128 },
+    key,
+    ciphertextWithTag
+  );
+  return new TextDecoder().decode(decryptedBuf);
+}
+
+/* ============================================
+   Binary <-> Encoding Helpers
+   ============================================ */
+function bufToHex(buffer) {
+  return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 function hexToBuf(hexStr) {
   const clean = hexStr.replace(/[^0-9a-fA-F]/g, '');
-  const bytes = new Uint8Array(clean.length / 2);
-  for (let i = 0; i < clean.length; i += 2) {
-    bytes[i / 2] = parseInt(clean.substr(i, 2), 16);
-  }
+  const bytes = new Uint8Array(Math.floor(clean.length / 2));
+  for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(clean.substr(i * 2, 2), 16);
   return bytes;
 }
-
-// Convert ArrayBuffer to Base64
 function bufToBase64(buffer) {
   let binary = '';
   const bytes = new Uint8Array(buffer);
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
+  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
   return btoa(binary);
 }
-
-// Convert Base64 to Uint8Array
 function base64ToBuf(b64) {
   const binary = atob(b64.trim());
   const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   return bytes;
 }
 
-// Classic Ciphers (Caesar, ROT13, XOR, RC4)
-function runClassicCipher(text, algo, key, isDecrypt) {
-  if (algo === 'rot13') {
-    return text.replace(/[a-zA-Z]/g, (c) => {
-      const base = c <= 'Z' ? 65 : 97;
-      return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
-    });
+/* ============================================
+   Classic Cipher Helpers (unchanged)
+   ============================================ */
+function xorBytes(inputBytes, keyStr) {
+  const result = new Uint8Array(inputBytes.length);
+  for (let i = 0; i < inputBytes.length; i++) result[i] = inputBytes[i] ^ keyStr.charCodeAt(i % keyStr.length);
+  return result;
+}
+function rc4Bytes(inputBytes, keyStr) {
+  const s = Array.from({ length: 256 }, (_, i) => i);
+  let j = 0;
+  for (let i = 0; i < 256; i++) {
+    j = (j + s[i] + keyStr.charCodeAt(i % keyStr.length)) % 256;
+    [s[i], s[j]] = [s[j], s[i]];
   }
-
-  if (algo === 'caesar') {
-    const shift = parseInt(key, 10) || 3;
-    const effShift = isDecrypt ? (26 - (shift % 26)) % 26 : shift % 26;
-    return text.replace(/[a-zA-Z]/g, (c) => {
-      const base = c <= 'Z' ? 65 : 97;
-      return String.fromCharCode(((c.charCodeAt(0) - base + effShift) % 26) + base);
-    });
+  let i2 = 0, j2 = 0;
+  const result = new Uint8Array(inputBytes.length);
+  for (let k = 0; k < inputBytes.length; k++) {
+    i2 = (i2 + 1) % 256;
+    j2 = (j2 + s[i2]) % 256;
+    [s[i2], s[j2]] = [s[j2], s[i2]];
+    result[k] = inputBytes[k] ^ s[(s[i2] + s[j2]) % 256];
   }
-
-  if (algo === 'xor') {
-    const keyStr = key || 'secretKey';
-    let res = '';
-    for (let i = 0; i < text.length; i++) {
-      res += String.fromCharCode(text.charCodeAt(i) ^ keyStr.charCodeAt(i % keyStr.length));
-    }
-    return res;
-  }
-
-  if (algo === 'rc4') {
-    const keyStr = key || 'secretKey';
-    const s = [];
-    for (let i = 0; i < 256; i++) s[i] = i;
-    let j = 0;
-    for (let i = 0; i < 256; i++) {
-      j = (j + s[i] + keyStr.charCodeAt(i % keyStr.length)) % 256;
-      [s[i], s[j]] = [s[j], s[i]];
-    }
-    let i = 0;
-    j = 0;
-    let res = '';
-    for (let k = 0; k < text.length; k++) {
-      i = (i + 1) % 256;
-      j = (j + s[i]) % 256;
-      [s[i], s[j]] = [s[j], s[i]];
-      const prng = s[(s[i] + s[j]) % 256];
-      res += String.fromCharCode(text.charCodeAt(k) ^ prng);
-    }
-    return res;
-  }
-
-  return text;
+  return result;
+}
+function caesarText(text, shift, isDecrypt) {
+  const effShift = isDecrypt ? (26 - (shift % 26)) % 26 : shift % 26;
+  return text.replace(/[a-zA-Z]/g, c => {
+    const base = c <= 'Z' ? 65 : 97;
+    return String.fromCharCode(((c.charCodeAt(0) - base + effShift) % 26) + base);
+  });
+}
+function rot13Text(text) {
+  return text.replace(/[a-zA-Z]/g, c => {
+    const base = c <= 'Z' ? 65 : 97;
+    return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+  });
 }
 
+/* ============================================
+   Algorithm metadata
+   ============================================ */
+const AES_NEW_ALGOS = ['aes-128-cbc', 'aes-256-cbc', 'aes-128-gcm', 'aes-256-gcm'];
+const AES_LEGACY_ALGOS = ['aes-gcm', 'aem-crypto'];
+
+function getAesParams(algo) {
+  switch (algo) {
+    case 'aes-128-cbc': return { mode: 'CBC', keyBytes: 16, bits: 128 };
+    case 'aes-256-cbc': return { mode: 'CBC', keyBytes: 32, bits: 256 };
+    case 'aes-128-gcm': return { mode: 'GCM', keyBytes: 16, bits: 128 };
+    case 'aes-256-gcm': return { mode: 'GCM', keyBytes: 32, bits: 256 };
+    default: return null;
+  }
+}
+
+function getStatusLabel(algo) {
+  const params = getAesParams(algo);
+  if (!params) return null;
+  const pad = params.mode === 'CBC' ? ' · PKCS7' : ' · Authenticated';
+  return `AES-${params.bits}-${params.mode}${pad} · SHA-256 Key`;
+}
+
+/* ============================================
+   CipherCryptoTool Component
+   ============================================ */
 const CipherCryptoTool = () => {
   const { showToast } = useApp();
-  const [algorithm, setAlgorithm] = useState('aes-gcm'); // 'aes-gcm' | 'aem-crypto' | 'aes-cbc' | 'rot13' | 'caesar' | 'xor' | 'rc4'
-  const [mode, setMode] = useState('encrypt'); // 'encrypt' | 'decrypt'
-  const [key, setKey] = useState('devwizard-secret-passphrase-2026');
-  const [outputFormat, setOutputFormat] = useState('base64'); // 'base64' | 'hex'
-  const [plainInput, setPlainInput] = useState('Welcome to DevWizard Secure Cryptography Studio. Confidential data protection.');
+  const [algorithm, setAlgorithm] = useState('aes-256-cbc');
+  const [mode, setMode] = useState('encrypt');
+  const [key, setKey] = useState('');
+  const [outputFormat, setOutputFormat] = useState('base64');
+  const [plainInput, setPlainInput] = useState('Welcome to DevWizard Secure Cryptography Studio.');
   const [cipherInput, setCipherInput] = useState('');
-  const [status, setStatus] = useState({ valid: true, message: '' });
+  const [status, setStatus] = useState({ valid: true, message: 'Ready — enter an encryption key to begin' });
   const [copied, setCopied] = useState(false);
+  const debounceRef = useRef(null);
 
-  // Generate random strong passphrase
+  const isNewAes = AES_NEW_ALGOS.includes(algorithm);
+  const isLegacyAes = AES_LEGACY_ALGOS.includes(algorithm);
+  const isClassic = ['rot13', 'caesar', 'xor', 'rc4'].includes(algorithm);
+
   const generateRandomKey = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
-    const array = new Uint32Array(24);
+    const len = isNewAes ? (getAesParams(algorithm)?.bits === 256 ? 32 : 16) : 24;
+    const array = new Uint32Array(len);
     crypto.getRandomValues(array);
-    const newKey = Array.from(array, x => chars[x % chars.length]).join('');
-    setKey(newKey);
-    showToast('Generated secure 24-char cryptographic key', 'info');
+    setKey(Array.from(array, x => chars[x % chars.length]).join(''));
+    showToast(`Generated secure ${len}-char key`, 'info');
   };
 
-  // Perform Encryption
-  const executeEncrypt = useCallback(async (text, pass, algo, format) => {
-    if (!text.trim()) {
-      setCipherInput('');
-      setStatus({ valid: true, message: '' });
-      return;
-    }
-
+  /* ---- Encrypt ---- */
+  const executeEncrypt = useCallback(async (text, pass, algo, fmt) => {
+    if (!text.trim()) { setCipherInput(''); setStatus({ valid: true, message: 'Ready' }); return; }
     try {
-      if (algo === 'rot13' || algo === 'caesar' || algo === 'xor' || algo === 'rc4') {
-        const out = runClassicCipher(text, algo, pass, false);
-        setCipherInput(format === 'hex' ? bufToHex(new TextEncoder().encode(out)) : out);
-        setStatus({ valid: true, message: `${algo.toUpperCase()} Encrypted` });
+      const enc = new TextEncoder();
+      const inputBytes = enc.encode(text);
+      const keyStr = pass || 'key';
+
+      // Classic ciphers (unchanged)
+      if (algo === 'rot13') { setCipherInput(rot13Text(text)); setStatus({ valid: true, message: 'ROT13 applied (symmetric)' }); return; }
+      if (algo === 'caesar') {
+        const shift = parseInt(keyStr, 10) || 3;
+        setCipherInput(caesarText(text, shift, false));
+        setStatus({ valid: true, message: `Caesar +${shift} shift` });
+        return;
+      }
+      if (algo === 'xor') {
+        const bytes = xorBytes(inputBytes, keyStr);
+        setCipherInput(fmt === 'hex' ? bufToHex(bytes) : bufToBase64(bytes));
+        setStatus({ valid: true, message: 'XOR encrypted successfully' });
+        return;
+      }
+      if (algo === 'rc4') {
+        const bytes = rc4Bytes(inputBytes, keyStr);
+        setCipherInput(fmt === 'hex' ? bufToHex(bytes) : bufToBase64(bytes));
+        setStatus({ valid: true, message: 'RC4 encrypted successfully' });
         return;
       }
 
-      // AES-GCM or AEM Crypto
-      const enc = new TextEncoder();
-      const salt = crypto.getRandomValues(new Uint8Array(16));
-      const iv = crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV for GCM
-      const derivedKey = await deriveAesKey(pass, salt, 256);
-
-      const ciphertextBuf = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv: iv },
-        derivedKey,
-        enc.encode(text)
-      );
-
-      // Package: [16 bytes salt] + [12 bytes IV] + [ciphertext + tag]
-      const combined = new Uint8Array(salt.length + iv.length + ciphertextBuf.byteLength);
-      combined.set(salt, 0);
-      combined.set(iv, salt.length);
-      combined.set(new Uint8Array(ciphertextBuf), salt.length + iv.length);
-
-      let resultString = format === 'hex' ? bufToHex(combined) : bufToBase64(combined);
-
-      if (algo === 'aem-crypto') {
-        // AEM (Adobe Experience Manager) standard token format: {aem-crypto}<base64-payload>
-        resultString = `{aem-crypto}${resultString}`;
+      // New AES modes (SHA-256 key derivation)
+      const aesParams = getAesParams(algo);
+      if (aesParams) {
+        if (!pass) { setCipherInput(''); setStatus({ valid: false, message: 'Encryption key is required' }); return; }
+        let combined;
+        if (aesParams.mode === 'CBC') {
+          combined = await encryptAesCbc(text, pass, aesParams.keyBytes);
+        } else {
+          combined = await encryptAesGcmNew(text, pass, aesParams.keyBytes);
+        }
+        const result = fmt === 'hex' ? bufToHex(combined) : bufToBase64(combined);
+        setCipherInput(result);
+        setStatus({ valid: true, message: `${getStatusLabel(algo)} — encrypted` });
+        return;
       }
 
-      setCipherInput(resultString);
-      setStatus({ valid: true, message: `Encrypted using ${algo.toUpperCase()}` });
+      // Legacy AES-GCM (PBKDF2) — unchanged
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv   = crypto.getRandomValues(new Uint8Array(12));
+      const derivedKey = await deriveAesKey(pass, salt, 256);
+      const ciphertextBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, derivedKey, inputBytes);
+
+      const combined = new Uint8Array(16 + 12 + ciphertextBuf.byteLength);
+      combined.set(salt, 0); combined.set(iv, 16); combined.set(new Uint8Array(ciphertextBuf), 28);
+
+      let result = fmt === 'hex' ? bufToHex(combined) : bufToBase64(combined);
+      if (algo === 'aem-crypto') result = `{aem-crypto}${result}`;
+
+      setCipherInput(result);
+      setStatus({ valid: true, message: 'AES-GCM 256-bit encrypted (PBKDF2 SHA-256)' });
     } catch (err) {
       setCipherInput('');
       setStatus({ valid: false, message: `Encryption error: ${err.message}` });
     }
   }, []);
 
-  // Perform Decryption
-  const executeDecrypt = useCallback(async (cipherText, pass, algo, format) => {
-    if (!cipherText.trim()) {
-      setPlainInput('');
-      setStatus({ valid: true, message: '' });
-      return;
-    }
-
+  /* ---- Decrypt ---- */
+  const executeDecrypt = useCallback(async (cipherText, pass, algo, fmt) => {
+    if (!cipherText.trim()) { setPlainInput(''); setStatus({ valid: true, message: 'Ready' }); return; }
     try {
-      if (algo === 'rot13' || algo === 'caesar' || algo === 'xor' || algo === 'rc4') {
-        const inputStr = format === 'hex' ? new TextDecoder().decode(hexToBuf(cipherText)) : cipherText;
-        const out = runClassicCipher(inputStr, algo, pass, true);
-        setPlainInput(out);
-        setStatus({ valid: true, message: `${algo.toUpperCase()} Decrypted` });
+      const keyStr = pass || 'key';
+
+      // Classic ciphers (unchanged)
+      if (algo === 'rot13') { setPlainInput(rot13Text(cipherText)); setStatus({ valid: true, message: 'ROT13 reversed' }); return; }
+      if (algo === 'caesar') {
+        const shift = parseInt(keyStr, 10) || 3;
+        setPlainInput(caesarText(cipherText, shift, true));
+        setStatus({ valid: true, message: `Caesar -${shift} decrypted` });
+        return;
+      }
+      if (algo === 'xor') {
+        const inputBytes = fmt === 'hex' ? hexToBuf(cipherText) : base64ToBuf(cipherText);
+        setPlainInput(new TextDecoder().decode(xorBytes(inputBytes, keyStr)));
+        setStatus({ valid: true, message: 'XOR decrypted successfully' });
+        return;
+      }
+      if (algo === 'rc4') {
+        const inputBytes = fmt === 'hex' ? hexToBuf(cipherText) : base64ToBuf(cipherText);
+        setPlainInput(new TextDecoder().decode(rc4Bytes(inputBytes, keyStr)));
+        setStatus({ valid: true, message: 'RC4 decrypted successfully' });
         return;
       }
 
-      // Handle AEM prefix {aem-crypto}... or {...}...
-      let cleanCipher = cipherText.trim();
-      if (cleanCipher.startsWith('{') && cleanCipher.includes('}')) {
-        const closeIdx = cleanCipher.indexOf('}');
-        cleanCipher = cleanCipher.substring(closeIdx + 1).trim();
+      // New AES modes (SHA-256 key derivation)
+      const aesParams = getAesParams(algo);
+      if (aesParams) {
+        if (!pass) { setPlainInput(''); setStatus({ valid: false, message: 'Encryption key is required' }); return; }
+        const packed = fmt === 'hex' ? hexToBuf(cipherText.trim()) : base64ToBuf(cipherText.trim());
+        let plaintext;
+        if (aesParams.mode === 'CBC') {
+          plaintext = await decryptAesCbc(packed, pass, aesParams.keyBytes);
+        } else {
+          plaintext = await decryptAesGcmNew(packed, pass, aesParams.keyBytes);
+        }
+        setPlainInput(plaintext);
+        setStatus({ valid: true, message: `${getStatusLabel(algo)} — decrypted` });
+        return;
       }
 
-      const combined = format === 'hex' ? hexToBuf(cleanCipher) : base64ToBuf(cleanCipher);
-      if (combined.length < 28) {
-        throw new Error('Ciphertext is too short to contain required cryptographic salt and IV.');
-      }
+      // Legacy AES-GCM (PBKDF2) — unchanged
+      let clean = cipherText.trim();
+      if (clean.startsWith('{') && clean.includes('}')) clean = clean.substring(clean.indexOf('}') + 1).trim();
 
-      const salt = combined.slice(0, 16);
-      const iv = combined.slice(16, 28);
+      const combined = fmt === 'hex' ? hexToBuf(clean) : base64ToBuf(clean);
+      if (combined.length < 28) throw new Error('Ciphertext too short (needs 16-byte salt + 12-byte IV).');
+
+      const salt       = combined.slice(0, 16);
+      const iv         = combined.slice(16, 28);
       const ciphertext = combined.slice(28);
-
       const derivedKey = await deriveAesKey(pass, salt, 256);
-      const decryptedBuf = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv: iv },
-        derivedKey,
-        ciphertext
-      );
-
-      const dec = new TextDecoder();
-      const plain = dec.decode(decryptedBuf);
-      setPlainInput(plain);
-      setStatus({ valid: true, message: `Decrypted with ${algo.toUpperCase()}` });
+      const decryptedBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, derivedKey, ciphertext);
+      setPlainInput(new TextDecoder().decode(decryptedBuf));
+      setStatus({ valid: true, message: 'AES-GCM decrypted successfully' });
     } catch (err) {
       setPlainInput('');
-      setStatus({ valid: false, message: `Decryption failed: Incorrect key or corrupted ciphertext.` });
+      const isAuthFail = err.message?.includes('decrypt') || err.name === 'OperationError';
+      const msg = isAuthFail
+        ? 'Decryption failed — wrong key, corrupted data, or authentication failure.'
+        : `Decryption failed — ${err.message}`;
+      setStatus({ valid: false, message: msg });
     }
   }, []);
 
-  // Trigger on changes
+  /* ---- Auto-execute on input change ---- */
   useEffect(() => {
-    if (mode === 'encrypt') {
-      executeEncrypt(plainInput, key, algorithm, outputFormat);
-    } else {
-      executeDecrypt(cipherInput, key, algorithm, outputFormat);
-    }
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (mode === 'encrypt') executeEncrypt(plainInput, key, algorithm, outputFormat);
+      else executeDecrypt(cipherInput, key, algorithm, outputFormat);
+    }, 320);
+    return () => clearTimeout(debounceRef.current);
   }, [plainInput, cipherInput, key, algorithm, mode, outputFormat, executeEncrypt, executeDecrypt]);
 
-  const handleSwap = () => {
-    if (mode === 'encrypt') {
-      setMode('decrypt');
-    } else {
-      setMode('encrypt');
-    }
-  };
-
+  /* ---- Copy ---- */
   const copyOutput = () => {
-    const textToCopy = mode === 'encrypt' ? cipherInput : plainInput;
-    navigator.clipboard.writeText(textToCopy);
+    const text = mode === 'encrypt' ? cipherInput : plainInput;
+    if (!text) return;
+    navigator.clipboard.writeText(text);
     setCopied(true);
-    showToast(`Copied ${mode === 'encrypt' ? 'Ciphertext' : 'Plaintext'}`, 'success');
+    showToast('Copied to clipboard', 'success');
     setTimeout(() => setCopied(false), 2000);
   };
 
+  /* ---- Status bar label ---- */
+  const statusRightLabel = (() => {
+    if (isNewAes) {
+      const p = getAesParams(algorithm);
+      return `AES-${p.bits}-${p.mode} · SHA-256 · ${p.mode === 'CBC' ? 'PKCS7' : 'Auth Tag'} · ${outputFormat.toUpperCase()}`;
+    }
+    if (isLegacyAes) return `AES-GCM · PBKDF2 · ${outputFormat.toUpperCase()}`;
+    return `${algorithm.toUpperCase()} · Classic · ${outputFormat.toUpperCase()}`;
+  })();
+
+  /* ---- Toolbar ---- */
   const toolbar = (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-      <div className="dw-tabs" style={{ border: 'none', gap: '4px' }}>
-        <button
-          className={`dw-tab ${mode === 'encrypt' ? 'active' : ''}`}
-          onClick={() => setMode('encrypt')}
-        >
-          <Lock size={12} />
-          <span>Encrypt</span>
+      <div className="dw-btn-group">
+        <button className={`dw-btn dw-btn-sm ${mode === 'encrypt' ? 'dw-btn-primary' : 'dw-btn-secondary'}`} onClick={() => setMode('encrypt')}>
+          <Lock size={12} /><span>Encrypt</span>
         </button>
-        <button
-          className={`dw-tab ${mode === 'decrypt' ? 'active' : ''}`}
-          onClick={() => setMode('decrypt')}
-        >
-          <Unlock size={12} />
-          <span>Decrypt</span>
+        <button className={`dw-btn dw-btn-sm ${mode === 'decrypt' ? 'dw-btn-primary' : 'dw-btn-secondary'}`} onClick={() => setMode('decrypt')}>
+          <Unlock size={12} /><span>Decrypt</span>
         </button>
       </div>
-
-      <button
-        className="dw-btn dw-btn-secondary dw-btn-sm"
-        onClick={handleSwap}
-        title="Swap encrypt / decrypt"
-      >
-        <ArrowLeftRight size={12} />
-        <span>Swap</span>
+      <button className="dw-btn dw-btn-secondary dw-btn-sm" onClick={() => setMode(m => m === 'encrypt' ? 'decrypt' : 'encrypt')}>
+        <ArrowRightLeft size={12} /><span>Swap Mode</span>
       </button>
-
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <button
-          className="dw-btn dw-btn-primary dw-btn-sm"
-          onClick={copyOutput}
-          title="Copy result"
-        >
+      <div style={{ marginLeft: 'auto' }}>
+        <button className="dw-btn dw-btn-primary dw-btn-sm" onClick={copyOutput}>
           {copied ? <Check size={12} /> : <Copy size={12} />}
-          <span>Copy Result</span>
+          <span>Copy {mode === 'encrypt' ? 'Ciphertext' : 'Plaintext'}</span>
         </button>
       </div>
     </div>
@@ -315,7 +411,7 @@ const CipherCryptoTool = () => {
       statusLeft={
         status.valid ? (
           <span style={{ color: 'var(--accent-success)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <ShieldCheck size={12} /> {status.message || 'Ready'}
+            <ShieldCheck size={12} /> {status.message}
           </span>
         ) : (
           <span style={{ color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -323,108 +419,123 @@ const CipherCryptoTool = () => {
           </span>
         )
       }
-      statusRight={
-        <span>
-          Algorithm: <strong>{algorithm.toUpperCase()}</strong> • PBKDF2 SHA-256
-        </span>
-      }
+      statusRight={<span>{statusRightLabel}</span>}
     >
       <div className="cipher-container">
-        {/* Configuration Bar */}
         <div className="cipher-config-bar">
           <div className="cipher-config-item">
             <span>Algorithm:</span>
-            <select
-              className="cipher-select"
-              value={algorithm}
-              onChange={(e) => setAlgorithm(e.target.value)}
-            >
-              <optgroup label="Modern Cryptography">
-                <option value="aes-gcm">AES-GCM (Authenticated 256-bit)</option>
-                <option value="aem-crypto">Adobe AEM CryptoSupport ({'{aem-crypto}...'})</option>
+            <select className="cipher-select" value={algorithm} onChange={e => setAlgorithm(e.target.value)}>
+              <optgroup label="AES — Backend Compatible (SHA-256 Key)">
+                <option value="aes-128-cbc">AES-128-CBC (PKCS7)</option>
+                <option value="aes-256-cbc">AES-256-CBC (PKCS7)</option>
+                <option value="aes-128-gcm">AES-128-GCM (Authenticated)</option>
+                <option value="aes-256-gcm">AES-256-GCM (Authenticated)</option>
               </optgroup>
-              <optgroup label="Stream & Classic Ciphers">
+              <optgroup label="AES — PBKDF2 (Legacy)">
+                <option value="aes-gcm">AES-GCM 256-bit (PBKDF2)</option>
+                <option value="aem-crypto">Adobe AEM CryptoSupport</option>
+              </optgroup>
+              <optgroup label="Stream and Classic Ciphers">
                 <option value="rc4">RC4 Stream Cipher</option>
-                <option value="xor">XOR Multi-byte Key Cipher</option>
+                <option value="xor">XOR Multi-byte Key</option>
                 <option value="caesar">Caesar Shift Cipher</option>
-                <option value="rot13">ROT13 Cipher</option>
+                <option value="rot13">ROT13 (Symmetric)</option>
               </optgroup>
             </select>
           </div>
+
+          {isNewAes && (
+            <div className="cipher-config-item">
+              <span className="cipher-key-size-badge" data-bits={getAesParams(algorithm)?.bits}>
+                {getAesParams(algorithm)?.bits}-bit · {getAesParams(algorithm)?.mode}
+              </span>
+            </div>
+          )}
 
           <div className="cipher-config-item">
             <Key size={13} />
-            <span>Passphrase / Key:</span>
+            <span>{algorithm === 'caesar' ? 'Shift Amount:' : isNewAes ? 'Encryption Key:' : 'Passphrase / Key:'}</span>
             <input
-              type="text"
+              type="password"
               className="cipher-input-key"
               value={key}
-              onChange={(e) => setKey(e.target.value)}
-              placeholder="Encryption passphrase..."
+              onChange={e => setKey(e.target.value)}
+              placeholder={
+                algorithm === 'caesar'
+                  ? 'Shift number (e.g. 3)'
+                  : isNewAes
+                    ? 'Enter your encryption key...'
+                    : 'Encryption passphrase...'
+              }
               spellCheck={false}
+              autoComplete="off"
             />
-            <button
-              className="dw-btn dw-btn-ghost dw-btn-sm"
-              onClick={generateRandomKey}
-              title="Generate random 24-char cryptographic key"
-            >
-              <RefreshCw size={12} />
-            </button>
+            {algorithm !== 'rot13' && (
+              <button className="dw-btn dw-btn-ghost dw-btn-sm" onClick={generateRandomKey} title="Generate random key">
+                <RefreshCw size={12} />
+              </button>
+            )}
           </div>
-
-          <div className="cipher-config-item">
-            <span>Encoding:</span>
-            <select
-              className="cipher-select"
-              value={outputFormat}
-              onChange={(e) => setOutputFormat(e.target.value)}
-            >
-              <option value="base64">Base64</option>
-              <option value="hex">Hexadecimal</option>
-            </select>
-          </div>
+          {(algorithm === 'xor' || algorithm === 'rc4' || !isClassic) && (
+            <div className="cipher-config-item">
+              <span>Output Encoding:</span>
+              <select className="cipher-select" value={outputFormat} onChange={e => setOutputFormat(e.target.value)}>
+                <option value="base64">Base64</option>
+                <option value="hex">Hexadecimal</option>
+              </select>
+            </div>
+          )}
         </div>
 
-        {/* Dual Input/Output Views */}
         <div className="cipher-views-row">
-          {/* Left Pane: Plaintext */}
           <div className="cipher-view-pane cipher-pane-left">
-            <div className="cipher-pane-header">
-              <span>Plaintext {mode === 'encrypt' ? '(Input)' : '(Decrypted Output)'}</span>
+            <div className={`cipher-pane-header ${mode === 'encrypt' ? 'cipher-header-active' : ''}`}>
+              <span>Plaintext {mode === 'encrypt' ? '(INPUT)' : '(OUTPUT)'}</span>
               <span className="cipher-meta-badge">{plainInput.length} chars</span>
             </div>
             <textarea
               className="cipher-textarea"
               value={plainInput}
-              onChange={(e) => {
-                setPlainInput(e.target.value);
-                if (mode === 'decrypt') setMode('encrypt');
-              }}
+              onChange={e => { setPlainInput(e.target.value); if (mode !== 'encrypt') setMode('encrypt'); }}
               placeholder="Type or paste plaintext here..."
               spellCheck={false}
               readOnly={mode === 'decrypt'}
             />
           </div>
 
-          {/* Right Pane: Ciphertext */}
+          <div className="cipher-direction-badge">
+            <ArrowRight
+              size={18}
+              style={{
+                color: mode === 'encrypt' ? 'var(--accent-primary)' : 'var(--accent-warning)',
+                transform: mode === 'decrypt' ? 'rotate(180deg)' : 'none',
+                transition: 'transform 0.3s ease, color 0.2s ease'
+              }}
+            />
+            <span className="cipher-dir-label">{mode === 'encrypt' ? 'Encrypt' : 'Decrypt'}</span>
+          </div>
+
           <div className="cipher-view-pane cipher-pane-right">
-            <div className="cipher-pane-header">
-              <span>Ciphertext {mode === 'decrypt' ? '(Input)' : '(Encrypted Output)'}</span>
+            <div className={`cipher-pane-header ${mode === 'decrypt' ? 'cipher-header-active' : ''}`}>
+              <span>Ciphertext {mode === 'decrypt' ? '(INPUT)' : '(OUTPUT)'}</span>
               <span className="cipher-meta-badge">{cipherInput.length} chars</span>
             </div>
             <textarea
-              className="cipher-textarea"
+              className="cipher-textarea cipher-textarea-cipher"
               value={cipherInput}
-              onChange={(e) => {
-                setCipherInput(e.target.value);
-                if (mode === 'encrypt') setMode('decrypt');
-              }}
-              placeholder="Encrypted ciphertext (Base64 / Hex)..."
+              onChange={e => { setCipherInput(e.target.value); if (mode !== 'decrypt') setMode('decrypt'); }}
+              placeholder={`Paste ${outputFormat} ciphertext here to decrypt...`}
               spellCheck={false}
               readOnly={mode === 'encrypt'}
-              style={{ color: 'var(--text-code)', letterSpacing: '0.04em' }}
             />
           </div>
+        </div>
+
+        <div className="cipher-hint-bar">
+          {mode === 'encrypt'
+            ? 'Encrypt mode: type plaintext on the left. Copy ciphertext from the right. Switch to Decrypt mode and paste it back to verify.'
+            : 'Decrypt mode: paste ciphertext on the right with the same key. Plaintext will appear on the left.'}
         </div>
       </div>
     </ToolWorkspace>

@@ -1,0 +1,164 @@
+.dw-shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay, rgba(5, 6, 9, 0.75));
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal, 400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: dwShortcutsFadeIn 150ms ease-out;
+}
+
+@keyframes dwShortcutsFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.dw-shortcuts-modal {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-card, #12151e);
+  border: 1px solid var(--border-default, #232736);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0,0,0,0.55));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dw-shortcuts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-subtle, #191c27);
+  background: var(--bg-surface, #131620);
+}
+
+.dw-shortcuts-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dw-shortcuts-title h3 {
+  font-family: var(--font-heading, inherit);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.dw-shortcuts-icon {
+  color: var(--accent-primary);
+}
+
+.dw-shortcuts-close {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm, 5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.dw-shortcuts-close:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+.dw-shortcuts-body {
+  padding: 16px 18px;
+  max-height: 65vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dw-shortcuts-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dw-shortcuts-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+.dw-shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dw-shortcuts-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--bg-surface, #131620);
+  border: 1px solid var(--border-subtle, #191c27);
+  border-radius: var(--radius-md, 7px);
+  font-size: 13px;
+}
+
+.dw-shortcuts-label {
+  color: var(--text-secondary);
+}
+
+.dw-shortcuts-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dw-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-card, #12151e);
+  border: 1px solid var(--border-strong, #32384c);
+  border-radius: var(--radius-xs, 3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+
+.dw-kbd-plus {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.dw-kbd-sm {
+  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 3px;
+}
+
+.dw-shortcuts-footer {
+  padding: 10px 18px;
+  background: var(--bg-surface, #131620);
+  border-top: 1px solid var(--border-subtle, #191c27);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}

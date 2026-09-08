@@ -1,15 +1,42 @@
 import React, { useState, useMemo } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
-import { CheckCircle, AlertCircle, Layers } from 'lucide-react';
+import { CheckCircle, AlertCircle, Layers, Sparkles } from 'lucide-react';
 import './RegexTester.css';
 
+const PRESETS = [
+  {
+    name: 'Email Address',
+    pattern: '([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})',
+    flags: { g: true, i: true, m: false, s: false },
+    testText: 'Contact us at support@devwizard.io or sales-team@company.org for technical inquiries.'
+  },
+  {
+    name: 'IPv4 Address',
+    pattern: '\\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b',
+    flags: { g: true, i: false, m: false, s: false },
+    testText: 'Gateway: 192.168.1.1, DNS: 8.8.8.8, Backup: 10.0.0.254, Invalid: 999.1.1.1'
+  },
+  {
+    name: 'ISO Date',
+    pattern: '(\\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])',
+    flags: { g: true, i: false, m: false, s: false },
+    testText: 'Deployment scheduled for 2026-09-08 and next milestone on 2026-12-31.'
+  }
+];
+
 const RegexTester = () => {
-  const [pattern, setPattern] = useState('([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})');
-  const [flags, setFlags] = useState({ g: true, i: true, m: false, s: false });
-  const [testText, setTestText] = useState('Contact us at support@devwizard.io or sales-team@company.org for any inquiries.');
+  const [pattern, setPattern] = useState(PRESETS[0].pattern);
+  const [flags, setFlags] = useState(PRESETS[0].flags);
+  const [testText, setTestText] = useState(PRESETS[0].testText);
 
   const toggleFlag = (flag) => {
     setFlags(prev => ({ ...prev, [flag]: !prev[flag] }));
+  };
+
+  const loadPreset = (preset) => {
+    setPattern(preset.pattern);
+    setFlags(preset.flags);
+    setTestText(preset.testText);
   };
 
   const regexResult = useMemo(() => {
@@ -19,17 +46,26 @@ const RegexTester = () => {
       const regex = new RegExp(pattern, flagStr);
 
       const matches = [];
+      const MAX_MATCHES = 2500;
+
       if (flags.g) {
         let match;
-        let lastIdx = -1;
+        let iterations = 0;
+
         while ((match = regex.exec(testText)) !== null) {
-          if (match.index === lastIdx) break; // avoid infinite loop on empty pattern match
-          lastIdx = match.index;
+          iterations++;
+          if (iterations > MAX_MATCHES) break;
+
           matches.push({
             text: match[0],
             index: match.index,
             groups: match.slice(1)
           });
+
+          // Critical fix: prevent infinite loop on zero-length matches (e.g. ^, \b, a*)
+          if (match[0].length === 0) {
+            regex.lastIndex++;
+          }
         }
       } else {
         const match = regex.exec(testText);
@@ -60,12 +96,14 @@ const RegexTester = () => {
       if (m.index > lastIndex) {
         elements.push(testText.substring(lastIndex, m.index));
       }
-      // Add highlighted match
-      elements.push(
-        <mark key={i} className="regex-highlight" title={`Match #${i + 1}`}>
-          {m.text}
-        </mark>
-      );
+      // Add highlighted match (if non-empty)
+      if (m.text.length > 0) {
+        elements.push(
+          <mark key={i} className="regex-highlight" title={`Match #${i + 1} (index ${m.index})`}>
+            {m.text}
+          </mark>
+        );
+      }
       lastIndex = m.index + m.text.length;
     });
 
@@ -82,10 +120,11 @@ const RegexTester = () => {
         <span className="regex-slash">/</span>
         <input
           type="text"
-          className="dw-input regex-input"
+          className="dw-input regex-input text-mono"
           value={pattern}
           onChange={(e) => setPattern(e.target.value)}
-          placeholder="Regular expression..."
+          placeholder="Enter regular expression pattern..."
+          spellCheck={false}
         />
         <span className="regex-slash">/</span>
       </div>
@@ -96,9 +135,23 @@ const RegexTester = () => {
             key={flag}
             className={`regex-flag-btn ${flags[flag] ? 'active' : ''}`}
             onClick={() => toggleFlag(flag)}
-            title={`Flag: ${flag}`}
+            title={`Toggle flag: ${flag}`}
           >
             {flag}
+          </button>
+        ))}
+      </div>
+
+      <div className="dw-btn-group">
+        {PRESETS.map((p, idx) => (
+          <button
+            key={idx}
+            className="dw-btn dw-btn-secondary dw-btn-sm"
+            onClick={() => loadPreset(p)}
+            title={`Load ${p.name} preset`}
+          >
+            <Sparkles size={11} />
+            <span>{p.name}</span>
           </button>
         ))}
       </div>
@@ -107,7 +160,7 @@ const RegexTester = () => {
 
   const statusLeft = regexResult.error ? (
     <span style={{ color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-      <AlertCircle size={12} /> {regexResult.error}
+      <AlertCircle size={12} /> Invalid RegEx: {regexResult.error}
     </span>
   ) : (
     <span style={{ color: 'var(--accent-success)', display: 'flex', alignItems: 'center', gap: '4px' }}>

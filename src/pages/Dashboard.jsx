@@ -2,12 +2,28 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getAllTools, CATEGORIES, getToolById } from '../tools/toolRegistry';
+import SeoMeta from '../components/SeoMeta';
 import {
   Search, Star, Clock, Zap,
-  ArrowRight, ShieldCheck, Cpu
+  ArrowRight, ShieldCheck, Cpu, Code2, Lock, Sparkles
 } from 'lucide-react';
 import DeveloperFooter from '../components/DeveloperFooter';
 import './Dashboard.css';
+
+const DASHBOARD_FAQS = [
+  {
+    q: 'What is DevWizard V4?',
+    a: 'DevWizard V4 is a client-side developer utility suite built for software engineers, security analysts, and web developers. It provides instant, local browser-based tools for formatting JSON/XML, decoding JWTs, converting Base64 files, analyzing GSM 03.38 SMS payloads, testing RegEx, computing cryptographic hashes, and comparing side-by-side text diffs.'
+  },
+  {
+    q: 'Does DevWizard upload any tokens, passwords, or files to a server?',
+    a: 'No. Every calculation, transformation, encryption, and decode routine is executed 100% locally in your browser memory using JavaScript and the native Web Cryptography API. Zero data telemetry is gathered or transmitted.'
+  },
+  {
+    q: 'Can I use DevWizard offline?',
+    a: 'Yes. Once loaded, all core utilities execute entirely within your browser runtime without requiring backend network roundtrips.'
+  }
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -30,17 +46,19 @@ const Dashboard = () => {
 
   return (
     <div className="dw-dashboard">
+      <SeoMeta />
+
       <div className="dw-dashboard-inner">
-        {/* Sleek Command Center Header */}
+        {/* Royal Obsidian Command Center Hero Header */}
         <header className="dw-dash-header">
           <div className="dw-dash-header-left">
             <div className="dw-dash-badge">
               <ShieldCheck size={13} className="dw-dash-badge-icon" />
-              <span>100% Client-Side • Zero Data Telemetry</span>
+              <span>100% Client-Side Execution • Zero Server Telemetry</span>
             </div>
-            <h1 className="dw-dash-headline">Developer Toolkit</h1>
+            <h1 className="dw-dash-headline">The Developer Utility Workspace</h1>
             <p className="dw-dash-subtitle">
-              Instant utilities for format transformation, diff inspection, cryptographic hashes, and token decoding.
+              Instant, privacy-first tools for JSON formatting, JWT token analysis, data conversion, cryptographic ciphers, and side-by-side text diffing.
             </p>
           </div>
 
@@ -49,9 +67,10 @@ const Dashboard = () => {
               className="dw-dash-search-trigger"
               onClick={() => setCommandPaletteOpen(true)}
               title="Open command palette (Ctrl + K)"
+              aria-label="Search all developer tools"
             >
               <Search size={15} className="dw-dash-search-icon" />
-              <span className="dw-dash-search-text">Search all tools...</span>
+              <span className="dw-dash-search-text">Search all utilities...</span>
               <div className="dw-dash-search-keys">
                 <kbd>Ctrl</kbd>
                 <kbd>K</kbd>
@@ -60,19 +79,23 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {/* Quick Access Strip */}
+        {/* Quick Access Statistics Strip */}
         <div className="dw-dash-quick-strip">
           <div className="dw-dash-stat-pill">
-            <Cpu size={14} />
+            <Cpu size={14} style={{ color: 'var(--accent-primary)' }} />
             <span><strong>{allTools.length}</strong> Utilities Available</span>
           </div>
           <div className="dw-dash-stat-pill">
-            <Zap size={14} />
-            <span>Local WebAssembly & JS Engines</span>
+            <Lock size={14} style={{ color: 'var(--accent-gold)' }} />
+            <span>Web Cryptography API & PBKDF2</span>
+          </div>
+          <div className="dw-dash-stat-pill">
+            <Zap size={14} style={{ color: 'var(--accent-info)' }} />
+            <span>Sub-millisecond Latency</span>
           </div>
         </div>
 
-        {/* Recently Used */}
+        {/* Recently Used Modules */}
         {recentTools.length > 0 && (
           <section className="dw-dash-section">
             <div className="dw-dash-section-title">
@@ -109,6 +132,7 @@ const Dashboard = () => {
                         toggleFavorite(tool.id);
                       }}
                       title={isFavorite(tool.id) ? 'Remove favorite' : 'Add favorite'}
+                      aria-label="Toggle favorite"
                     >
                       <Star
                         size={13}
@@ -123,13 +147,13 @@ const Dashboard = () => {
           </section>
         )}
 
-        {/* Favorites */}
+        {/* Starred Modules */}
         {favoriteTools.length > 0 && (
           <section className="dw-dash-section">
             <div className="dw-dash-section-title">
               <div className="dw-dash-section-label">
-                <Star size={15} />
-                <h2>Starred Tools</h2>
+                <Star size={15} fill="var(--accent-warning)" color="var(--accent-warning)" />
+                <h2>Starred Utilities</h2>
               </div>
               <span className="dw-dash-section-meta">{favoriteTools.length} tools</span>
             </div>
@@ -159,6 +183,8 @@ const Dashboard = () => {
                         e.stopPropagation();
                         toggleFavorite(tool.id);
                       }}
+                      title="Remove favorite"
+                      aria-label="Remove favorite"
                     >
                       <Star size={13} fill="var(--accent-warning)" color="var(--accent-warning)" />
                     </button>
@@ -169,13 +195,14 @@ const Dashboard = () => {
           </section>
         )}
 
-        {/* Categorized Tool Suite */}
+        {/* Categorized Tool Modules */}
         <section className="dw-dash-section">
           <div className="dw-dash-section-title">
             <div className="dw-dash-section-label">
-              <h2>All Tool Modules</h2>
+              <Code2 size={15} />
+              <h2>All Developer Modules</h2>
             </div>
-            <span className="dw-dash-section-meta">{allTools.length} total utilities</span>
+            <span className="dw-dash-section-meta">{allTools.length} tools</span>
           </div>
 
           <div className="dw-dash-categories-container">
@@ -219,6 +246,7 @@ const Dashboard = () => {
                                 toggleFavorite(tool.id);
                               }}
                               title={isFavorite(tool.id) ? 'Remove favorite' : 'Add favorite'}
+                              aria-label="Toggle favorite"
                             >
                               <Star
                                 size={13}
@@ -237,9 +265,45 @@ const Dashboard = () => {
             })}
           </div>
         </section>
+
+        {/* AI & Developer Knowledge Strip (AEO) */}
+        <section className="dw-dash-info-section">
+          <div className="dw-dash-info-card">
+            <h3 className="dw-dash-info-heading">Why Choose DevWizard?</h3>
+            <div className="dw-dash-info-grid">
+              <div className="dw-dash-feature-item">
+                <ShieldCheck size={20} className="dw-dash-feature-icon" />
+                <h4>100% Client-Side Privacy</h4>
+                <p>Sensitive API keys, JWT bearer tokens, customer records, and passwords never leave your browser. Zero cloud processing or telemetry.</p>
+              </div>
+              <div className="dw-dash-feature-item">
+                <Sparkles size={20} className="dw-dash-feature-icon" />
+                <h4>Zero Configuration Required</h4>
+                <p>No account logins, no captchas, no rate limits, and no subscriptions. Instant access via keyboard shortcuts (Cmd+K).</p>
+              </div>
+              <div className="dw-dash-feature-item">
+                <Cpu size={20} className="dw-dash-feature-icon" />
+                <h4>High-Performance Engines</h4>
+                <p>Sub-millisecond transformations powered by modern JavaScript engines, native WebCrypto subtle digests, and fast parsers.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="dw-dash-faq-card">
+            <h3 className="dw-dash-info-heading">Frequently Asked Questions</h3>
+            <div className="dw-dash-faq-list">
+              {DASHBOARD_FAQS.map((faq, idx) => (
+                <article key={idx} className="dw-dash-faq-item">
+                  <h4 className="dw-dash-faq-q">{faq.q}</h4>
+                  <p className="dw-dash-faq-a">{faq.a}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Developer Footer with Watermark */}
+      {/* Developer Footer */}
       <DeveloperFooter />
     </div>
   );

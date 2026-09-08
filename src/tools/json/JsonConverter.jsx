@@ -123,7 +123,8 @@ const JsonConverter = () => {
     <ToolWorkspace
       toolId="json-converter"
       input={input}
-      output={result.output || result.error || ''}
+      output={result.output}
+      errorMessage={result.valid === false ? result.error : null}
       onInputChange={setInput}
       inputLabel={isReverseStringToJson ? 'Escaped String Input' : 'JSON Input'}
       outputLabel={isReverseStringToJson ? 'Formatted JSON Output' : `${targetFormat.toUpperCase()} Output`}

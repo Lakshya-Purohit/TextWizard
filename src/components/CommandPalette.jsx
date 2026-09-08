@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getAllTools, CATEGORIES } from '../tools/toolRegistry';
-import { Search, Star, ArrowRight } from 'lucide-react';
+import { Search, Star, CornerDownLeft } from 'lucide-react';
 import './CommandPalette.css';
 
 const CommandPalette = () => {
@@ -29,11 +29,11 @@ const CommandPalette = () => {
         .map(id => allTools.find(t => t.id === id))
         .filter(Boolean)
         .filter(t => !recentIds.includes(t.id))
-        .map(t => ({ ...t, section: 'Favorites' }));
+        .map(t => ({ ...t, section: 'Starred' }));
 
       const remaining = allTools
         .filter(t => !recentIds.includes(t.id) && !favorites.includes(t.id))
-        .map(t => ({ ...t, section: 'All Tools' }));
+        .map(t => ({ ...t, section: 'All Utilities' }));
 
       return [...recentTools, ...favTools, ...remaining];
     }
@@ -45,13 +45,13 @@ const CommandPalette = () => {
         t.keywords.some(k => k.includes(q)) ||
         t.category.includes(q)
       )
-      .map(t => ({ ...t, section: 'Results' }));
+      .map(t => ({ ...t, section: 'Search Results' }));
   }, [query, allTools, history, favorites]);
 
   // Keyboard shortcut
   useEffect(() => {
     const handler = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setCommandPaletteOpen(prev => !prev);
       }
@@ -114,7 +114,7 @@ const CommandPalette = () => {
           <input
             ref={inputRef}
             className="dw-cp-input"
-            placeholder="Search tools, actions..."
+            placeholder="Search all utilities, JSON formats, JWT, RegEx..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -122,12 +122,14 @@ const CommandPalette = () => {
             }}
             onKeyDown={handleKeyDown}
           />
-          <kbd>Esc</kbd>
+          <kbd className="dw-cp-esc">Esc</kbd>
         </div>
 
         <div className="dw-cp-list" ref={listRef}>
           {results.length === 0 ? (
-            <div className="dw-cp-empty">No tools found</div>
+            <div className="dw-cp-empty">
+              <span>No tools matching "{query}"</span>
+            </div>
           ) : (
             results.map((tool, idx) => {
               const showSection = tool.section !== lastSection;
@@ -146,7 +148,9 @@ const CommandPalette = () => {
                     onMouseEnter={() => setSelectedIndex(idx)}
                   >
                     <div className="dw-cp-item-left">
-                      <Icon size={16} style={{ color: category?.color }} />
+                      <div className="dw-cp-icon-wrap" style={{ color: category?.color, background: `${category?.color}14` }}>
+                        <Icon size={16} />
+                      </div>
                       <div className="dw-cp-item-info">
                         <span className="dw-cp-item-name">{tool.name}</span>
                         <span className="dw-cp-item-desc">{tool.description}</span>
@@ -160,7 +164,7 @@ const CommandPalette = () => {
                       >
                         {category?.name}
                       </span>
-                      {idx === selectedIndex && <ArrowRight size={14} />}
+                      {idx === selectedIndex && <CornerDownLeft size={13} className="dw-cp-enter" />}
                     </div>
                   </button>
                 </React.Fragment>
@@ -170,9 +174,9 @@ const CommandPalette = () => {
         </div>
 
         <div className="dw-cp-footer">
-          <span><kbd>↑↓</kbd> Navigate</span>
-          <span><kbd>↵</kbd> Select</span>
-          <span><kbd>Esc</kbd> Close</span>
+          <span><kbd className="dw-kbd-mini">↑</kbd><kbd className="dw-kbd-mini">↓</kbd> Navigate</span>
+          <span><kbd className="dw-kbd-mini">↵</kbd> Select</span>
+          <span><kbd className="dw-kbd-mini">Esc</kbd> Close</span>
         </div>
       </div>
     </div>

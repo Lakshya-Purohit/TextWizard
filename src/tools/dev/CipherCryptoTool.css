@@ -116,6 +116,60 @@
   color: var(--accent-primary);
 }
 
+/* Key size and mode badge */
+.cipher-key-size-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: hsla(210, 60%, 50%, 0.12);
+  color: hsl(210, 70%, 55%);
+  border: 1px solid hsla(210, 60%, 50%, 0.2);
+}
+.cipher-key-size-badge[data-bits="256"] {
+  background: hsla(150, 60%, 42%, 0.12);
+  color: hsl(150, 60%, 42%);
+  border-color: hsla(150, 60%, 42%, 0.2);
+}
+
+/* Active pane header highlight */
+.cipher-header-active {
+  border-bottom-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* Direction badge between panes */
+.cipher-direction-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.cipher-dir-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+/* Hint bar */
+.cipher-hint-bar {
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border-subtle);
+}
+
 @media (max-width: 768px) {
   .cipher-views-row {
     flex-direction: column;
@@ -126,5 +180,9 @@
   }
   .cipher-input-key {
     width: 140px;
+  }
+  .cipher-direction-badge {
+    flex-direction: row;
+    padding: 6px 0;
   }
 }

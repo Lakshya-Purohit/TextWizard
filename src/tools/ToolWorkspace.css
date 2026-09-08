@@ -1,13 +1,13 @@
-/* ============================================
-   Tool Workspace Styles
-   ============================================ */
+/* ============================================================
+   DevWizard V4 — Tool Workspace Styles
+   ============================================================ */
 
 .dw-workspace {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
   background: var(--bg-app);
-  overflow: hidden;
 }
 
 /* Toolbar */
@@ -15,21 +15,44 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-2) var(--space-4);
+  height: var(--toolbar-height);
+  padding: 0 var(--space-4);
   background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-subtle);
-  min-height: var(--toolbar-height);
-  gap: var(--space-3);
+  border-bottom: 1px solid var(--border-default);
   flex-shrink: 0;
+  gap: var(--space-3);
+  z-index: 10;
 }
 
 .dw-workspace-toolbar-left {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  flex: 1;
+  overflow-x: auto;
   min-width: 0;
-  flex-wrap: wrap;
+}
+
+.dw-workspace-tool-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.dw-cat-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dw-workspace-tool-name {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
 }
 
 .dw-workspace-toolbar-right {
@@ -39,50 +62,112 @@
   flex-shrink: 0;
 }
 
-.dw-workspace-tool-info {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+/* Description Strip */
+.dw-workspace-desc-strip {
+  padding: 8px var(--space-4);
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
 }
-.dw-workspace-tool-name {
-  font-size: var(--text-sm);
+
+.dw-workspace-desc-text {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Mobile Tabs */
+.dw-workspace-mobile-tabs {
+  display: none;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  padding: 4px var(--space-2);
+  gap: 4px;
+}
+
+.dw-mobile-tab-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.dw-mobile-tab-btn.active {
+  color: var(--accent-primary);
+  background: var(--accent-primary-subtle);
+  border-color: var(--accent-primary-border);
   font-weight: 600;
-  color: var(--text-primary);
 }
 
-.favorited {
-  color: var(--accent-warning) !important;
-}
-
-/* Content (split panels) */
+/* Workspace Split Content */
 .dw-workspace-content {
   display: flex;
   flex: 1;
+  min-height: 360px;
   overflow: hidden;
+  position: relative;
 }
+
 .dw-workspace-content.single {
   flex-direction: column;
   overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
 }
 
-/* Panel */
 .dw-workspace-panel {
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  height: 100%;
+  min-width: 200px;
+  background: var(--bg-editor);
   overflow: hidden;
 }
 
-.dw-workspace-panel .dw-panel-header {
+.dw-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+  padding: 0 var(--space-3);
   background: var(--bg-panel);
   border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.dw-panel-header-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+
+.dw-panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dw-panel-body {
+  flex: 1;
+  position: relative;
+  overflow: auto;
 }
 
 .dw-workspace-editor {
-  flex: 1;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .dw-workspace-textarea {
@@ -90,50 +175,34 @@
   height: 100%;
   padding: var(--space-3);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: 13px;
   line-height: 1.6;
   color: var(--text-primary);
-  background: var(--bg-editor);
+  background: transparent;
   border: none;
   outline: none;
   resize: none;
   tab-size: 2;
 }
+
 .dw-workspace-textarea::placeholder {
   color: var(--text-tertiary);
 }
 
-/* Mobile Panel Tab Switcher */
-.dw-workspace-mobile-tabs {
-  display: none;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 6px var(--space-3);
-  background: var(--bg-panel);
-  border-bottom: 1px solid var(--border-subtle);
+/* Resizer Bar */
+.dw-resizer {
+  width: 4px;
+  background: var(--border-subtle);
+  cursor: col-resize;
   flex-shrink: 0;
+  transition: background var(--transition-fast);
+  position: relative;
+  z-index: 2;
 }
 
-.dw-mobile-tab-btn {
-  flex: 1;
-  padding: 6px 10px;
-  font-size: var(--text-xs);
-  font-weight: 600;
-  font-family: var(--font-ui);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-align: center;
-}
-
-.dw-mobile-tab-btn.active {
+.dw-resizer:hover,
+.dw-resizer:active {
   background: var(--accent-primary);
-  color: var(--accent-primary-text);
-  border-color: var(--accent-primary);
-  box-shadow: var(--shadow-xs);
 }
 
 /* Status Bar */
@@ -141,67 +210,184 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: var(--statusbar-height);
   padding: 0 var(--space-4);
-  min-height: var(--statusbar-height);
   background: var(--bg-surface);
-  border-top: 1px solid var(--border-subtle);
-  font-size: var(--text-xs);
-  color: var(--text-tertiary);
+  border-top: 1px solid var(--border-default);
+  font-size: var(--text-2xs);
+  color: var(--text-secondary);
   flex-shrink: 0;
-  flex-wrap: wrap;
-  gap: var(--space-2);
 }
 
 .dw-workspace-status-left,
 .dw-workspace-status-right {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
-/* ============================================
-   Mobile Responsiveness for ToolWorkspace (< 768px)
-   ============================================ */
+/* Footer Section with FAQs and Interlinking */
+.dw-workspace-footer-section {
+  padding: var(--space-6) var(--space-4);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.dw-footer-subheading {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.dw-related-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-3);
+}
+
+.dw-related-tool-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dw-related-tool-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.dw-related-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dw-related-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dw-related-name {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.dw-related-desc {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dw-related-arrow {
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.dw-related-tool-card:hover .dw-related-arrow {
+  color: var(--accent-primary);
+  transform: translateX(2px);
+}
+
+/* FAQ Accordion */
+.dw-faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dw-faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.dw-faq-question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dw-faq-question-btn:hover {
+  background: var(--bg-surface-hover);
+}
+
+.dw-faq-question-text {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.dw-faq-chevron {
+  color: var(--text-tertiary);
+  transition: transform var(--transition-fast);
+}
+
+.dw-faq-chevron.open {
+  transform: rotate(180deg);
+  color: var(--accent-primary);
+}
+
+.dw-faq-answer {
+  padding: 0 16px 14px 16px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .dw-workspace-toolbar {
-    padding: var(--space-2) var(--space-3);
-    gap: var(--space-2);
-  }
-
-  .dw-workspace-toolbar-left {
-    gap: var(--space-2);
-  }
-
   .dw-workspace-mobile-tabs {
     display: flex;
   }
 
   .dw-workspace-content {
-    flex-direction: column !important;
+    flex-direction: column;
   }
 
   .dw-workspace-panel {
     width: 100% !important;
-    height: 100% !important;
   }
 
-  /* When both are shown on mobile */
-  .dw-workspace-content.mobile-tab-both .dw-workspace-panel {
-    height: 50% !important;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
+  .mobile-tab-input .output-panel,
   .mobile-panel-hidden {
     display: none !important;
   }
 
-  .dw-workspace-textarea {
-    font-size: 14px; /* prevents iOS zoom */
-  }
-
-  .dw-workspace-status {
-    padding: 4px var(--space-3);
-    font-size: 11px;
+  .mobile-tab-output .input-panel {
+    display: none !important;
   }
 }

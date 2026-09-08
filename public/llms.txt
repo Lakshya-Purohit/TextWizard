@@ -1,0 +1,39 @@
+# DevWizard V4 — Client-Side Developer Utility Suite
+
+> DevWizard (https://dev-wizard.lakhsyapurohit.online) is a private, client-side developer utility platform. All operations execute locally in the user's browser using JavaScript and the Web Cryptography API. Zero data telemetry is sent to any server.
+
+## Overview of Core Tools & Utilities
+
+### 1. JSON & Data Tools
+- **JSON Formatter & Validator** (`/tool/json-formatter`): Formats, minifies, and validates JSON with syntax diagnostics and line/column error detection.
+- **JSON Tree Viewer** (`/tool/json-tree`): Interactive collapsible tree viewer for complex nested JSON structures with path copying.
+- **JSON Converter** (`/tool/json-converter`): Converts JSON to CSV (with deep nested object flattening and custom delimiter), YAML, and XML.
+- **String ⇄ JSON Converter** (`/tool/string-json`): Parses escaped JSON strings (from CloudWatch, Datadog logs) to formatted JSON and escapes JSON for Java, JS, Python, C#, and SQL.
+
+### 2. XML Tools
+- **XML Formatter & Validator** (`/tool/xml-formatter`): Strict XML schema validation, indentation formatting, and minification.
+
+### 3. Text Tools
+- **Text Transform** (`/tool/text-transform`): Case conversions (UPPERCASE, lowercase, camelCase, snake_case, kebab-case), line sorting, and deduplication.
+
+### 4. Encoding & Telecom Tools
+- **GSM 7-bit & SMS Encoder** (`/tool/gsm-encoder`): GSM 03.38 SMS packing, 160-char segment calculator, and non-GSM UCS-2 Unicode detection.
+- **Base64 Studio** (`/tool/base64`): Multi-modal Base64 tool for text, images, PDFs, audio, and video files with live browser preview and binary reconstruction.
+- **URL Encoder** (`/tool/url-encoder`): RFC 3986 percent encoding and decoding.
+- **HTML Encoder** (`/tool/html-encoder`): HTML entity escaping and unescaping to prevent XSS.
+
+### 5. Security & Dev Tools
+- **Cipher & Cryptography Studio** (`/tool/cipher-crypto`): 256-bit AES-GCM encryption with PBKDF2 SHA-256 derivation, Adobe AEM CryptoSupport, RC4, XOR, Caesar, and ROT13 ciphers.
+- **RegEx Creator & Builder** (`/tool/regex-creator`): Modular visual regular expression builder with human-readable explanations and multi-language code snippets.
+- **RegEx Tester** (`/tool/regex-tester`): Real-time regular expression matcher with captured group inspection and execution safety bounds.
+- **JWT Decoder** (`/tool/jwt-decoder`): Decodes JWT Header, Payload claims, and signature, with active expiration timer calculation.
+- **Cryptographic Hash Generator** (`/tool/hash-generator`): Instant MD5, SHA-1, SHA-256, and SHA-512 calculation.
+- **Unix Timestamp Converter** (`/tool/timestamp-converter`): 2-way epoch time converter supporting seconds, milliseconds, microseconds, nanoseconds, live IST (Asia/Kolkata) clock, and ISO-8601.
+
+### 6. Diff & Comparison Tools
+- **Text Diff** (`/tool/text-diff`): Dual-screen side-by-side text comparison with word-level difference highlighting and synchronized scrolling.
+
+## Privacy & Security Guarantees
+- 100% Client-Side in browser memory.
+- No network requests made with payload contents.
+- Secure for production tokens, credentials, and confidential developer payloads.

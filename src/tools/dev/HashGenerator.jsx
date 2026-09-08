@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ToolWorkspace from '../ToolWorkspace';
 import { useApp } from '../../context/AppContext';
-import { Hash, Copy } from 'lucide-react';
+import { Hash, Copy, Check } from 'lucide-react';
 import './HashGenerator.css';
 
-// Simple MD5 implementation
+// MD5 implementation
 function md5(string) {
   function rotateLeft(lValue, iShiftBits) {
     return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
@@ -170,6 +170,7 @@ async function computeSubtleHash(algorithm, text) {
 
 const HashGenerator = () => {
   const [input, setInput] = useState('DevWizard V4');
+  const [copiedKey, setCopiedKey] = useState(null);
   const [hashes, setHashes] = useState({
     md5: '',
     sha1: '',
@@ -195,8 +196,11 @@ const HashGenerator = () => {
   }, [input]);
 
   const copyHash = (name, val) => {
+    if (!val) return;
     navigator.clipboard.writeText(val);
+    setCopiedKey(name);
     showToast(`Copied ${name} hash`, 'success');
+    setTimeout(() => setCopiedKey(null), 2000);
   };
 
   return (
@@ -209,6 +213,8 @@ const HashGenerator = () => {
       singlePanel={false}
       output={null}
       hideOutput={false}
+      statusLeft={<span>Web Cryptography API (SubtleCrypto)</span>}
+      statusRight={<span>{input.length} chars</span>}
     >
       <div className="hash-list-container">
         {[
@@ -228,13 +234,14 @@ const HashGenerator = () => {
                 <button
                   className="dw-btn dw-btn-ghost dw-btn-sm"
                   onClick={() => copyHash(item.label, item.val)}
+                  title={`Copy ${item.label} hash`}
                 >
-                  <Copy size={12} />
-                  <span>Copy</span>
+                  {copiedKey === item.label ? <Check size={12} className="text-success" /> : <Copy size={12} />}
+                  <span>{copiedKey === item.label ? 'Copied' : 'Copy'}</span>
                 </button>
               )}
             </div>
-            <div className="hash-value">
+            <div className="hash-value text-mono">
               {item.val || <span style={{ opacity: 0.4 }}>Generating hash...</span>}
             </div>
           </div>

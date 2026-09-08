@@ -4,7 +4,8 @@ import { useApp } from '../context/AppContext';
 import { CATEGORIES, getToolsByCategory } from '../tools/toolRegistry';
 import {
   ChevronDown, ChevronRight, Star, Search,
-  PanelLeftClose, PanelLeftOpen, LayoutDashboard, X, Zap
+  PanelLeftClose, PanelLeftOpen, LayoutDashboard, X, Zap,
+  ShieldCheck
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -73,15 +74,15 @@ const Sidebar = () => {
         <div
           className="dw-sidebar-backdrop"
           onClick={closeMobileSidebar}
-          aria-label="Close sidebar"
+          aria-label="Close sidebar overlay"
         />
       )}
 
       <aside className={`dw-sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${mobileSidebarOpen ? 'mobile-open' : ''}`}>
         <div className="dw-sidebar-header">
           {/* Mobile brand header */}
-          <div className="dw-sidebar-mobile-brand">
-            <Zap size={16} className="dw-topbar-logo" />
+          <div className="dw-sidebar-mobile-brand" onClick={() => handleNavigate('/')}>
+            <Zap size={18} className="dw-topbar-logo" />
             <span>DevWizard</span>
           </div>
 
@@ -91,8 +92,9 @@ const Sidebar = () => {
               className="dw-sidebar-toggle dw-hide-mobile"
               onClick={toggleSidebar}
               title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              aria-label="Toggle sidebar collapse"
             >
-              {sidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+              {sidebarCollapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
             </button>
 
             {/* Mobile close button */}
@@ -100,19 +102,20 @@ const Sidebar = () => {
               className="dw-sidebar-toggle dw-show-mobile"
               onClick={closeMobileSidebar}
               title="Close navigation"
+              aria-label="Close navigation"
             >
               <X size={18} />
             </button>
           </div>
         </div>
 
-        {/* Search */}
+        {/* Search Input in Sidebar */}
         {(!sidebarCollapsed || mobileSidebarOpen) && (
           <div className="dw-sidebar-search">
-            <Search size={14} className="dw-sidebar-search-icon" />
+            <Search size={13} className="dw-sidebar-search-icon" />
             <input
               type="text"
-              placeholder="Filter tools..."
+              placeholder="Filter utilities..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="dw-sidebar-search-input"
@@ -141,7 +144,7 @@ const Sidebar = () => {
                     if (tools.length > 0) handleNavigate(`/tool/${tools[0].id}`);
                   }}
                   title={cat.name}
-                  style={{ '--cat-color': cat.color }}
+                  style={{ color: cat.color }}
                 >
                   <Icon size={18} />
                 </button>
@@ -150,21 +153,21 @@ const Sidebar = () => {
           </div>
         ) : (
           <nav className="dw-sidebar-nav">
-            {/* Dashboard */}
+            {/* Dashboard Link */}
             <button
               className={`dw-sidebar-item ${location.pathname === '/' ? 'active' : ''}`}
               onClick={() => handleNavigate('/')}
             >
-              <LayoutDashboard size={16} />
+              <LayoutDashboard size={15} />
               <span>Dashboard</span>
             </button>
 
-            {/* Favorites */}
+            {/* Starred / Favorites */}
             {favoriteTools.length > 0 && !searchQuery && (
               <div className="dw-sidebar-section">
                 <div className="dw-sidebar-section-header">
-                  <Star size={12} />
-                  <span>Favorites</span>
+                  <Star size={11} fill="var(--accent-warning)" color="var(--accent-warning)" />
+                  <span>Starred</span>
                 </div>
                 {favoriteTools.map(tool => {
                   const Icon = tool.icon;
@@ -182,7 +185,7 @@ const Sidebar = () => {
               </div>
             )}
 
-            {/* Categories */}
+            {/* Categorized Tools */}
             {Object.values(filteredCategories).map(cat => {
               const tools = getFilteredTools(cat.id);
               if (tools.length === 0) return null;
@@ -202,7 +205,7 @@ const Sidebar = () => {
                     </div>
                     <div className="dw-sidebar-category-right">
                       <span className="dw-sidebar-count">{tools.length}</span>
-                      {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                      {isExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                     </div>
                   </button>
                   {isExpanded && (
@@ -231,10 +234,8 @@ const Sidebar = () => {
 
         <div className="dw-sidebar-footer">
           <div className="privacy-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            Local-first processing
+            <ShieldCheck size={11} />
+            <span>100% Client-Side</span>
           </div>
         </div>
       </aside>

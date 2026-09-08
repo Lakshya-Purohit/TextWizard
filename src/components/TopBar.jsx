@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getToolById, CATEGORIES } from '../tools/toolRegistry';
-import { Sun, Moon, Monitor, Command, Zap, Menu, Clock } from 'lucide-react';
+import ShortcutsModal from './ShortcutsModal';
+import { Sun, Moon, Monitor, Command, Zap, Menu, Clock, HelpCircle } from 'lucide-react';
 import './TopBar.css';
 
 const TopBar = () => {
@@ -10,6 +11,7 @@ const TopBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [istClock, setIstClock] = useState('');
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
   // Live IST Clock (UTC+05:30)
   useEffect(() => {
@@ -28,6 +30,21 @@ const TopBar = () => {
     update();
     const timer = setInterval(update, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Global '?' shortcut listener for shortcuts modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (
+        (e.key === '?' || (e.shiftKey && e.key === '/')) &&
+        !['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
+      ) {
+        e.preventDefault();
+        setShortcutsOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const currentToolId = location.pathname.replace('/tool/', '');
@@ -50,79 +67,95 @@ const TopBar = () => {
   const themeLabel = themeOptions.find(t => t.value === theme)?.label || 'Dark';
 
   return (
-    <header className="dw-topbar">
-      <div className="dw-topbar-left">
-        {/* Mobile Hamburger Menu Toggle */}
-        <button
-          className="dw-topbar-mobile-menu-btn"
-          onClick={toggleMobileSidebar}
-          aria-label="Open navigation menu"
-          title="Open Menu"
-        >
-          <Menu size={20} />
-        </button>
+    <>
+      <header className="dw-topbar">
+        <div className="dw-topbar-left">
+          {/* Mobile Hamburger Menu Toggle */}
+          <button
+            className="dw-topbar-mobile-menu-btn"
+            onClick={toggleMobileSidebar}
+            aria-label="Open navigation menu"
+            title="Open Menu"
+          >
+            <Menu size={20} />
+          </button>
 
-        <button className="dw-topbar-brand" onClick={() => navigate('/')}>
-          <Zap size={18} className="dw-topbar-logo" />
-          <span className="dw-topbar-title">DevWizard</span>
-        </button>
+          <button className="dw-topbar-brand" onClick={() => navigate('/')}>
+            <Zap size={18} className="dw-topbar-logo" />
+            <span className="dw-topbar-title">DevWizard</span>
+          </button>
 
-        {currentTool && (
-          <div className="dw-topbar-breadcrumb">
-            <span className="dw-topbar-separator">/</span>
-            {currentCategory && (
-              <>
-                <span
-                  className="dw-topbar-crumb dw-topbar-crumb-cat"
-                  style={{ color: currentCategory.color }}
-                >
-                  {currentCategory.name}
-                </span>
-                <span className="dw-topbar-separator dw-topbar-crumb-cat">/</span>
-              </>
-            )}
-            <span className="dw-topbar-crumb active">{currentTool.name}</span>
-          </div>
-        )}
-      </div>
+          {currentTool && (
+            <div className="dw-topbar-breadcrumb">
+              <span className="dw-topbar-separator">/</span>
+              {currentCategory && (
+                <>
+                  <span
+                    className="dw-topbar-crumb dw-topbar-crumb-cat"
+                    style={{ color: currentCategory.color }}
+                  >
+                    {currentCategory.name}
+                  </span>
+                  <span className="dw-topbar-separator dw-topbar-crumb-cat">/</span>
+                </>
+              )}
+              <span className="dw-topbar-crumb active">{currentTool.name}</span>
+            </div>
+          )}
+        </div>
 
-      <div className="dw-topbar-center">
-        <button
-          className="dw-topbar-search"
-          onClick={() => setCommandPaletteOpen(true)}
-          aria-label="Search tools"
-        >
-          <Command size={14} />
-          <span className="dw-topbar-search-text">Search tools...</span>
-          <div className="dw-topbar-search-kbd">
-            <kbd>Ctrl</kbd>
-            <kbd>K</kbd>
-          </div>
-        </button>
-      </div>
+        <div className="dw-topbar-center">
+          <button
+            className="dw-topbar-search"
+            onClick={() => setCommandPaletteOpen(true)}
+            aria-label="Search tools"
+          >
+            <Command size={14} />
+            <span className="dw-topbar-search-text">Search all tools...</span>
+            <div className="dw-topbar-search-kbd">
+              <kbd>Ctrl</kbd>
+              <kbd>K</kbd>
+            </div>
+          </button>
+        </div>
 
-      <div className="dw-topbar-right">
-        {/* Live IST Clock Chip */}
-        <button
-          className="dw-topbar-ist-chip"
-          onClick={() => navigate('/tool/timestamp-converter')}
-          title="Current Indian Standard Time (IST • UTC+05:30) — Click to open Timestamp Converter"
-        >
-          <Clock size={12} style={{ color: 'var(--accent-warning)' }} />
-          <span className="dw-topbar-ist-label">IST</span>
-          <span className="dw-topbar-ist-time">{istClock}</span>
-        </button>
+        <div className="dw-topbar-right">
+          {/* Live IST Clock Chip */}
+          <button
+            className="dw-topbar-ist-chip"
+            onClick={() => navigate('/tool/timestamp-converter')}
+            title="Indian Standard Time (IST • UTC+05:30) — Click to open Converter"
+          >
+            <Clock size={12} style={{ color: 'var(--accent-warning)' }} />
+            <span className="dw-topbar-ist-label">IST</span>
+            <span className="dw-topbar-ist-time">{istClock}</span>
+          </button>
 
-        <button
-          className="dw-topbar-theme-btn"
-          onClick={nextTheme}
-          title={`Theme: ${themeLabel}`}
-        >
-          <CurrentThemeIcon size={16} />
-          <span className="dw-topbar-theme-text">{themeLabel}</span>
-        </button>
-      </div>
-    </header>
+          {/* Shortcuts Modal Trigger */}
+          <button
+            className="dw-topbar-icon-btn"
+            onClick={() => setShortcutsOpen(true)}
+            title="Keyboard Shortcuts (?)"
+            aria-label="Keyboard Shortcuts"
+          >
+            <HelpCircle size={16} />
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            className="dw-topbar-theme-btn"
+            onClick={nextTheme}
+            title={`Theme: ${themeLabel}`}
+            aria-label={`Theme: ${themeLabel}`}
+          >
+            <CurrentThemeIcon size={16} />
+            <span className="dw-topbar-theme-text">{themeLabel}</span>
+          </button>
+        </div>
+      </header>
+
+      <ShortcutsModal isOpen={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+    </>
   );
 };
 
