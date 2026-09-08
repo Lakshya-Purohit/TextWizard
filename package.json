@@ -2,10 +2,10 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "allowScripts": [
-    "core-js",
-    "core-js-pure"
-  ],
+  "allowScripts": {
+    "core-js@3.37.0": true,
+    "core-js-pure@3.37.0": true
+  },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@testing-library/jest-dom": "^5.17.0",
