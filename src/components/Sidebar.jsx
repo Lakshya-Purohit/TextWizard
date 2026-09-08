@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES, getToolsByCategory } from '../tools/toolRegistry';
 import {
-  ChevronDown, ChevronRight, Star, Search,
+  ChevronDown, Star, Search,
   PanelLeftClose, PanelLeftOpen, LayoutDashboard, X, Zap,
   ShieldCheck
 } from 'lucide-react';
