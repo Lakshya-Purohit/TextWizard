@@ -23,7 +23,7 @@ const TRANSFORMS = {
 };
 
 const TextTransform = () => {
-  const [input, setInput] = useState('Welcome to DevWizard V4!\nThe unified workspace for modern developers.');
+  const [input, setInput] = useState('Welcome to DevWizard!\nThe unified workspace for modern developers.');
   const [activeTransform, setActiveTransform] = useState('upper');
 
   const output = useMemo(() => {

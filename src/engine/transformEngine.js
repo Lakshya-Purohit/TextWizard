@@ -3,7 +3,7 @@ import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import Papa from 'papaparse';
 
 /**
- * DevWizard V4 — Universal Data Transformation Engine
+ * DevWizard — Universal Data Transformation Engine
  */
 
 export const CONVERTERS = {

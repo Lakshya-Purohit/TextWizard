@@ -6,7 +6,7 @@ import { Upload, CheckCircle, AlertCircle, FileImage } from 'lucide-react';
 
 const Base64Tool = () => {
   const navigate = useNavigate();
-  const [input, setInput] = useState('Hello DevWizard V4!');
+  const [input, setInput] = useState('Hello DevWizard!');
   const [mode, setMode] = useState('text-base64'); // text-base64 | base64-text | text-hex | hex-text | text-binary | binary-text
   const fileInputRef = useRef(null);
 

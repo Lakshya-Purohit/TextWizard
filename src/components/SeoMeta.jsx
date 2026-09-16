@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { getToolById } from '../tools/toolRegistry';
 
 const SITE_URL = 'https://dev-wizard.lakhsyapurohit.online';
-const DEFAULT_TITLE = 'DevWizard V4 — Client-Side Developer Utility Suite';
-const DEFAULT_DESC = 'DevWizard V4 is a high-performance, 100% client-side developer utility suite. Format JSON/XML, decode JWTs, convert Base64/files, test RegEx, generate cryptographic hashes, and inspect text diffs locally with zero data leakage.';
+const DEFAULT_TITLE = 'DevWizard — Client-Side Developer Utility Suite';
+const DEFAULT_DESC = 'DevWizard is a high-performance, 100% client-side developer utility suite. Format JSON/XML, decode JWTs, convert Base64/files, test RegEx, generate cryptographic hashes, and inspect text diffs locally with zero data leakage.';
 
 export const SeoMeta = ({ toolId }) => {
   const location = useLocation();
@@ -12,7 +12,7 @@ export const SeoMeta = ({ toolId }) => {
 
   useEffect(() => {
     const canonicalUrl = `${SITE_URL}${location.pathname}`;
-    const pageTitle = tool ? `${tool.name} — DevWizard V4` : DEFAULT_TITLE;
+    const pageTitle = tool ? `${tool.name} — DevWizard` : DEFAULT_TITLE;
     const pageDesc = tool ? `${tool.description} Fast, secure, and 100% client-side in your browser.` : DEFAULT_DESC;
 
     // 1. Update Title
@@ -49,7 +49,7 @@ export const SeoMeta = ({ toolId }) => {
     setMeta('meta[property="og:description"]', 'property', 'og:description', pageDesc);
     setMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl);
     setMeta('meta[property="og:type"]', 'property', 'og:type', 'website');
-    setMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'DevWizard V4');
+    setMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'DevWizard');
 
     // Twitter Card
     setMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
@@ -70,7 +70,7 @@ export const SeoMeta = ({ toolId }) => {
       {
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        'name': tool ? `${tool.name} - DevWizard` : 'DevWizard V4 Developer Suite',
+        'name': tool ? `${tool.name} - DevWizard` : 'DevWizard Developer Suite',
         'url': canonicalUrl,
         'description': pageDesc,
         'applicationCategory': 'DeveloperApplication',

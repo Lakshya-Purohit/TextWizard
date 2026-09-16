@@ -49,7 +49,7 @@ const DeveloperFooter = () => {
       content: (
         <div className="dev-legal-modal-body">
           <p>
-            <strong>DevWizard V4 operates entirely on your local machine.</strong> All data transformations, JSON parsing, Base64 encodings/decodings, JWT inspects, RegEx computations, and cryptographic operations run locally inside your browser's V8/JavaScript engine.
+            <strong>DevWizard operates entirely on your local machine.</strong> All data transformations, JSON parsing, Base64 encodings/decodings, JWT inspects, RegEx computations, and cryptographic operations run locally inside your browser's V8/JavaScript engine.
           </p>
           <ul>
             <li><strong>Zero Server Transmission:</strong> No data, code, keys, or text snippets are transmitted to external remote servers.</li>
@@ -65,7 +65,7 @@ const DeveloperFooter = () => {
       content: (
         <div className="dev-legal-modal-body">
           <p>
-            DevWizard V4 is provided as a free, open-source developer utility suite "AS IS", without warranty of any kind, express or implied.
+            DevWizard is provided as a free, open-source developer utility suite "AS IS", without warranty of any kind, express or implied.
           </p>
           <ul>
             <li><strong>No Liability:</strong> In no event shall the authors or copyright holders be liable for any claim, damages, or software failures arising from the use of these tools.</li>
@@ -92,7 +92,7 @@ const DeveloperFooter = () => {
       content: (
         <div className="dev-legal-modal-body">
           <p>
-            DevWizard V4 uses <strong>zero tracking or third-party advertising cookies</strong>. Native Web Cryptography APIs (<code>crypto.subtle</code>) are used for cryptographic hash calculations and AES ciphers.
+            DevWizard uses <strong>zero tracking or third-party advertising cookies</strong>. Native Web Cryptography APIs (<code>crypto.subtle</code>) are used for cryptographic hash calculations and AES ciphers.
           </p>
         </div>
       )
@@ -226,7 +226,7 @@ const DeveloperFooter = () => {
         </div>
 
         <div className="dev-watermark-center">
-          <em>DevWizard V4 • Minimalist Anthropic Suite</em>
+          <em>DevWizard • Minimalist Anthropic Suite</em>
         </div>
 
         <div className="dev-watermark-right">

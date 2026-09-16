@@ -169,7 +169,7 @@ async function computeSubtleHash(algorithm, text) {
 }
 
 const HashGenerator = () => {
-  const [input, setInput] = useState('DevWizard V4');
+  const [input, setInput] = useState('DevWizard');
   const [copiedKey, setCopiedKey] = useState(null);
   const [hashes, setHashes] = useState({
     md5: '',

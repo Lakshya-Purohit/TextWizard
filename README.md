@@ -1,4 +1,4 @@
-# TextWizard (DevWizard V4) 🧙‍♂️⚡
+# TextWizard (DevWizard) 🧙‍♂️⚡
 
 > **High-Performance, 100% Client-Side Developer Utility & Cryptography Suite**  
 > Fast, privacy-first, in-browser developer toolset built with React 18, Vanilla CSS design tokens, and the native Web Cryptography API. Zero data leaves your device.
@@ -7,7 +7,7 @@
 
 ## 🌟 Overview
 
-**TextWizard** (also known as **DevWizard V4**) is a modern, privacy-focused engineering workbench engineered for developers, DevOps engineers, and security analysts. Unlike conventional online converters and formatting tools that transmit sensitive tokens, logs, and payloads to third-party cloud servers, **TextWizard runs every single computation locally within the user's browser memory**.
+**TextWizard** (also known as **DevWizard**) is a modern, privacy-focused engineering workbench engineered for developers, DevOps engineers, and security analysts. Unlike conventional online converters and formatting tools that transmit sensitive tokens, logs, and payloads to third-party cloud servers, **TextWizard runs every single computation locally within the user's browser memory**.
 
 From enterprise-grade AES cryptographic operations and JWT decoding to telecom-spec GSM 03.38 SMS segment packing, TextWizard consolidates essential daily developer utilities into a unified, distraction-free environment.
 

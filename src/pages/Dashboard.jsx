@@ -12,8 +12,8 @@ import './Dashboard.css';
 
 const DASHBOARD_FAQS = [
   {
-    q: 'What is DevWizard V4?',
-    a: 'DevWizard V4 is a client-side developer utility suite built for software engineers, security analysts, and web developers. It provides instant, local browser-based tools for formatting JSON/XML, decoding JWTs, converting Base64 files, analyzing GSM 03.38 SMS payloads, testing RegEx, computing cryptographic hashes, and comparing side-by-side text diffs.'
+    q: 'What is DevWizard?',
+    a: 'DevWizard is a client-side developer utility suite built for software engineers, security analysts, and web developers. It provides instant, local browser-based tools for formatting JSON/XML, decoding JWTs, converting Base64 files, analyzing GSM 03.38 SMS payloads, testing RegEx, computing cryptographic hashes, and comparing side-by-side text diffs.'
   },
   {
     q: 'Does DevWizard upload any tokens, passwords, or files to a server?',
