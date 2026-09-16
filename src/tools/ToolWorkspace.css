@@ -18,7 +18,7 @@
   justify-content: space-between;
   height: auto;
   min-height: var(--toolbar-height);
-  padding: 6px var(--space-4);
+  padding: 8px var(--space-4);
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-default);
   flex-shrink: 0;
@@ -29,7 +29,7 @@
 
 .dw-workspace-toolbar-left {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
   overflow-x: auto;
   min-width: 0;
@@ -48,12 +48,13 @@
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
+  background: var(--accent-primary);
 }
 
 .dw-workspace-tool-name {
   font-family: var(--font-heading);
-  font-size: var(--text-md);
-  font-weight: 600;
+  font-size: var(--text-xl);
+  font-weight: 500;
   color: var(--text-primary);
   margin: 0;
   white-space: nowrap;
@@ -132,13 +133,31 @@
   flex: 1 1 0;
   background: var(--bg-editor);
   overflow: hidden;
+  border-right: 1px solid var(--border-subtle);
+  transition: border-color var(--transition-fast);
+}
+
+/* Output Panel Animation */
+.dw-workspace-panel.output-panel {
+  animation: dwOutputPopulate var(--transition-base) ease-out;
+}
+
+@keyframes dwOutputPopulate {
+  from {
+    opacity: 0.85;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dw-panel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 34px;
+  height: 36px;
   padding: 0 var(--space-3);
   background: var(--bg-panel);
   border-bottom: 1px solid var(--border-subtle);
@@ -184,7 +203,7 @@
 .dw-workspace-textarea {
   width: 100%;
   height: 100%;
-  padding: var(--space-3);
+  padding: var(--space-4);
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.6;
@@ -194,6 +213,7 @@
   outline: none;
   resize: none;
   tab-size: 2;
+  overflow-x: auto;
 }
 
 .dw-workspace-textarea::placeholder {
@@ -202,7 +222,7 @@
 
 /* Resizer Bar */
 .dw-resizer {
-  width: 4px;
+  width: 5px;
   background: var(--border-subtle);
   cursor: col-resize;
   flex-shrink: 0;
@@ -247,8 +267,6 @@
   gap: var(--space-6);
 }
 
-/* Browser zoom reduces the CSS viewport. Treat the compact range as a
-   responsive layout before the phone breakpoint is reached. */
 @media (max-width: 1100px) {
   .dw-workspace-toolbar {
     height: auto;
@@ -285,8 +303,8 @@
 
 .dw-footer-subheading {
   font-family: var(--font-heading);
-  font-size: var(--text-md);
-  font-weight: 600;
+  font-size: var(--text-lg);
+  font-weight: 500;
   color: var(--text-primary);
   margin-bottom: var(--space-3);
 }
@@ -301,7 +319,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: var(--bg-card);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
@@ -312,7 +330,8 @@
 .dw-related-tool-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-strong);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: var(--shadow-sm);
 }
 
 .dw-related-icon {
@@ -323,6 +342,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
 }
 
 .dw-related-info {
@@ -355,7 +376,7 @@
 
 .dw-related-tool-card:hover .dw-related-arrow {
   color: var(--accent-primary);
-  transform: translateX(2px);
+  transform: translateX(3px);
 }
 
 /* FAQ Accordion */
@@ -390,8 +411,8 @@
 
 .dw-faq-question-text {
   font-family: var(--font-heading);
-  font-size: var(--text-sm);
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: 500;
   color: var(--text-primary);
   margin: 0;
 }
@@ -415,7 +436,7 @@
   padding-top: 10px;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsiveness & Vertical Stacking */
 @media (max-width: 768px) {
   .dw-workspace-mobile-tabs {
     display: flex;
@@ -423,10 +444,14 @@
 
   .dw-workspace-content {
     flex-direction: column;
+    overflow-y: auto;
   }
 
   .dw-workspace-panel {
     width: 100% !important;
+    border-right: none;
+    border-bottom: 1px solid var(--border-default);
+    min-height: 280px;
   }
 
   .mobile-tab-input .output-panel,
@@ -436,5 +461,9 @@
 
   .mobile-tab-output .input-panel {
     display: none !important;
+  }
+
+  .mobile-tab-both .dw-workspace-panel {
+    display: flex !important;
   }
 }

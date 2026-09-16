@@ -1,5 +1,5 @@
 /* ============================================================
-   DevWizard V4 — App Layout Styles
+   DevWizard V4 — App Layout Styles & Page Transitions
    ============================================================ */
 
 .dw-app-layout {
@@ -28,4 +28,24 @@
   display: flex;
   flex-direction: column;
   background: var(--bg-app);
+}
+
+/* Tool Page Switch Fade/Slide Transition */
+.dw-page-transition {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  animation: dwPageFadeIn var(--transition-base) ease-out forwards;
+}
+
+@keyframes dwPageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

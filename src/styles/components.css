@@ -2,7 +2,7 @@
    DevWizard V4 — Core Component Styles
    ============================================================ */
 
-/* Buttons */
+/* Buttons Reset & Micro-Transitions */
 .dw-btn {
   display: inline-flex;
   align-items: center;
@@ -14,16 +14,25 @@
   line-height: 1.25;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
   white-space: nowrap;
   user-select: none;
   cursor: pointer;
+}
+
+.dw-btn:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.dw-btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .dw-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
+  transform: none;
 }
 
 .dw-btn svg {
@@ -65,58 +74,46 @@
   height: 16px;
 }
 
-/* Primary Button (Gold Fill with Dark Text) */
-.dw-btn-primary {
-  background: var(--accent-gold);
-  color: var(--accent-primary-text);
-  border-color: var(--accent-gold);
+/* Primary Button (Terracotta Fill) */
+.dw-btn-primary, .dw-btn-gold {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+  border-color: var(--accent-primary);
   font-weight: 600;
   box-shadow: var(--shadow-xs);
 }
 
-.dw-btn-primary:hover {
-  background: var(--accent-gold-hover);
-  border-color: var(--accent-gold-hover);
-  color: var(--accent-primary-text);
+.dw-btn-primary:hover, .dw-btn-gold:hover {
+  background: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Gold Button */
-.dw-btn-gold {
-  background: var(--accent-gold);
-  color: var(--accent-primary-text);
-  border-color: var(--accent-gold);
-  font-weight: 600;
-}
-
-.dw-btn-gold:hover {
-  background: var(--accent-gold-hover);
-  border-color: var(--accent-gold-hover);
-}
-
-/* Secondary Button (Outlined Gold) */
+/* Secondary Button (Terracotta Border / Subtle Fill) */
 .dw-btn-secondary {
-  background: transparent;
-  color: var(--accent-gold);
-  border-color: var(--accent-gold);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-default);
 }
 
 .dw-btn-secondary:hover {
-  background: rgba(212, 175, 55, 0.12);
-  color: var(--accent-gold-hover);
-  border-color: var(--accent-gold-hover);
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary-border);
 }
 
 /* Destructive Button (--error) */
 .dw-btn-danger {
-  background: var(--error);
-  color: var(--text-primary);
-  border-color: var(--error);
+  background: var(--accent-danger-subtle);
+  color: var(--accent-danger);
+  border-color: rgba(217, 83, 79, 0.3);
 }
 
 .dw-btn-danger:hover {
-  background: #A93226;
-  border-color: #A93226;
-  color: var(--text-primary);
+  background: var(--accent-danger);
+  color: #FFFFFF;
+  border-color: var(--accent-danger);
 }
 
 /* Ghost Button */
@@ -145,17 +142,18 @@
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
+  transform: none;
 }
 
 .dw-btn-group .dw-btn.dw-btn-primary {
-  background: var(--accent-gold);
-  color: var(--accent-primary-text);
+  background: var(--accent-primary);
+  color: #FFFFFF;
   font-weight: 600;
 }
 
 .dw-btn-group .dw-btn.dw-btn-primary:hover {
-  background: var(--accent-gold-hover);
-  color: var(--accent-primary-text);
+  background: var(--accent-primary-hover);
+  color: #FFFFFF;
 }
 
 .dw-btn-group .dw-btn.dw-btn-secondary {
@@ -164,6 +162,7 @@
 
 .dw-btn-group .dw-btn.dw-btn-secondary:hover {
   color: var(--text-primary);
+  background: var(--bg-surface-hover);
 }
 
 /* Form Controls */
@@ -180,7 +179,7 @@
 
 .dw-input:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 2px var(--accent-primary-subtle);
+  box-shadow: var(--ring-focus);
 }
 
 .dw-input::placeholder {
@@ -189,7 +188,7 @@
 
 .dw-select {
   padding-right: 28px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa2b7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D97757' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
   appearance: none;
@@ -204,13 +203,14 @@
 }
 
 .dw-tab {
-  padding: 4px 10px;
+  padding: 5px 12px;
   font-size: var(--text-xs);
   font-weight: 500;
   color: var(--text-secondary);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   transition: all var(--transition-fast);
+  cursor: pointer;
 }
 
 .dw-tab:hover {
@@ -223,6 +223,25 @@
   background: var(--accent-primary-subtle);
   border-color: var(--accent-primary-border);
   font-weight: 600;
+}
+
+/* Copy Button Micro-Animation */
+.dw-copy-btn {
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.dw-copy-btn.copied {
+  background: var(--accent-success-subtle) !important;
+  color: var(--accent-success) !important;
+  border-color: rgba(46, 139, 87, 0.3) !important;
+  animation: dwCopyPulse 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes dwCopyPulse {
+  0% { transform: scale(0.92); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
 
 /* Empty State */
@@ -257,8 +276,9 @@
 }
 
 .dw-empty-title {
-  font-size: var(--text-md);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 500;
   color: var(--text-primary);
   margin-bottom: var(--space-1);
 }
@@ -304,13 +324,13 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   font-size: var(--text-2xs);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--accent-success);
-  background: var(--accent-success-subtle);
+  color: var(--accent-primary);
+  background: var(--accent-primary-subtle);
   border: 1px solid var(--accent-primary-border);
   border-radius: var(--radius-full);
 }

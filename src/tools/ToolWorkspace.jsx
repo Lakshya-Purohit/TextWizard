@@ -261,7 +261,7 @@ const ToolWorkspace = ({
                   {output && (
                     <button
                       type="button"
-                      className="dw-btn dw-btn-ghost dw-btn-sm"
+                      className={`dw-btn dw-btn-ghost dw-btn-sm dw-copy-btn ${copiedOutput ? 'copied' : ''}`}
                       onClick={() => handleCopy(output)}
                       title="Copy output to clipboard"
                     >

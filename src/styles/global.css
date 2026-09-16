@@ -1,5 +1,5 @@
 /* ============================================================
-   DevWizard V4 — Global Styles
+   DevWizard V4 — Global Styles & Reset
    ============================================================ */
 
 @import './variables.css';
@@ -25,21 +25,55 @@ body {
   background-color: var(--bg-app);
   overflow-x: hidden;
   min-height: 100vh;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
-/* Headings with Royal Typography */
+/* Headings with Editorial Serif Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--text-primary);
   letter-spacing: -0.015em;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-weight: 500;
 }
 
-/* Code & Pre */
+/* Section titles & subtitles */
+.dw-page-title, .dw-section-title {
+  font-family: var(--font-heading);
+}
+
+/* Code & Monospace Panels */
 code, pre, kbd, samp {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  font-feature-settings: "liga" 0;
+}
+
+/* Scrollbar Customization for Code & Panels */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+/* Code output containers must handle long horizontal text without breaking layout */
+code, pre, .text-mono, .dw-code-block, .dw-output-panel {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 /* Links */
@@ -53,7 +87,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Buttons Reset & Focus */
+/* Buttons Reset & Hover Scale */
 button {
   font-family: inherit;
   font-size: inherit;
@@ -61,12 +95,14 @@ button {
   border: none;
   background: none;
   color: inherit;
+  transition: transform var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* Custom Gold Focus Rings (No default browser blue) */
+/* Focus Rings (Terracotta accent) */
 :focus-visible {
-  outline: 2px solid var(--accent-gold) !important;
+  outline: 2px solid var(--accent-primary) !important;
   outline-offset: 2px !important;
+  transition: outline-offset var(--transition-fast);
 }
 
 /* Inputs & Textareas */
@@ -77,38 +113,20 @@ input, textarea, select {
   background: transparent;
   border: none;
   outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 textarea {
-  resize: none;
+  resize: vertical;
 }
 
-/* Scrollbar Customization */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
-
-/* Selection */
+/* Text Selection */
 ::selection {
   background: var(--accent-primary-subtle);
   color: var(--text-primary);
 }
 
-/* Utility Classes */
+/* Utility Helper Classes */
 .text-mono {
   font-family: var(--font-mono) !important;
 }
@@ -137,8 +155,8 @@ textarea {
   color: var(--accent-danger) !important;
 }
 
-.text-gold {
-  color: var(--accent-gold) !important;
+.text-accent, .text-gold {
+  color: var(--accent-primary) !important;
 }
 
 /* Responsive Hide/Show Helpers */
@@ -152,5 +170,23 @@ textarea {
   }
   .dw-show-mobile {
     display: flex !important;
+  }
+}
+
+/* ============================================================
+   Global Accessibility & Motion Settings
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Retain simple opacity fades for accessibility context */
+  .fade-in, .dw-page-transition, .dw-output-animate {
+    transition: opacity 150ms ease-in-out !important;
+    transform: none !important;
   }
 }

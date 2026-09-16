@@ -60,6 +60,7 @@
   width: 220px;
   border-color: var(--border-focus);
   background: var(--bg-input);
+  box-shadow: var(--ring-focus);
 }
 
 .json-tree-search-clear {
@@ -82,7 +83,7 @@
 .json-tree-loading-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(18, 20, 26, 0.75);
+  background: var(--bg-overlay);
   backdrop-filter: blur(2px);
   display: flex;
   flex-direction: column;
@@ -103,7 +104,7 @@
   letter-spacing: 0.02em;
 }
 
-/* Tree Nodes */
+/* Tree Nodes & Smooth Expand Animation */
 .tree-node, .tree-leaf {
   position: relative;
 }
@@ -113,10 +114,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  padding: 2px 6px;
+  padding: 3px 6px;
   border-radius: var(--radius-sm);
   user-select: none;
-  min-height: 24px;
+  min-height: 26px;
   transition: background var(--transition-fast);
 }
 
@@ -135,20 +136,21 @@
   flex-wrap: wrap;
 }
 
+/* Rotating arrow icon on expand/collapse */
 .tree-toggle-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--text-tertiary);
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), color var(--transition-fast);
 }
 
 .tree-branch-header:hover .tree-toggle-icon {
-  color: var(--text-primary);
+  color: var(--accent-primary);
 }
 
 .tree-key {
-  color: var(--accent-primary);
+  color: var(--code-key);
   font-weight: 500;
 }
 
@@ -167,23 +169,24 @@
   border: 1px solid var(--border-subtle);
 }
 
-/* Values */
+/* Restyled Warm Syntax Palette */
 .tree-val-string {
-  color: var(--accent-success);
+  color: var(--code-string);
   word-break: break-all;
 }
 
 .tree-val-number {
-  color: #ff9800;
+  color: var(--code-number);
+  font-weight: 500;
 }
 
 .tree-val-boolean {
-  color: #ab47bc;
+  color: var(--code-boolean);
   font-weight: 600;
 }
 
 .tree-val-null {
-  color: var(--accent-danger);
+  color: var(--code-null);
   font-style: italic;
   opacity: 0.9;
 }
@@ -196,8 +199,8 @@
 .tree-type-badge {
   font-size: 9px;
   font-weight: 600;
-  padding: 0 4px;
-  height: 15px;
+  padding: 0 5px;
+  height: 16px;
   display: inline-flex;
   align-items: center;
   border-radius: var(--radius-sm);
@@ -206,32 +209,32 @@
 }
 
 .badge-obj {
-  background: rgba(79, 143, 247, 0.12);
+  background: var(--accent-primary-subtle);
   color: var(--accent-primary);
 }
 
 .badge-arr {
-  background: rgba(179, 136, 255, 0.12);
-  color: var(--accent-purple);
+  background: rgba(194, 123, 155, 0.14);
+  color: var(--cat-diff);
 }
 
 .badge-str {
-  background: rgba(62, 207, 142, 0.12);
-  color: var(--accent-success);
+  background: rgba(139, 168, 136, 0.14);
+  color: var(--code-string);
 }
 
 .badge-num {
-  background: rgba(255, 152, 0, 0.12);
-  color: #ff9800;
+  background: rgba(217, 155, 87, 0.14);
+  color: var(--code-number);
 }
 
 .badge-bool {
-  background: rgba(171, 71, 188, 0.12);
-  color: #ab47bc;
+  background: rgba(194, 123, 155, 0.14);
+  color: var(--code-boolean);
 }
 
 .badge-null {
-  background: rgba(239, 83, 80, 0.12);
+  background: rgba(217, 83, 79, 0.14);
   color: var(--accent-danger);
 }
 
@@ -255,7 +258,7 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  padding: 1px 5px;
+  padding: 1px 6px;
   font-size: 10px;
   font-family: var(--font-ui);
   background: var(--bg-surface);
@@ -267,347 +270,29 @@
 }
 
 .tree-mini-btn:hover {
-  background: var(--bg-surface-active);
-  color: var(--text-primary);
-  border-color: var(--border-strong);
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary-border);
 }
 
-/* Branch body guidelines */
+/* Branch body smooth expansion animation */
 .tree-branch-body {
   position: relative;
   border-left: 1px dashed var(--border-subtle);
   margin-left: 7px;
-}
-
-.tree-branch-closing {
-  display: flex;
-  align-items: center;
-}
-
-/* Status */
-.json-tree-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--text-xs);
-}
-
-.status-loading {
-  color: var(--accent-primary);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.status-error {
-  color: var(--accent-danger);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.status-success {
-  color: var(--accent-success);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.status-idle {
-  color: var(--text-tertiary);
-}
-
-.json-tree-stats {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-}
-
-.json-tree-stats strong {
-  color: var(--text-primary);
-}
-/* Fix overlapping controls by restoring standard flow */
-/* ============================================
-   Interactive JSON Tree Viewer Styles
-   ============================================ */
-
-.json-tree-view-wrapper {
-  position: relative;
-  height: 100%;
-  width: 100%;
+  animation: dwTreeExpand var(--transition-base) ease-out forwards;
   overflow: hidden;
-  background: var(--bg-editor);
-  display: flex;
-  flex-direction: column;
 }
 
-.json-tree-container {
-  padding: var(--space-3) var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  line-height: 1.7;
-  color: var(--text-primary);
-  height: 100%;
-  overflow: auto;
-}
-
-/* Toolbar search & buttons */
-.json-tree-toolbar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-
-.json-tree-search-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.json-tree-search-icon {
-  position: absolute;
-  left: 8px;
-  color: var(--text-tertiary);
-  pointer-events: none;
-}
-
-.json-tree-search-input {
-  padding: 4px 24px 4px 26px;
-  font-size: var(--text-xs);
-  font-family: var(--font-ui);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  width: 170px;
-  transition: all var(--transition-fast);
-  outline: none;
-}
-
-.json-tree-search-input:focus {
-  width: 220px;
-  border-color: var(--border-focus);
-  background: var(--bg-input);
-}
-
-.json-tree-search-clear {
-  position: absolute;
-  right: 6px;
-  background: none;
-  border: none;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  padding: 0 2px;
-}
-
-.json-tree-search-clear:hover {
-  color: var(--text-primary);
-}
-
-/* Loading Overlay */
-.json-tree-loading-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(18, 20, 26, 0.75);
-  backdrop-filter: blur(2px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
-  z-index: 10;
-}
-
-.json-tree-loader-spinner {
-  color: var(--accent-primary);
-}
-
-.json-tree-loader-text {
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-/* Tree Nodes */
-.tree-node, .tree-leaf {
-  position: relative;
-}
-
-.tree-branch-header, .tree-leaf {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  user-select: none;
-  min-height: 24px;
-  transition: background var(--transition-fast);
-}
-
-.tree-branch-header {
-  cursor: pointer;
-}
-
-.tree-branch-header:hover, .tree-leaf:hover {
-  background: var(--bg-surface-hover);
-}
-
-.tree-leaf-content {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.tree-toggle-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-tertiary);
-  transition: transform var(--transition-fast);
-}
-
-.tree-branch-header:hover .tree-toggle-icon {
-  color: var(--text-primary);
-}
-
-.tree-key {
-  color: var(--accent-primary);
-  font-weight: 500;
-}
-
-.tree-bracket {
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.tree-collapsed-preview {
-  color: var(--text-tertiary);
-  font-style: italic;
-  font-size: 11px;
-  background: var(--bg-surface);
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
-}
-
-/* Values */
-.tree-val-string {
-  color: var(--accent-success);
-  word-break: break-all;
-}
-
-.tree-val-number {
-  color: #ff9800;
-}
-
-.tree-val-boolean {
-  color: #ab47bc;
-  font-weight: 600;
-}
-
-.tree-val-null {
-  color: var(--accent-danger);
-  font-style: italic;
-  opacity: 0.9;
-}
-
-.tree-val-other {
-  color: var(--text-primary);
-}
-
-/* Type Badges */
-.tree-type-badge {
-  font-size: 9px;
-  font-weight: 600;
-  padding: 0 4px;
-  height: 15px;
-  display: inline-flex;
-  align-items: center;
-  border-radius: var(--radius-sm);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.badge-obj {
-  background: rgba(79, 143, 247, 0.12);
-  color: var(--accent-primary);
-}
-
-.badge-arr {
-  background: rgba(179, 136, 255, 0.12);
-  color: var(--accent-purple);
-}
-
-.badge-str {
-  background: rgba(62, 207, 142, 0.12);
-  color: var(--accent-success);
-}
-
-.badge-num {
-  background: rgba(255, 152, 0, 0.12);
-  color: #ff9800;
-}
-
-.badge-bool {
-  background: rgba(171, 71, 188, 0.12);
-  color: #ab47bc;
-}
-
-.badge-null {
-  background: rgba(239, 83, 80, 0.12);
-  color: var(--accent-danger);
-}
-
-/* Node actions (Copy path / value) */
-.tree-node-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  margin-left: auto;
-  padding-left: 8px;
-}
-
-.tree-branch-header:hover .tree-node-actions,
-.tree-leaf:hover .tree-node-actions {
-  opacity: 1;
-}
-
-.tree-mini-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 1px 5px;
-  font-size: 10px;
-  font-family: var(--font-ui);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.tree-mini-btn:hover {
-  background: var(--bg-surface-active);
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-
-/* Branch body guidelines */
-.tree-branch-body {
-  position: relative;
-  border-left: 1px dashed var(--border-subtle);
-  margin-left: 7px;
+@keyframes dwTreeExpand {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .tree-branch-closing {
@@ -615,7 +300,7 @@
   align-items: center;
 }
 
-/* Status */
+/* Status Bar */
 .json-tree-status {
   display: flex;
   align-items: center;
@@ -659,73 +344,7 @@
 .json-tree-stats strong {
   color: var(--text-primary);
 }
-/* Fix overlapping controls by restoring standard flow */
-/* Ensure the context toolbar stays below tabs and description */
-.json-context-actions {
-  display: flex !important;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  
-  /* Reset positioning that pulls it into the header */
-  position: static !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-  
-  /* Spacing: clear tab bar above and panels below */
-  margin-top: 12px !important;
-  margin-bottom: 12px !important;
-  padding: 0 !important;
-  width: 100%;
-  height: auto !important;
-  z-index: 1;
-}
 
-.json-context-actions .dw-btn-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.json-context-actions .json-select {
-  height: 28px;
-  padding: 2px 8px;
-  font-size: 12px;
-  border-radius: var(--radius-sm, 4px);
-  background-color: var(--bg-surface, #1e2029);
-  color: var(--text-primary, #ffffff);
-  border: 1px solid var(--border-default, #2e3346);
-  outline: none;
-  cursor: pointer;
-}
-
-/* ============================================
-   JSON Tree Viewer Mobile Media Queries (< 768px)
-   ============================================ */
-@media (max-width: 768px) {
-  .json-tree-toolbar {
-    gap: var(--space-1);
-  }
-
-  .json-tree-search-input {
-    width: 130px;
-  }
-
-  .json-tree-search-input:focus {
-    width: 160px;
-  }
-
-  .json-tree-container {
-    padding: var(--space-2);
-  }
-}
-
-
-/* ============================================
-   JSON Tree Viewer Mobile Media Queries (< 768px)
-   ============================================ */
 @media (max-width: 768px) {
   .json-tree-toolbar {
     gap: var(--space-1);

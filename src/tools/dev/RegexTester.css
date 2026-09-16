@@ -12,6 +12,12 @@
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   padding: 0 var(--space-2);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.regex-pattern-input-group:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: var(--ring-focus);
 }
 
 .regex-slash {
@@ -54,7 +60,7 @@
 
 .regex-flag-btn.active {
   background: var(--accent-primary);
-  color: var(--accent-primary-text);
+  color: #FFFFFF;
 }
 
 .regex-output-container {
@@ -93,10 +99,11 @@
   color: var(--text-primary);
   white-space: pre-wrap;
   word-break: break-all;
+  overflow-x: auto;
 }
 
 .regex-highlight {
-  background: rgba(79, 143, 247, 0.35);
+  background: rgba(217, 119, 87, 0.25);
   color: var(--text-primary);
   border-bottom: 2px solid var(--accent-primary);
   border-radius: 2px;
@@ -123,6 +130,12 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: var(--space-3);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.regex-match-card:hover {
+  border-color: var(--accent-primary-border);
+  transform: translateY(-1px);
 }
 
 .regex-match-header {
@@ -172,9 +185,6 @@
   color: var(--accent-success);
 }
 
-/* ============================================
-   Regex Tester Mobile Media Queries (< 768px)
-   ============================================ */
 @media (max-width: 768px) {
   .regex-pattern-input-group {
     width: 100%;
