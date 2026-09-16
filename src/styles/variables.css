@@ -1,12 +1,12 @@
 /* ============================================================
-   DevWizard — Anthropic-Inspired Warm Minimalist Palette
+   DevWizard — Professional Modern Palette & Typography
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap');
 
 :root {
   /* Typography Scale */
-  --font-heading: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-ui: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
@@ -62,14 +62,14 @@
 }
 
 /* ============================================================
-   Dark Mode — Warm Near-Black & Terracotta Clay Palette
+   Dark Mode — Warm Charcoal & Terracotta Clay
    ============================================================ */
 :root, [data-theme="dark"] {
   --bg-base: #1A1A19;
   --bg-surface: #242422;
   --bg-elevated: #2D2D29;
   --border: #383834;
-  --text-primary: #F5F4ED;
+  --text-primary: #F9F8F3;
   --text-muted: #A3A199;
   --accent-primary: #D97757;
   --accent-gold: #D97757;
@@ -106,7 +106,7 @@
   --text-link: #E58667;
   --text-code: #E58667;
 
-  /* Muted Terracotta Accent */
+  /* Terracotta Accent */
   --accent-primary-hover: #E58667;
   --accent-primary-subtle: rgba(217, 119, 87, 0.16);
   --accent-primary-border: rgba(217, 119, 87, 0.35);
@@ -118,21 +118,21 @@
 
   /* Functional Status Accents */
   --accent-success-subtle: rgba(62, 154, 112, 0.18);
-  --accent-success-text: #F5F4ED;
+  --accent-success-text: #F9F8F3;
 
   --accent-warning: #D99B57;
   --accent-warning-subtle: rgba(217, 155, 87, 0.18);
-  --accent-warning-text: #F5F4ED;
+  --accent-warning-text: #F9F8F3;
 
   --accent-danger: #D9534F;
   --accent-danger-subtle: rgba(217, 83, 79, 0.18);
-  --accent-danger-text: #F5F4ED;
+  --accent-danger-text: #F9F8F3;
 
   --accent-info: #7E99AB;
   --accent-info-subtle: rgba(126, 153, 171, 0.16);
-  --accent-info-text: #F5F4ED;
+  --accent-info-text: #F9F8F3;
 
-  /* Category Accents — Harmonized Terracotta */
+  /* Category Accents */
   --cat-json: #D97757;
   --cat-xml: #D99B57;
   --cat-text: #8BA888;
@@ -140,7 +140,7 @@
   --cat-dev: #D97757;
   --cat-diff: #C27B9B;
 
-  /* Code Syntax Palette (Warm & Restrained) */
+  /* Code Syntax Palette */
   --code-string: #8BA888;
   --code-number: #D99B57;
   --code-keyword: #D97757;
@@ -157,7 +157,7 @@
   /* Focus Ring */
   --ring-focus: 0 0 0 2px rgba(217, 119, 87, 0.45);
 
-  /* Restrained Shadows */
+  /* Shadows */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 4px 10px -2px rgba(0, 0, 0, 0.45);
@@ -165,15 +165,15 @@
 }
 
 /* ============================================================
-   Light Mode — Warm Cream & Terracotta Clay Palette
+   Light Mode — Crisp Off-White & Highly Legible Charcoal
    ============================================================ */
 [data-theme="light"] {
-  --bg-base: #F5F4ED;
-  --bg-surface: #EAE7DF;
+  --bg-base: #F9F8F3;
+  --bg-surface: #F0EEE6;
   --bg-elevated: #FFFFFF;
-  --border: #D5CFC3;
-  --text-primary: #1A1A19;
-  --text-muted: #6B6963;
+  --border: #D8D2C6;
+  --text-primary: #111827;
+  --text-muted: #4B5563;
   --accent-primary: #D97757;
   --accent-gold: #D97757;
   --accent-success: #2E8B57;
@@ -181,58 +181,58 @@
   --warning: #C88332;
 
   /* Surfaces */
-  --bg-app: #F5F4ED;
-  --bg-sidebar: #ECE9E1;
-  --bg-topbar: #ECE9E1;
-  --bg-surface-hover: #E2DDD3;
+  --bg-app: #F9F8F3;
+  --bg-sidebar: #EFECE4;
+  --bg-topbar: #EFECE4;
+  --bg-surface-hover: #E4DFD5;
   --bg-surface-active: #D8D2C6;
-  --bg-editor: #FAF9F5;
+  --bg-editor: #FFFFFF;
   --bg-input: #FFFFFF;
-  --bg-panel: #FFFFFF;
+  --bg-panel: #F0EEE6;
   --bg-card: #FFFFFF;
-  --bg-card-hover: #FAF9F5;
-  --bg-overlay: rgba(26, 26, 25, 0.4);
-  --bg-tooltip: #1A1A19;
-  --bg-badge: #E2DDD3;
+  --bg-card-hover: #FAF8F3;
+  --bg-overlay: rgba(17, 24, 39, 0.4);
+  --bg-tooltip: #111827;
+  --bg-badge: #E4DFD5;
 
   /* Borders */
-  --border-subtle: #E2DDD4;
-  --border-default: #D5CFC3;
-  --border-strong: #C2BBB0;
+  --border-subtle: #E4DFD5;
+  --border-default: #D8D2C6;
+  --border-strong: #C4BDB0;
   --border-focus: #D97757;
 
   /* Typography Colors */
-  --text-secondary: #6B6963;
-  --text-tertiary: #8C8A82;
-  --text-disabled: #B5B2A8;
-  --text-inverse: #F5F4ED;
+  --text-secondary: #4B5563;
+  --text-tertiary: #6B7280;
+  --text-disabled: #9CA3AF;
+  --text-inverse: #F9F8F3;
   --text-link: #C56545;
   --text-code: #C56545;
 
   /* Accents */
   --accent-primary-hover: #C56545;
-  --accent-primary-subtle: rgba(217, 119, 87, 0.1);
-  --accent-primary-border: rgba(217, 119, 87, 0.3);
+  --accent-primary-subtle: rgba(217, 119, 87, 0.12);
+  --accent-primary-border: rgba(217, 119, 87, 0.35);
   --accent-primary-text: #FFFFFF;
 
   --accent-gold-hover: #C56545;
-  --accent-gold-subtle: rgba(217, 119, 87, 0.1);
-  --accent-gold-border: rgba(217, 119, 87, 0.3);
+  --accent-gold-subtle: rgba(217, 119, 87, 0.12);
+  --accent-gold-border: rgba(217, 119, 87, 0.35);
 
   --accent-success-subtle: rgba(46, 139, 87, 0.1);
-  --accent-success-text: #1A1A19;
+  --accent-success-text: #111827;
 
   --accent-warning: #C88332;
   --accent-warning-subtle: rgba(200, 131, 50, 0.1);
-  --accent-warning-text: #1A1A19;
+  --accent-warning-text: #111827;
 
   --accent-danger: #C94A4A;
   --accent-danger-subtle: rgba(201, 74, 74, 0.1);
-  --accent-danger-text: #1A1A19;
+  --accent-danger-text: #111827;
 
   --accent-info: #5B7A8C;
   --accent-info-subtle: rgba(91, 122, 140, 0.1);
-  --accent-info-text: #1A1A19;
+  --accent-info-text: #111827;
 
   /* Category Accents */
   --cat-json: #D97757;
@@ -242,23 +242,23 @@
   --cat-dev: #D97757;
   --cat-diff: #A05270;
 
-  /* Code Syntax Palette (Light Mode Restrained) */
-  --code-string: #3B7A57;
-  --code-number: #B86B28;
+  /* Code Syntax Palette */
+  --code-string: #2E7D32;
+  --code-number: #D97757;
   --code-keyword: #C56545;
   --code-boolean: #A05270;
-  --code-key: #4A6B82;
-  --code-null: #6B6963;
-  --code-comment: #8C8A82;
+  --code-key: #2563EB;
+  --code-null: #6B7280;
+  --code-comment: #9CA3AF;
 
   /* Scrollbars */
   --scrollbar-track: transparent;
-  --scrollbar-thumb: #D5CFC3;
-  --scrollbar-thumb-hover: #C2BBB0;
+  --scrollbar-thumb: #D8D2C6;
+  --scrollbar-thumb-hover: #C4BDB0;
 
-  /* Restrained Soft Shadows */
-  --shadow-xs: 0 1px 2px rgba(26, 26, 25, 0.04);
-  --shadow-sm: 0 1px 3px rgba(26, 26, 25, 0.06);
-  --shadow-md: 0 4px 8px -2px rgba(26, 26, 25, 0.08);
-  --shadow-lg: 0 12px 20px -4px rgba(26, 26, 25, 0.1);
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.05);
+  --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.08);
+  --shadow-md: 0 4px 8px -2px rgba(17, 24, 39, 0.1);
+  --shadow-lg: 0 12px 20px -4px rgba(17, 24, 39, 0.12);
 }

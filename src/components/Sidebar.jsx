@@ -235,10 +235,16 @@ const Sidebar = () => {
         )}
 
         <div className="dw-sidebar-footer">
-          <div className="privacy-badge">
-            <ShieldCheck size={11} />
-            <span>100% Client-Side</span>
-          </div>
+          {sidebarCollapsed && !mobileSidebarOpen ? (
+            <div className="privacy-badge collapsed" title="100% Client-Side Execution">
+              <ShieldCheck size={14} />
+            </div>
+          ) : (
+            <div className="privacy-badge">
+              <ShieldCheck size={11} />
+              <span>100% Client-Side</span>
+            </div>
+          )}
         </div>
       </aside>
     </>

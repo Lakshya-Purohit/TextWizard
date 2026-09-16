@@ -330,6 +330,21 @@
   flex-shrink: 0;
 }
 
+.dw-sidebar.collapsed .dw-sidebar-footer {
+  padding: var(--space-3) var(--space-2);
+  display: flex;
+  justify-content: center;
+}
+
+.privacy-badge.collapsed {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Mobile Overlay Drawer */
 .dw-sidebar-backdrop {
   display: none;

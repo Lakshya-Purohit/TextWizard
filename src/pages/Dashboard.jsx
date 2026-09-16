@@ -7,7 +7,6 @@ import {
   Search, Star, Clock, Zap,
   ArrowRight, ShieldCheck, Cpu, Code2, Lock, Sparkles
 } from 'lucide-react';
-import DeveloperFooter from '../components/DeveloperFooter';
 import './Dashboard.css';
 
 const DASHBOARD_FAQS = [
@@ -302,9 +301,6 @@ const Dashboard = () => {
           </div>
         </section>
       </div>
-
-      {/* Developer Footer */}
-      <DeveloperFooter />
     </div>
   );
 };

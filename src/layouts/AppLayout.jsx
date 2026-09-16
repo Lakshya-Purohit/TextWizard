@@ -5,6 +5,7 @@ import TopBar from '../components/TopBar';
 import CommandPalette from '../components/CommandPalette';
 import Toast from '../components/Toast';
 import ErrorBoundary from '../components/ErrorBoundary';
+import DeveloperFooter from '../components/DeveloperFooter';
 import './AppLayout.css';
 
 const AppLayout = () => {
@@ -30,6 +31,7 @@ const AppLayout = () => {
               </div>
             </Suspense>
           </ErrorBoundary>
+          <DeveloperFooter />
         </main>
       </div>
       <CommandPalette />

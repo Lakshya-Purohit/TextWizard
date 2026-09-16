@@ -28,17 +28,18 @@ body {
   transition: background-color var(--transition-base), color var(--transition-base);
 }
 
-/* Headings with Editorial Serif Typography */
+/* Headings with Bold Professional Sans-Serif Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--text-primary);
-  letter-spacing: -0.015em;
-  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 /* Section titles & subtitles */
 .dw-page-title, .dw-section-title {
   font-family: var(--font-heading);
+  font-weight: 700;
 }
 
 /* Code & Monospace Panels */
@@ -173,9 +174,7 @@ textarea {
   }
 }
 
-/* ============================================================
-   Global Accessibility & Motion Settings
-   ============================================================ */
+/* Global Accessibility & Motion Settings */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
@@ -184,7 +183,6 @@ textarea {
     scroll-behavior: auto !important;
   }
   
-  /* Retain simple opacity fades for accessibility context */
   .fade-in, .dw-page-transition, .dw-output-animate {
     transition: opacity 150ms ease-in-out !important;
     transform: none !important;
